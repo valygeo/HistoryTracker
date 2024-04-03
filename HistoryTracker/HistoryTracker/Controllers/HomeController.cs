@@ -1,6 +1,8 @@
 ﻿using HistoryTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using HistoryTracker.Gateways;
+using HistoryTrackers.Contexts;
 
 namespace HistoryTracker.Controllers
 {
@@ -15,6 +17,8 @@ namespace HistoryTracker.Controllers
 
         public IActionResult Index()
         {
+            var context = new GetSummaryDataContext(new GetSummaryDataGateway());
+            context.Execute();
             return View();
         }
 
