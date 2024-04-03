@@ -1,12 +1,54 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Vali\\source\\repos\\HistoryTracker\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CF396519-D620-4D1F-9213-7C493DCD1C92}|HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\historytracker.gateways\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CF396519-D620-4D1F-9213-7C493DCD1C92}|HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj|solutionrelative:historytracker.gateways\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}|HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\historytrackers.contexts\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}|HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj|solutionrelative:historytrackers.contexts\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\Class1.cs",
+              "RelativeDocumentMoniker": "HistoryTracker.Gateways\\Class1.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\Class1.cs",
+              "RelativeToolTip": "HistoryTracker.Gateways\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-03T14:46:51.211Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\Class1.cs",
+              "RelativeDocumentMoniker": "HistoryTrackers.Contexts\\Class1.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\Class1.cs",
+              "RelativeToolTip": "HistoryTrackers.Contexts\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-03T14:46:26.041Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
