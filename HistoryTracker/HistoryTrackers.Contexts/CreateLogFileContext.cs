@@ -22,13 +22,13 @@ namespace HistoryTrackers.Contexts
             if (cloneRepositoryResponse.IsSuccess)
             {
                 var createLogFileResult = _gateway.CreateLogFile(githubUrl, cloneRepositoryResponse.ClonedRepositoryPath);
-                if (createLogFileResult != null)
+                if (!String.IsNullOrWhiteSpace(createLogFileResult))
                     return new CreateLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult };
                 return new CreateLogFileResponse { IsSuccess = false, Error = "Error occured while trying to create log file!" };
             }
 
             return new CreateLogFileResponse
-                { IsSuccess = false, Error = "Erorr occured while trying to clone the repository!" };
+                { IsSuccess = false, Error = "Error occured while trying to clone the repository!" };
         }
           
     }

@@ -18,15 +18,19 @@ namespace HistoryTrackers.Contexts
         }
         public GetSummaryDataResponse Execute(string githubUrl)
         {
-            githubUrl = HttpUtility.UrlDecode(githubUrl);
-            var createLogFileResponse = _createLogFileContext.Execute(githubUrl);
-            if (createLogFileResponse.IsSuccess)
+            if (String.IsNullOrWhiteSpace(githubUrl))
+                return new GetSummaryDataResponse { IsSuccess = false, Error = "Github url is empty!" };
             {
-                var result = _gateway.GetSummaryData(createLogFileResponse.LogFilePath);
-                return new GetSummaryDataResponse { FileContent = result };
-            }
+                githubUrl = HttpUtility.UrlDecode(githubUrl);
+                var createLogFileResponse =  _createLogFileContext.Execute(githubUrl);
 
-            return new GetSummaryDataResponse {IsSuccess = false};
+                if (createLogFileResponse.IsSuccess)
+                {
+                    var result = _gateway.GetSummaryData(createLogFileResponse.LogFilePath);
+                    return new GetSummaryDataResponse { FileContent = result };
+                }
+                return new GetSummaryDataResponse { IsSuccess = false, Error = "Creation of the log file failed!" };
+            }
         }
     }
 

@@ -3,6 +3,6 @@ namespace Domain
 {
     public interface ICloneRepositoryGateway
     {
-        bool CloneRepository(string githubUrl, string directoryPathWhereRepositoryWillBeCloned);
+         bool CloneRepository(string githubUrl, string directoryPathWhereRepositoryWillBeCloned);
     }
 }

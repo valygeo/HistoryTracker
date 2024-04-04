@@ -16,10 +16,10 @@ namespace HistoryTracker.Gateways
             process.StartInfo.WorkingDirectory = clonedRepositoryPath;
             process.Start();
             process.WaitForExit();
-           
+            
             var logFilePath = Path.Combine(clonedRepositoryPath, $"{repositoryName}.log");
             if (process.ExitCode != 0 || !File.Exists(logFilePath))
-                return null; 
+                return ""; 
             return logFilePath; 
         }
     }

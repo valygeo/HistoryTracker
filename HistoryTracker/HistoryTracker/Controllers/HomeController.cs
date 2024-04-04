@@ -21,7 +21,7 @@ namespace HistoryTracker.Controllers
         }
         [HttpGet]
         [Route("{githubUrl:required}/get-summary-data")]
-        public IActionResult GetSummaryData([FromRoute]string githubUrl, bool needToBeSaved)
+        public IActionResult GetSummaryData([FromRoute]string githubUrl)
         {
             var context = new GetSummaryDataContext(new GetSummaryDataGateway(), new CreateLogFileContext(new CreateLogFileGateway(), new CloneRepositoryContext(new CloneRepositoryGateway())));
             var response = context.Execute(githubUrl);
