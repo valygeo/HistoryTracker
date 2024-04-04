@@ -18,6 +18,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\Vali\Documents\GitHub\HistoryTracker\HistoryTracker\HistoryTracker
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/Vali/Documents/GitHub/HistoryTracker/HistoryTracker/HistoryTracker/Views/Home/GetSummaryData.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxHZXRTdW1tYXJ5RGF0YS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Vali/Documents/GitHub/HistoryTracker/HistoryTracker/HistoryTracker/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

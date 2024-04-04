@@ -17,9 +17,15 @@ namespace HistoryTracker.Controllers
 
         public IActionResult Index()
         {
-            var context = new GetSummaryDataContext(new GetSummaryDataGateway());
-            context.Execute();
             return View();
+        }
+        [HttpGet]
+        [Route("{githubUrl:required}/get-summary-data")]
+        public IActionResult GetSummaryData([FromRoute]string githubUrl, bool needToBeSaved)
+        {
+            var context = new GetSummaryDataContext(new GetSummaryDataGateway(), new CreateLogFileContext(new CreateLogFileGateway(), new CloneRepositoryContext(new CloneRepositoryGateway())));
+            var response = context.Execute(githubUrl);
+            return Json(new { fileContent = response.FileContent });
         }
 
         public IActionResult Privacy()

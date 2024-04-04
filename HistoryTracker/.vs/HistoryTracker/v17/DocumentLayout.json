@@ -3,24 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{CF396519-D620-4D1F-9213-7C493DCD1C92}|HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\historytracker.gateways\\createlogfilegateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CF396519-D620-4D1F-9213-7C493DCD1C92}|HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj|solutionrelative:historytracker.gateways\\createlogfilegateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}|HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\historytrackers.contexts\\createlogfilecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}|HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj|solutionrelative:historytrackers.contexts\\createlogfilecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CF396519-D620-4D1F-9213-7C493DCD1C92}|HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\historytracker.gateways\\getsummarydatagateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CF396519-D620-4D1F-9213-7C493DCD1C92}|HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj|solutionrelative:historytracker.gateways\\getsummarydatagateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B859C174-F29C-46FA-9D83-2B9DE8A41BB4}|HistoryTracker\\HistoryTracker.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\historytracker\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B859C174-F29C-46FA-9D83-2B9DE8A41BB4}|HistoryTracker\\HistoryTracker.csproj|solutionrelative:historytracker\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}|HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\historytrackers.contexts\\clonerepositorycontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}|HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj|solutionrelative:historytrackers.contexts\\clonerepositorycontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}|HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\historytrackers.contexts\\getsummarydatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}|HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj|solutionrelative:historytrackers.contexts\\getsummarydatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\domain\\igetsummarydatagateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|solutionrelative:domain\\igetsummarydatagateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\domain\\entities\\summarydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|solutionrelative:domain\\entities\\summarydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B859C174-F29C-46FA-9D83-2B9DE8A41BB4}|HistoryTracker\\HistoryTracker.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\historytracker\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B859C174-F29C-46FA-9D83-2B9DE8A41BB4}|HistoryTracker\\HistoryTracker.csproj|solutionrelative:historytracker\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -35,65 +39,80 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GetSummaryDataGateway.cs",
-              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
-              "RelativeDocumentMoniker": "HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
-              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
-              "RelativeToolTip": "HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
-              "ViewState": "AQIAAAoAAAAAAAAAAAAswCQAAABFAAAA",
+              "Title": "CreateLogFileGateway.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\CreateLogFileGateway.cs",
+              "RelativeDocumentMoniker": "HistoryTracker.Gateways\\CreateLogFileGateway.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\CreateLogFileGateway.cs",
+              "RelativeToolTip": "HistoryTracker.Gateways\\CreateLogFileGateway.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAABJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-03T16:01:08.572Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "HistoryTracker\\Controllers\\HomeController.cs",
-              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "HistoryTracker\\Controllers\\HomeController.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAAABMAAABRAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-03T15:11:36.613Z",
+              "WhenOpened": "2024-04-04T11:48:59.962Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "GetSummaryDataContext.cs",
-              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
-              "RelativeDocumentMoniker": "HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
-              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
-              "RelativeToolTip": "HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
-              "ViewState": "AQIAAAQAAAAAAAAAAAAcwBIAAAAMAAAA",
+              "Title": "GetSummaryDataGateway.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
+              "RelativeDocumentMoniker": "HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
+              "RelativeToolTip": "HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-03T15:04:26.558Z",
+              "WhenOpened": "2024-04-04T11:47:37.542Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CloneRepositoryContext.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\CloneRepositoryContext.cs",
+              "RelativeDocumentMoniker": "HistoryTrackers.Contexts\\CloneRepositoryContext.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\CloneRepositoryContext.cs",
+              "RelativeToolTip": "HistoryTrackers.Contexts\\CloneRepositoryContext.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAIwBEAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-04T11:47:28.325Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CreateLogFileContext.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\CreateLogFileContext.cs",
+              "RelativeDocumentMoniker": "HistoryTrackers.Contexts\\CreateLogFileContext.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\CreateLogFileContext.cs",
+              "RelativeToolTip": "HistoryTrackers.Contexts\\CreateLogFileContext.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAMwBUAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-04T11:46:42.499Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "SummaryData.cs",
-              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\Entities\\SummaryData.cs",
-              "RelativeDocumentMoniker": "Domain\\Entities\\SummaryData.cs",
-              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\Entities\\SummaryData.cs",
-              "RelativeToolTip": "Domain\\Entities\\SummaryData.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAARAAAA",
+              "Title": "GetSummaryDataContext.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
+              "RelativeDocumentMoniker": "HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
+              "RelativeToolTip": "HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAwwBUAAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-03T15:03:29.94Z"
+              "WhenOpened": "2024-04-04T11:46:38.232Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "IGetSummaryDataGateway.cs",
-              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\IGetSummaryDataGateway.cs",
-              "RelativeDocumentMoniker": "Domain\\IGetSummaryDataGateway.cs",
-              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\IGetSummaryDataGateway.cs",
-              "RelativeToolTip": "Domain\\IGetSummaryDataGateway.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAzAAAA",
+              "DocumentIndex": 5,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "HistoryTracker\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "HistoryTracker\\Controllers\\HomeController.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAAwBoAAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-03T16:01:24.51Z"
+              "WhenOpened": "2024-04-04T11:46:34.252Z",
+              "EditorCaption": ""
             }
           ]
         }

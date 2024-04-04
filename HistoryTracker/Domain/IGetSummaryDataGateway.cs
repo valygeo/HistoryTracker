@@ -5,6 +5,6 @@ namespace Domain
 {
     public interface IGetSummaryDataGateway
     {
-        public void GetSummaryData(string githubUrl);
+        public string GetSummaryData(string logFilePath);
     }
 }
