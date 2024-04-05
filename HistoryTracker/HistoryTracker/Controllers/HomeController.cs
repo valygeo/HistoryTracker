@@ -1,8 +1,8 @@
 ﻿using HistoryTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using HistoryTracker.Contexts;
 using HistoryTracker.Gateways;
-using HistoryTrackers.Contexts;
 
 namespace HistoryTracker.Controllers
 {

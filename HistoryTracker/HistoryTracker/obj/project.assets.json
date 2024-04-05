@@ -12,6 +12,19 @@
           "bin/placeholder/Domain.dll": {}
         }
       },
+      "HistoryTracker.Contexts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/HistoryTracker.Contexts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/HistoryTracker.Contexts.dll": {}
+        }
+      },
       "HistoryTracker.Gateways/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
@@ -24,19 +37,6 @@
         "runtime": {
           "bin/placeholder/HistoryTracker.Gateways.dll": {}
         }
-      },
-      "HistoryTrackers.Contexts/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "dependencies": {
-          "Domain": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/HistoryTrackers.Contexts.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/HistoryTrackers.Contexts.dll": {}
-        }
       }
     }
   },
@@ -46,21 +46,21 @@
       "path": "../Domain/Domain.csproj",
       "msbuildProject": "../Domain/Domain.csproj"
     },
+    "HistoryTracker.Contexts/1.0.0": {
+      "type": "project",
+      "path": "../HistoryTrackers.Contexts/HistoryTracker.Contexts.csproj",
+      "msbuildProject": "../HistoryTrackers.Contexts/HistoryTracker.Contexts.csproj"
+    },
     "HistoryTracker.Gateways/1.0.0": {
       "type": "project",
       "path": "../HistoryTracker.Gateways/HistoryTracker.Gateways.csproj",
       "msbuildProject": "../HistoryTracker.Gateways/HistoryTracker.Gateways.csproj"
-    },
-    "HistoryTrackers.Contexts/1.0.0": {
-      "type": "project",
-      "path": "../HistoryTrackers.Contexts/HistoryTrackers.Contexts.csproj",
-      "msbuildProject": "../HistoryTrackers.Contexts/HistoryTrackers.Contexts.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "HistoryTracker.Gateways >= 1.0.0",
-      "HistoryTrackers.Contexts >= 1.0.0"
+      "HistoryTracker.Contexts >= 1.0.0",
+      "HistoryTracker.Gateways >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -93,8 +93,8 @@
             "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj": {
               "projectPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj"
             },
-            "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj": {
-              "projectPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj"
+            "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTracker.Contexts.csproj": {
+              "projectPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTracker.Contexts.csproj"
             }
           }
         }

@@ -1,9 +1,7 @@
-﻿
-using Domain;
-using HistoryTrackers.Contexts.Base;
-using System.Web;
+﻿using Domain;
+using HistoryTracker.Contexts.Base;
 
-namespace HistoryTrackers.Contexts
+namespace HistoryTracker.Contexts
 {
     public class CreateLogFileContext
     {

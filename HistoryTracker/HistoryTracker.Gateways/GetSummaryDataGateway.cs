@@ -1,4 +1,5 @@
 ﻿
+using System.Security.Cryptography;
 using Domain;
 
 
@@ -6,18 +7,21 @@ namespace HistoryTracker.Gateways
 {
     public class GetSummaryDataGateway : IGetSummaryDataGateway
     {
-        public string GetSummaryData(string logFilePath)
+        public ICollection<string> GetSummaryData(string logFilePath)
         {
-                if (File.Exists(logFilePath))
+            if (File.Exists(logFilePath))
+            { 
+                var fields = new List<string>();
+                var lines = File.ReadAllLines(logFilePath);
+                foreach (var line in lines)
                 {
-                    return File.ReadAllText(logFilePath);
+                    fields.Add(line);
                 }
 
-                {
-                    Console.WriteLine("Error: Git log file not found.");
-                    return null;
-                }
-            
+                return fields;
+
+            }
+            return new List<string>();
         }
 }
 }

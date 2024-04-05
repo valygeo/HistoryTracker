@@ -1,5 +1,5 @@
 ﻿
-namespace HistoryTrackers.Contexts.Base
+namespace HistoryTracker.Contexts.Base
 {
     public abstract class BaseResponse
     {

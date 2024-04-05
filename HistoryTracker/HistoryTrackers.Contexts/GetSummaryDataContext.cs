@@ -1,10 +1,10 @@
-﻿
+﻿using System.Text.RegularExpressions;
+using System.Web;
 using Domain;
 using Domain.Entities;
-using HistoryTrackers.Contexts.Base;
-using System.Web;
+using HistoryTracker.Contexts.Base;
 
-namespace HistoryTrackers.Contexts
+namespace HistoryTracker.Contexts
 {
     public class GetSummaryDataContext
     {
@@ -16,27 +16,52 @@ namespace HistoryTrackers.Contexts
             _gateway = gateway;
             _createLogFileContext = createLogFileContext;
         }
+
         public GetSummaryDataResponse Execute(string githubUrl)
         {
             if (String.IsNullOrWhiteSpace(githubUrl))
                 return new GetSummaryDataResponse { IsSuccess = false, Error = "Github url is empty!" };
+
+            githubUrl = HttpUtility.UrlDecode(githubUrl);
+            var createLogFileResponse = _createLogFileContext.Execute(githubUrl);
+
+            if (createLogFileResponse.IsSuccess)
             {
-                githubUrl = HttpUtility.UrlDecode(githubUrl);
-                var createLogFileResponse =  _createLogFileContext.Execute(githubUrl);
+                var result = _gateway.GetSummaryData(createLogFileResponse.LogFilePath);
 
-                if (createLogFileResponse.IsSuccess)
+                List<Commit> commits = new List<Commit>();
+
+                foreach (string line in result)
                 {
-                    var result = _gateway.GetSummaryData(createLogFileResponse.LogFilePath);
-                    return new GetSummaryDataResponse { FileContent = result };
-                }
-                return new GetSummaryDataResponse { IsSuccess = false, Error = "Creation of the log file failed!" };
-            }
-        }
-    }
+                   
+                    string pattern = @"\[([^\]]+)\]\s+(\S+)\s+(\d{4}-\d{2}-\d{2})\s+(.*?)\s*(?=\[|$)";
 
+                   
+                    Match match = Regex.Match(line, pattern);
+
+                    if (match.Success)
+                    {
+                        string commitId = match.Groups[1].Value;
+                        string commitAuthor = match.Groups[2].Value;
+                        string commitDate = match.Groups[3].Value;
+                        string commitMessage = match.Groups[4].Value;
+
+                        Commit commit = new Commit(commitId, commitAuthor, commitDate);
+                        commits.Add(commit);
+                    }
+                }
+
+                return new GetSummaryDataResponse { Commits = commits };
+            }
+
+            return new GetSummaryDataResponse { IsSuccess = false, Error = "Creation of the log file failed!" };
+        }
+
+    }
     public class GetSummaryDataResponse : BaseResponse
     {
-        public string FileContent { get; set; }
-        public SummaryData SummaryData { get; set; }
+        public ICollection<string> FileContent { get; set; }
+        public ICollection<SummaryData> SummaryData { get; set; }
+        public ICollection<Commit> Commits { get; set; }
     }
 }

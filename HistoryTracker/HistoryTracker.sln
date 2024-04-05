@@ -5,11 +5,11 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HistoryTracker", "HistoryTracker\HistoryTracker.csproj", "{B859C174-F29C-46FA-9D83-2B9DE8A41BB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HistoryTrackers.Contexts", "HistoryTrackers.Contexts\HistoryTrackers.Contexts.csproj", "{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HistoryTracker.Contexts", "HistoryTrackers.Contexts\HistoryTracker.Contexts.csproj", "{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HistoryTracker.Gateways", "HistoryTracker.Gateways\HistoryTracker.Gateways.csproj", "{CF396519-D620-4D1F-9213-7C493DCD1C92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HistoryTracker.Gateways", "HistoryTracker.Gateways\HistoryTracker.Gateways.csproj", "{CF396519-D620-4D1F-9213-7C493DCD1C92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{AB357102-482E-41BC-A14F-CB33BF0562B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{AB357102-482E-41BC-A14F-CB33BF0562B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

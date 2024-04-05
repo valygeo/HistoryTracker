@@ -128,12 +128,12 @@
         }
       }
     },
-    "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj": {
+    "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTracker.Contexts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj",
-        "projectName": "HistoryTrackers.Contexts",
-        "projectPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj",
+        "projectUniqueName": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTracker.Contexts.csproj",
+        "projectName": "HistoryTracker.Contexts",
+        "projectPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTracker.Contexts.csproj",
         "packagesPath": "C:\\Users\\Vali\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\obj\\",
         "projectStyle": "PackageReference",
@@ -219,8 +219,8 @@
               "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj": {
                 "projectPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\HistoryTracker.Gateways.csproj"
               },
-              "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj": {
-                "projectPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTrackers.Contexts.csproj"
+              "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTracker.Contexts.csproj": {
+                "projectPath": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\HistoryTracker.Contexts.csproj"
               }
             }
           }
