@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{D22ED46C-0B7F-477E-B224-8E6A2F06C6D1}|HistoryTrackers.Contexts\\HistoryTracker.Contexts.csproj|solutionrelative:historytrackers.contexts\\getsummarydatacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\domain\\entities\\commit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|solutionrelative:domain\\entities\\commit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\domain\\igetsummarydatagateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|solutionrelative:domain\\igetsummarydatagateway.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -21,10 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\domain\\entities\\summarydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|solutionrelative:domain\\entities\\summarydata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|c:\\users\\vali\\documents\\github\\historytracker\\historytracker\\domain\\entities\\commit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AB357102-482E-41BC-A14F-CB33BF0562B5}|Domain\\Domain.csproj|solutionrelative:domain\\entities\\commit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,11 +34,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
+              "Title": "Commit.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\Entities\\Commit.cs",
+              "RelativeDocumentMoniker": "Domain\\Entities\\Commit.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\Entities\\Commit.cs",
+              "RelativeToolTip": "Domain\\Entities\\Commit.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAwwCQAAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-05T15:47:34.371Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GetSummaryDataContext.cs",
+              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
+              "RelativeDocumentMoniker": "HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
+              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
+              "RelativeToolTip": "HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
+              "ViewState": "AQIAADoAAAAAAAAAAAAcwE4AAAAzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-04T16:43:07.929Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "SummaryData.cs",
               "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\Entities\\SummaryData.cs",
               "RelativeDocumentMoniker": "Domain\\Entities\\SummaryData.cs",
@@ -51,20 +77,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Commit.cs",
-              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\Entities\\Commit.cs",
-              "RelativeDocumentMoniker": "Domain\\Entities\\Commit.cs",
-              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\Entities\\Commit.cs",
-              "RelativeToolTip": "Domain\\Entities\\Commit.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAgwA8AAAALAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-05T15:47:34.371Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "GetSummaryData.cshtml",
               "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker\\Views\\Home\\GetSummaryData.cshtml",
               "RelativeDocumentMoniker": "HistoryTracker\\Views\\Home\\GetSummaryData.cshtml",
@@ -77,7 +90,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "GetSummaryDataGateway.cs",
               "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
               "RelativeDocumentMoniker": "HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
@@ -90,7 +103,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "IGetSummaryDataGateway.cs",
               "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\Domain\\IGetSummaryDataGateway.cs",
               "RelativeDocumentMoniker": "Domain\\IGetSummaryDataGateway.cs",
@@ -99,19 +112,6 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-05T07:38:47.482Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "GetSummaryDataContext.cs",
-              "DocumentMoniker": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
-              "RelativeDocumentMoniker": "HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
-              "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
-              "RelativeToolTip": "HistoryTrackers.Contexts\\GetSummaryDataContext.cs",
-              "ViewState": "AQIAABwAAAAAAAAAAAAqwCoAAAAVAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-04T16:43:07.929Z",
               "EditorCaption": ""
             }
           ]

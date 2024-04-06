@@ -6,15 +6,19 @@ namespace Domain.Entities
         public string Id { get; set; }
         public string Author { get; set; }
         public string Message { get; set; }
-        //public ICollection<EntityRows> EntityChanged { get; set; }
+        public ICollection<EntityRows> EntityChanged { get; set; }
+        public string CommitDate { get; set; }
 
-        public Commit(string id, string author, string message)
+        public Commit(string id, string author, string message, string commitDate, ICollection<EntityRows> entityChanged)
         {
             Id = id;
             Author = author;
             Message = message;
-           
+            CommitDate = commitDate;
+            EntityChanged = entityChanged;
         }
+        public Commit(){}
+
     }
 
     public class EntityRows
@@ -29,6 +33,8 @@ namespace Domain.Entities
             RowsDeleted = rowsDeleted;
             EntityName = entityName;
         }
+
+        public EntityRows(){}
     }
 
 }
