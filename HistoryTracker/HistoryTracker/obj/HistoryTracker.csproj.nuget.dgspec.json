@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Vali\\source\\repos\\HistoryTracker\\HistoryTracker\\HistoryTracker.csproj": {}
+    "C:\\Users\\Catalina\\Source\\Repos\\valygeo\\HistoryTracker\\HistoryTracker\\HistoryTracker\\HistoryTracker.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Vali\\source\\repos\\HistoryTracker\\HistoryTracker\\HistoryTracker.csproj": {
+    "C:\\Users\\Catalina\\Source\\Repos\\valygeo\\HistoryTracker\\HistoryTracker\\HistoryTracker\\HistoryTracker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Vali\\source\\repos\\HistoryTracker\\HistoryTracker\\HistoryTracker.csproj",
+        "projectUniqueName": "C:\\Users\\Catalina\\Source\\Repos\\valygeo\\HistoryTracker\\HistoryTracker\\HistoryTracker\\HistoryTracker.csproj",
         "projectName": "HistoryTracker",
-        "projectPath": "C:\\Users\\Vali\\source\\repos\\HistoryTracker\\HistoryTracker\\HistoryTracker.csproj",
-        "packagesPath": "C:\\Users\\Vali\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Vali\\source\\repos\\HistoryTracker\\HistoryTracker\\obj\\",
+        "projectPath": "C:\\Users\\Catalina\\Source\\Repos\\valygeo\\HistoryTracker\\HistoryTracker\\HistoryTracker\\HistoryTracker.csproj",
+        "packagesPath": "C:\\Users\\Catalina\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Catalina\\Source\\Repos\\valygeo\\HistoryTracker\\HistoryTracker\\HistoryTracker\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Vali\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Catalina\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -34,11 +34,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -63,7 +58,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
