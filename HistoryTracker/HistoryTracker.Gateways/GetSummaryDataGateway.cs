@@ -1,5 +1,4 @@
 ﻿
-using System.Security.Cryptography;
 using Domain;
 
 
@@ -17,9 +16,7 @@ namespace HistoryTracker.Gateways
                 {
                     fields.Add(line);
                 }
-
                 return fields;
-
             }
             return new List<string>();
         }

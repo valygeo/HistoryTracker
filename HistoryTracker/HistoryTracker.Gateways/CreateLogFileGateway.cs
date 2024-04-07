@@ -12,7 +12,7 @@ namespace HistoryTracker.Gateways
             var command = "git log --pretty=format:\"[%h] %an %ad %s\" --date=short --numstat";
             var process = new Process();
             process.StartInfo.FileName = "cmd.exe";
-            process.StartInfo.Arguments = $"/c{command} > {repositoryName}.log";
+            process.StartInfo.Arguments = $"/c {command} > {repositoryName}.log";
             process.StartInfo.WorkingDirectory = clonedRepositoryPath;
             process.Start();
             process.WaitForExit();

@@ -32,17 +32,17 @@ namespace HistoryTracker.Contexts
 
                 List<Commit> commits = new List<Commit>();
                 var commitToAdd = new Commit();
-                List<EntityRows> entityRows = new List<EntityRows>();
+                List<CommitDetails> commitDetails = new List<CommitDetails>();
 
                 foreach (string line in result)
                 {
                     string pattern = @"\[([^\]]+)\]\s+(\S+)\s+(\d{4}-\d{2}-\d{2})\s+(.*?)\s*(?=\[|$)";
-                    // Regular expression explication : [([^\]]+)\] - any string array into the [] , in our case this is the commit id which is a sha 256 encrypted
+                    // Regular expression explanation : [([^\]]+)\] - any string array into the [] , in our case this is the commit id which is a sha 256 encrypted
                     //  \s - one or many white spaces or tabs newlines etc
                     //  (\S+) - one or many characters which aren't white spaces or tabs
                     // d{4}-\d{2}-\d{2} - string char for a date in format yyyy-mm-dd
-                    // 
-
+                    // (.?) - any text or special characters * (our commit message) - meaning 0 or more and ? - non-greedy experssion - to stop at the first match of the next component
+                    // (?=[|$) - used to check if the next character is either "[" or the end of the string
                     Match match = Regex.Match(line, pattern);
                     if (match.Success)
                     {
@@ -50,59 +50,76 @@ namespace HistoryTracker.Contexts
                         commitToAdd.Author = match.Groups[2].Value;
                         commitToAdd.CommitDate = match.Groups[3].Value;
                         commitToAdd.Message = match.Groups[4].Value;
+                        if (IsMergeCommit(commitToAdd.Message))
+                            AddMergeCommit(commitToAdd, commits);
                     }
-
-                    string changePattern = @"\b(\d+)\t(\d+)\t(.+?)\b";
-                    MatchCollection matchesForEntityChanged = Regex.Matches(line, changePattern);
-
-                    foreach (Match matchForEntityChanged in matchesForEntityChanged)
+                    
+                    string changesPattern = @"\b(\d+)\t(\d+)\t(.+)\b";
+                    Match matchForCommitDetails = Regex.Match(line, changesPattern);
+                    if (matchForCommitDetails.Success)
                     {
-                        entityRows.Add(ParseEntityRows(matchForEntityChanged));
+                        commitDetails.Add(ParseCommitDetails(matchForCommitDetails));
                     }
 
                     if (String.IsNullOrWhiteSpace(line))
                     {
-                        var commitToBeAdded = new Commit
-                        {
-                            Id = commitToAdd.Id,
-                            Author = commitToAdd.Author,
-                            CommitDate = commitToAdd.CommitDate,
-                            Message = commitToAdd.Message,
-                            EntityChanged = entityRows
-                        };
-
-                        commits.Add(commitToBeAdded);
-                        entityRows = new List<EntityRows>();
+                        AddCommitWithDetailsOfEntitiesChanged(commitToAdd, commitDetails, commits);
+                        commitDetails = new List<CommitDetails>();
                     }
+                   
                 }
-                
                 return new GetSummaryDataResponse { Commits = commits };
             }
-
             return new GetSummaryDataResponse { IsSuccess = false, Error = "Creation of the log file failed!" };
         }
 
-        private EntityRows ParseEntityRows(Match match)
+        private static void AddCommitWithDetailsOfEntitiesChanged(Commit commitToAdd, List<CommitDetails> commitDetails, List<Commit> commits)
         {
-            EntityRows entityRow = new EntityRows(0,0,"");
-                int addedLine, removedLine;
-                if (int.TryParse(match.Groups[1].Value, out addedLine) &&
-                    int.TryParse(match.Groups[2].Value, out removedLine))
-                {
-                    string entityChangedPath = match.Groups[3].Value;
-                     entityRow = new EntityRows(addedLine, removedLine, entityChangedPath);
-                     entityRow.EntityName = entityChangedPath;
-                     entityRow.RowsAdded = addedLine;
-                     entityRow.RowsDeleted = removedLine;
-                }
-           
-            return entityRow;
+            var commitToBeAdded = new Commit
+            {
+                Id = commitToAdd.Id,
+                Author = commitToAdd.Author,
+                CommitDate = commitToAdd.CommitDate,
+                Message = commitToAdd.Message,
+                CommitDetails = commitDetails
+            };
+            commits.Add(commitToBeAdded);
+        }
+        private static void AddMergeCommit(Commit commitToAdd, List<Commit> commits)
+        {
+            var commitToBeAdded = new Commit
+            {
+                Id = commitToAdd.Id,
+                Author = commitToAdd.Author,
+                CommitDate = commitToAdd.CommitDate,
+                Message = commitToAdd.Message,
+            };
+            commits.Add(commitToBeAdded);
+        }
+
+        private bool IsMergeCommit(string commitMessage)
+        {
+            if (commitMessage.StartsWith("Merge"))
+                return true;
+            return false;
+        }
+        private CommitDetails ParseCommitDetails(Match match)
+        { 
+            CommitDetails commitDetails = new CommitDetails();
+
+            if (int.TryParse(match.Groups[1].Value, out int rowsAdded) &&
+                int.TryParse(match.Groups[2].Value, out int rowsRemoved))
+            {
+                commitDetails.EntityChangedName = match.Groups[3].Value;
+                commitDetails.RowsAdded = rowsAdded;
+                commitDetails.RowsDeleted = rowsRemoved;
+            }
+            return commitDetails;
         }
     }
     public class GetSummaryDataResponse : BaseResponse
     {
         public ICollection<string> FileContent { get; set; }
-        public ICollection<SummaryData> SummaryData { get; set; }
         public ICollection<Commit> Commits { get; set; }
     }
 }
