@@ -1,6 +1,8 @@
 ﻿using HistoryTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using HistoryTracker.Contexts;
+using HistoryTracker.Gateways;
 
 namespace HistoryTracker.Controllers
 {
@@ -16,6 +18,14 @@ namespace HistoryTracker.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        [HttpGet]
+        [Route("{githubUrl:required}/get-summary-data")]
+        public IActionResult GetSummaryData([FromRoute]string githubUrl)
+        {
+            var context = new GetSummaryDataContext(new GetSummaryDataGateway(), new CreateLogFileContext(new CreateLogFileGateway(), new CloneRepositoryContext(new CloneRepositoryGateway())));
+            var response = context.Execute(githubUrl);
+            return Json(new { fileContent = response.FileContent });
         }
 
         public IActionResult Privacy()
