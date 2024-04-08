@@ -60,7 +60,7 @@
               "RelativeDocumentMoniker": "HistoryTracker.Gateways\\CreateLogFileGateway.cs",
               "ToolTip": "C:\\Users\\Vali\\Documents\\GitHub\\HistoryTracker\\HistoryTracker\\HistoryTracker.Gateways\\CreateLogFileGateway.cs",
               "RelativeToolTip": "HistoryTracker.Gateways\\CreateLogFileGateway.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-08T06:51:30.651Z",
               "EditorCaption": ""
@@ -75,8 +75,7 @@
               "RelativeToolTip": "HistoryTrackers.Contexts\\CloneRepositoryContext.cs",
               "ViewState": "AQIAAAMAAAAAAAAAAAAAAAUAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-08T06:49:36.934Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-08T06:49:36.934Z"
             },
             {
               "$type": "Document",
@@ -88,8 +87,7 @@
               "RelativeToolTip": "HistoryTracker.Gateways\\CloneRepositoryGateway.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-08T06:39:31.441Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-08T06:39:31.441Z"
             },
             {
               "$type": "Document",
@@ -101,8 +99,7 @@
               "RelativeToolTip": "HistoryTrackers.Contexts\\CreateLogFileContext.cs",
               "ViewState": "AQIAAAUAAAAAAAAAAAAxwAoAAABUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-08T05:19:59.808Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-08T05:19:59.808Z"
             },
             {
               "$type": "Document",
@@ -114,8 +111,7 @@
               "RelativeToolTip": "Domain\\Entities\\Commit.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-07T13:38:26.132Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-07T13:38:26.132Z"
             },
             {
               "$type": "Document",
@@ -127,8 +123,7 @@
               "RelativeToolTip": "HistoryTracker\\Controllers\\HomeController.cs",
               "ViewState": "AQIAAA0AAAAAAAAAAAAQwBkAAABhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-07T13:37:18.419Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-07T13:37:18.419Z"
             },
             {
               "$type": "Document",
@@ -153,8 +148,7 @@
               "RelativeToolTip": "Domain\\Entities\\SummaryData.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-05T15:51:57.519Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-05T15:51:57.519Z"
             },
             {
               "$type": "Document",
@@ -166,8 +160,7 @@
               "RelativeToolTip": "HistoryTracker.Gateways\\GetSummaryDataGateway.cs",
               "ViewState": "AQIAAAYAAAAAAAAAAAAAABIAAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-05T07:39:08.336Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-05T07:39:08.336Z"
             },
             {
               "$type": "Document",
