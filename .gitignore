@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+HistoryTracker/.vs/HistoryTracker/v17/DocumentLayout.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
