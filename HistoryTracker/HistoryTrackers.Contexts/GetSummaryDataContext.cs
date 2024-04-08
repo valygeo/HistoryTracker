@@ -36,12 +36,12 @@ namespace HistoryTracker.Contexts
 
                 foreach (string line in result)
                 {
-                    string pattern = @"\[([^\]]+)\]\s+(\S+)\s+(\d{4}-\d{2}-\d{2})\s+(.*?)\s*(?=\[|$)";
+                    string pattern = @"\[([^\]]+)\]\s+(\S+)\s+(\d{4}-\d{2}-\d{2})\s+(.+)\s*(?=\[|$)";
                     // Regular expression explanation : [([^\]]+)\] - any string array into the [] , in our case this is the commit id which is a sha 256 encrypted
                     //  \s - one or many white spaces or tabs newlines etc
                     //  (\S+) - one or many characters which aren't white spaces or tabs
                     // d{4}-\d{2}-\d{2} - string char for a date in format yyyy-mm-dd
-                    // (.?) - any text or special characters * (our commit message) - meaning 0 or more and ? - non-greedy experssion - to stop at the first match of the next component
+                    // (.+) - any text or special characters * (our commit message)
                     // (?=[|$) - used to check if the next character is either "[" or the end of the string
                     Match match = Regex.Match(line, pattern);
                     if (match.Success)
@@ -50,10 +50,10 @@ namespace HistoryTracker.Contexts
                         commitToAdd.Author = match.Groups[2].Value;
                         commitToAdd.CommitDate = match.Groups[3].Value;
                         commitToAdd.Message = match.Groups[4].Value;
-                        if (IsMergeCommit(commitToAdd.Message))
-                            AddMergeCommit(commitToAdd, commits);
+                        //if (IsMergeCommit(commitToAdd.Message))
+                        //    AddMergeCommit(commitToAdd, commits);
                     }
-                    
+               
                     string changesPattern = @"\b(\d+)\t(\d+)\t(.+)\b";
                     Match matchForCommitDetails = Regex.Match(line, changesPattern);
                     if (matchForCommitDetails.Success)
@@ -66,7 +66,6 @@ namespace HistoryTracker.Contexts
                         AddCommitWithDetailsOfEntitiesChanged(commitToAdd, commitDetails, commits);
                         commitDetails = new List<CommitDetails>();
                     }
-                   
                 }
                 return new GetSummaryDataResponse { Commits = commits };
             }
