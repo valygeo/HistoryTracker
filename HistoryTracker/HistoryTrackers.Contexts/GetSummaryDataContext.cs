@@ -1,5 +1,4 @@
 ﻿
-using System.Text.RegularExpressions;
 using System.Web;
 using Domain;
 using Domain.Entities;
@@ -32,90 +31,58 @@ namespace HistoryTracker.Contexts
 
                 List<Commit> commits = new List<Commit>();
                 var commitToAdd = new Commit();
-                List<CommitDetails> commitDetails = new List<CommitDetails>();
 
-                foreach (string line in result)
+                for (int i = 0; i < result.Count; i++)
                 {
-                    string pattern = @"\[([^\]]+)\]\s+(\S+)\s+(\d{4}-\d{2}-\d{2})\s+(.+)\s*(?=\[|$)";
-                    // Regular expression explanation : [([^\]]+)\] - any string array into the [] , in our case this is the commit id which is a sha 256 encrypted
-                    //  \s - one or many white spaces or tabs newlines etc
-                    //  (\S+) - one or many characters which aren't white spaces or tabs
-                    // d{4}-\d{2}-\d{2} - string char for a date in format yyyy-mm-dd
-                    // (.+) - any text or special characters * (our commit message)
-                    // (?=[|$) - used to check if the next character is either "[" or the end of the string
-                    Match match = Regex.Match(line, pattern);
-                    if (match.Success)
+                    var line = result.ElementAt(i);
+                    if (line.StartsWith("["))
                     {
-                        commitToAdd.Id = match.Groups[1].Value;
-                        commitToAdd.Author = match.Groups[2].Value;
-                        commitToAdd.CommitDate = match.Groups[3].Value;
-                        commitToAdd.Message = match.Groups[4].Value;
-                        //if (IsMergeCommit(commitToAdd.Message))
-                        //    AddMergeCommit(commitToAdd, commits);
-                    }
-               
-                    string changesPattern = @"\b(\d+)\t(\d+)\t(.+)\b";
-                    Match matchForCommitDetails = Regex.Match(line, changesPattern);
-                    if (matchForCommitDetails.Success)
-                    {
-                        commitDetails.Add(ParseCommitDetails(matchForCommitDetails));
+                        commitToAdd = new Commit();
+                        string[] parts = line.Split(' ', 4);
+                        if (parts.Length >= 4)
+                        {
+                            commitToAdd.Id = parts[0];
+                            commitToAdd.Author = parts[1];
+                            commitToAdd.CommitDate = parts[2];
+                            commitToAdd.Message = parts[3];
+                        }
+
+                        if (i + 1 < result.Count)
+                        {
+                            var nextLine = result.ElementAt(i + 1);
+                            if (nextLine.StartsWith("["))
+                            {
+                                commits.Add(commitToAdd);
+                                commitToAdd = new Commit();
+                            }
+                        }
                     }
 
-                    if (String.IsNullOrWhiteSpace(line))
+                    else if (!String.IsNullOrWhiteSpace(line) && char.IsDigit(line[0]))
                     {
-                        AddCommitWithDetailsOfEntitiesChanged(commitToAdd, commitDetails, commits);
-                        commitDetails = new List<CommitDetails>();
+                        var commitDetails = new CommitDetails();
+                        string[] parts = line.Split('\t', 3);
+
+                        if (parts.Length >= 3)
+                        {
+                            commitDetails.RowsAdded = int.Parse(parts[0]);
+                            commitDetails.RowsDeleted = int.Parse(parts[1]);
+                            commitDetails.EntityChangedName = parts[2];
+                            commitToAdd.CommitDetails.Add(commitDetails);
+                        }
+                    }
+
+                    else if (String.IsNullOrWhiteSpace(line))
+                    {
+                        commits.Add(commitToAdd);
                     }
                 }
                 return new GetSummaryDataResponse { Commits = commits };
             }
             return new GetSummaryDataResponse { IsSuccess = false, Error = "Creation of the log file failed!" };
         }
-
-        private static void AddCommitWithDetailsOfEntitiesChanged(Commit commitToAdd, List<CommitDetails> commitDetails, List<Commit> commits)
-        {
-            var commitToBeAdded = new Commit
-            {
-                Id = commitToAdd.Id,
-                Author = commitToAdd.Author,
-                CommitDate = commitToAdd.CommitDate,
-                Message = commitToAdd.Message,
-                CommitDetails = commitDetails
-            };
-            commits.Add(commitToBeAdded);
-        }
-        private static void AddMergeCommit(Commit commitToAdd, List<Commit> commits)
-        {
-            var commitToBeAdded = new Commit
-            {
-                Id = commitToAdd.Id,
-                Author = commitToAdd.Author,
-                CommitDate = commitToAdd.CommitDate,
-                Message = commitToAdd.Message,
-            };
-            commits.Add(commitToBeAdded);
-        }
-
-        private bool IsMergeCommit(string commitMessage)
-        {
-            if (commitMessage.StartsWith("Merge"))
-                return true;
-            return false;
-        }
-        private CommitDetails ParseCommitDetails(Match match)
-        { 
-            CommitDetails commitDetails = new CommitDetails();
-
-            if (int.TryParse(match.Groups[1].Value, out int rowsAdded) &&
-                int.TryParse(match.Groups[2].Value, out int rowsRemoved))
-            {
-                commitDetails.EntityChangedName = match.Groups[3].Value;
-                commitDetails.RowsAdded = rowsAdded;
-                commitDetails.RowsDeleted = rowsRemoved;
-            }
-            return commitDetails;
-        }
     }
+
     public class GetSummaryDataResponse : BaseResponse
     {
         public ICollection<string> FileContent { get; set; }

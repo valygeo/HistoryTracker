@@ -6,7 +6,7 @@ namespace Domain.Entities
         public string Id { get; set; }
         public string Author { get; set; }
         public string Message { get; set; }
-        public ICollection<CommitDetails> CommitDetails { get; set; }
+        public ICollection<CommitDetails> CommitDetails { get; set; } = new List<CommitDetails>();
         public string CommitDate { get; set; }
 
     }
