@@ -9,9 +9,9 @@
 *.user
 *.userosscache
 *.sln.docstates
-HistoryTracker/HistoryTracker/obj/Debug/net6.0/HistoryTracker.AssemblyInfoInputs.cache
-HistoryTracker/HistoryTracker/obj/Debug/net6.0/HistoryTracker.AssemblyInfo.cs
-
+*.HistoryTracker/.vs/HistoryTracker/v17/DocumentLayout.json
+*.HistoryTracker/HistoryTracker/obj/Debug/net6.0/HistoryTracker.AssemblyInfo.cs
+*.HistoryTracker/HistoryTracker/obj/Debug/net6.0/HistoryTracker.AssemblyInfoInputs.cache
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -352,6 +352,4 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-CompanyApp2023/wwwroot/files/ProfilePictures/*.jpg
-CompanyApp2023/.idea/
 *.db-*
