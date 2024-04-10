@@ -40,7 +40,7 @@ namespace HistoryTracker.Contexts
                 }
                 return new GetSummaryDataResponse { IsSuccess = false, Error = "Creation of the log file failed!" };
             }
-            else
+         
             {
                 var isRepositoryUpToDate = _gateway.IsRepositoryUpToDate(cloneRepositoryResponse.ClonedRepositoryPath);
 
@@ -73,7 +73,7 @@ namespace HistoryTracker.Contexts
                     }
                 }
             }
-            return new GetSummaryDataResponse();
+            return new GetSummaryDataResponse { IsSuccess = false, Error = "Error trying to retrieve data!" };
         }
 
         private ICollection<Commit> ExtractCommits(ICollection<string> result)
@@ -120,11 +120,16 @@ namespace HistoryTracker.Contexts
                         commitToAdd.CommitDetails.Add(commitDetails);
                     }
                 }
+
                 else if (String.IsNullOrWhiteSpace(line))
                 {
                     commits.Add(commitToAdd);
                 }
             }
+
+            if (!commits.Contains(commitToAdd))
+                commits.Add(commitToAdd);
+
             return commits;
         }
     }

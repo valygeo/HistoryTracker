@@ -21,6 +21,7 @@ namespace HistoryTracker.Gateways
             }
             return new List<string>();
         }
+
         public bool IsRepositoryUpToDate(string repositoryClonedPath)
         {
             var verifyRepositoryProcessStartInfo = new ProcessStartInfo
