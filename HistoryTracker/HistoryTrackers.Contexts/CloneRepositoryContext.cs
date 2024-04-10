@@ -22,17 +22,10 @@ namespace HistoryTracker.Contexts
             {
                 var cloneResponse = _gateway.CloneRepository(githubUrl,directoryPathWhereRepositoryWillBeCloned);
                 if(cloneResponse)
-                    return new CloneRepositoryResponse { IsSuccess = true, ClonedRepositoryPath = Path.Combine(directoryPathWhereRepositoryWillBeCloned, repositoryName)};
+                    return new CloneRepositoryResponse { IsSuccess = true, ClonedRepositoryPath = repositoryPath};
                 return new CloneRepositoryResponse { IsSuccess = false };
             }
-
-            if (!_gateway.IsRepositoryUpToDate(repositoryPath))
-            {
-                var fetchChangesResponse = _gateway.FetchChanges(repositoryPath);
-                if (!fetchChangesResponse)
-                    return new CloneRepositoryResponse { IsSuccess = false, Error = "Error trying to fetch changes!" };
-            }
-            return new CloneRepositoryResponse { Error = "Repository already cloned!", ClonedRepositoryPath = Path.Combine(directoryPathWhereRepositoryWillBeCloned,repositoryName)};
+            return new CloneRepositoryResponse { IsSuccess = false, Error = "Repository already cloned!", ClonedRepositoryPath = repositoryPath};
         }
     }
 

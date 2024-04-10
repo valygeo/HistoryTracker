@@ -1,10 +1,11 @@
 ﻿
-using Domain.Entities;
 
 namespace Domain
 {
     public interface IGetSummaryDataGateway
     {
-        public ICollection<string> GetSummaryData(string logFilePath);
+        bool IsRepositoryUpToDate(string repositoryClonedPath);
+        bool FetchChanges(string repositoryClonedPath);
+        public ICollection<string> ReadFile(string logFilePath);
     }
 }

@@ -19,11 +19,12 @@ namespace HistoryTracker.Controllers
         {
             return View();
         }
+
         [HttpGet]
         [Route("{githubUrl:required}/get-summary-data")]
         public IActionResult GetSummaryData([FromRoute]string githubUrl)
         {
-            var context = new GetSummaryDataContext(new GetSummaryDataGateway(), new CreateLogFileContext(new CreateLogFileGateway(), new CloneRepositoryContext(new CloneRepositoryGateway())));
+            var context = new GetSummaryDataContext(new GetSummaryDataGateway(), new CreateLogFileContext(new CreateLogFileGateway()), new CloneRepositoryContext(new CloneRepositoryGateway()));
             var response = context.Execute(githubUrl);
             return Json(new { fileContent = response.FileContent });
         }
