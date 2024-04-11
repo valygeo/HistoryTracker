@@ -69,12 +69,47 @@ namespace HistoryTracker.Contexts
                     {
                         var result = _gateway.ReadFile(createLogFileResponse.LogFilePath);
                         var commits = ExtractCommits(result);
+                        var n = GetStatistics(commits);
                         return new GetSummaryDataResponse {IsSuccess = true, Commits = commits };
+
                     }
                 }
             }
             return new GetSummaryDataResponse { IsSuccess = false, Error = "Error trying to retrieve data!" };
         }
+
+        public GetSummaryDataResponse GetStatistics(ICollection<Commit> commits)
+        {
+            var response = new GetSummaryDataResponse();
+            response.Statistics.NumberOfCommits = commits.Count;
+            var authors = new List<string>();
+            var uniqueEntities = new List<string>();
+            var entitiesChanged = new List<string>();
+            var numberOfEntitiesChanged = 0;
+            foreach (var commit in commits)
+            {
+                if(!String.IsNullOrWhiteSpace(commit.Author) && !authors.Contains(commit.Author))
+                    authors.Add(commit.Author);
+                foreach (var commitDetail in commit.CommitDetails)
+                {
+                    if(!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName) && !uniqueEntities.Contains(commitDetail.EntityChangedName))
+                        uniqueEntities.Add(commitDetail.EntityChangedName);
+
+                    if (!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName))
+                       
+                    {
+                        entitiesChanged.Add(commitDetail.EntityChangedName);
+                    }
+                        
+                }
+            }
+
+            response.Statistics.NumberOfAuthors = authors.Count;
+            response.Statistics.NumberOfEntities = uniqueEntities.Count;
+
+            return response;
+        }
+
 
         private ICollection<Commit> ExtractCommits(ICollection<string> result)
         {
@@ -139,5 +174,6 @@ namespace HistoryTracker.Contexts
     {
         public ICollection<string> FileContent { get; set; }
         public ICollection<Commit> Commits { get; set; }
+        public Statistics Statistics { get; set; } = new Statistics();
     }
 }
