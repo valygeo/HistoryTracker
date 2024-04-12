@@ -37,7 +37,7 @@ namespace HistoryTracker.Contexts
                     var result = _gateway.ReadFile(createLogFileResponse.LogFilePath); 
                     var commits =  ExtractCommits(result);
                     var statistics = GetStatistics(commits);
-                    return new GetSummaryDataResponse { IsSuccess = true, Statistics = statistics};
+                    return new GetSummaryDataResponse { IsSuccess = true, Statistics = statistics, Commits = commits};
                 }
                 return new GetSummaryDataResponse { IsSuccess = false, Error = "Creation of the log file failed!" };
             }
@@ -59,7 +59,7 @@ namespace HistoryTracker.Contexts
                             var result = _gateway.ReadFile(createLogFileResponse.LogFilePath);
                             var commits = ExtractCommits(result);
                             var statistics = GetStatistics(commits);
-                            return new GetSummaryDataResponse {IsSuccess = true, Statistics = statistics};
+                            return new GetSummaryDataResponse {IsSuccess = true, Statistics = statistics, Commits = commits};
                         }
                     }
                 }
@@ -72,14 +72,14 @@ namespace HistoryTracker.Contexts
                         var result = _gateway.ReadFile(createLogFileResponse.LogFilePath);
                         var commits = ExtractCommits(result);
                         var statistics = GetStatistics(commits);
-                        return new GetSummaryDataResponse {IsSuccess = true, Statistics = statistics};
+                        return new GetSummaryDataResponse {IsSuccess = true, Statistics = statistics, Commits = commits };
                     }
                 }
             }
             return new GetSummaryDataResponse { IsSuccess = false, Error = "Error trying to retrieve data!" };
         }
 
-        public Statistics GetStatistics(ICollection<Commit> commits)
+        private Statistics GetStatistics(ICollection<Commit> commits)
         {
             var response = new Statistics();
             var authors = new List<string>();
@@ -177,5 +177,6 @@ namespace HistoryTracker.Contexts
     public class GetSummaryDataResponse : BaseResponse
     {
         public Statistics Statistics { get; set; } = new Statistics();
+        public ICollection<Commit> Commits { get; set; }
     }
 }

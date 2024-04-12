@@ -28,6 +28,16 @@ namespace HistoryTracker.Controllers
             var response = context.Execute(githubUrl);
             return Json(new { statistics = response.Statistics });
         }
+        [HttpGet]
+        [Route("{githubUrl:required}/get-change-frequencies")]
+        public IActionResult GetChangeFrequencies([FromRoute] string githubUrl)
+        {
+            var context = new GetChangeFrequenciesOfModulesContext(new GetSummaryDataContext(
+                new GetSummaryDataGateway(), new CreateLogFileContext(new CreateLogFileGateway()),
+                new CloneRepositoryContext(new CloneRepositoryGateway())));
+            var response = context.Execute(githubUrl);
+            return Json(new { changeFrequencies = response.Revisions });
+        }
 
         public IActionResult Privacy()
         {
