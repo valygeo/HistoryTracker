@@ -26,7 +26,7 @@ namespace HistoryTracker.Controllers
         {
             var context = new GetSummaryDataContext(new GetSummaryDataGateway(), new CreateLogFileContext(new CreateLogFileGateway()), new CloneRepositoryContext(new CloneRepositoryGateway()));
             var response = context.Execute(githubUrl);
-            return Json(new { fileContent = response.FileContent });
+            return Json(new { statistics = response.Statistics });
         }
 
         public IActionResult Privacy()
