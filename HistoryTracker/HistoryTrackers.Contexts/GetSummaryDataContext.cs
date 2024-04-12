@@ -81,31 +81,35 @@ namespace HistoryTracker.Contexts
         public GetSummaryDataResponse GetStatistics(ICollection<Commit> commits)
         {
             var response = new GetSummaryDataResponse();
-            response.Statistics.NumberOfCommits = commits.Count;
             var authors = new List<string>();
             var uniqueEntities = new List<string>();
-            var entitiesChanged = new List<string>();
-            var numberOfEntitiesChanged = 0;
+            var entitiesChangedCount = new Dictionary<string, int>();
             foreach (var commit in commits)
             {
                 if(!String.IsNullOrWhiteSpace(commit.Author) && !authors.Contains(commit.Author))
                     authors.Add(commit.Author);
+
                 foreach (var commitDetail in commit.CommitDetails)
                 {
-                    if(!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName) && !uniqueEntities.Contains(commitDetail.EntityChangedName))
-                        uniqueEntities.Add(commitDetail.EntityChangedName);
-
-                    if (!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName))
-                       
+                    if (!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName) &&
+                        !uniqueEntities.Contains(commitDetail.EntityChangedName))
                     {
-                        entitiesChanged.Add(commitDetail.EntityChangedName);
+                        uniqueEntities.Add(commitDetail.EntityChangedName);
+                        entitiesChangedCount[commitDetail.EntityChangedName] = 0; 
+                    }
+                    
+                    if (!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName) && uniqueEntities.Contains(commitDetail.EntityChangedName))
+
+                    {
+                        entitiesChangedCount[commitDetail.EntityChangedName]++;
                     }
                         
                 }
             }
-
+            response.Statistics.NumberOfCommits = commits.Count;
             response.Statistics.NumberOfAuthors = authors.Count;
             response.Statistics.NumberOfEntities = uniqueEntities.Count;
+            response.Statistics.NumberOfEntitiesChanged = entitiesChangedCount.Values.Sum();
 
             return response;
         }
