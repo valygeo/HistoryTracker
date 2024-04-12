@@ -111,7 +111,6 @@ namespace HistoryTracker.Contexts
             response.Statistics.NumberOfEntities = uniqueEntities.Count;
             response.Statistics.NumberOfEntitiesChanged = entitiesChangedCount.Values.Sum();
             
-
             return response;
         }
 
