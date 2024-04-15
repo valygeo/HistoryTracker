@@ -72,6 +72,7 @@ namespace HistoryTracker.Gateways
                 return true;
             }
         }
+
     }
 }
 

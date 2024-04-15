@@ -66,17 +66,35 @@ namespace HistoryTracker.Contexts
 
                 if (isRepositoryUpToDate)
                 {
-                    var createLogFileResponse = _createLogFileContext.Execute(githubUrl, cloneRepositoryResponse.ClonedRepositoryPath);
-                    if (createLogFileResponse.IsSuccess)
+                    var logFilePath = GetLogFilePath(githubUrl, cloneRepositoryResponse.ClonedRepositoryPath);
+                    if (!File.Exists(logFilePath))
                     {
-                        var result = _gateway.ReadFile(createLogFileResponse.LogFilePath);
+                        var createLogFileResponse = _createLogFileContext.Execute(githubUrl, cloneRepositoryResponse.ClonedRepositoryPath);
+                        if (createLogFileResponse.IsSuccess)
+                        {
+                            var result = _gateway.ReadFile(createLogFileResponse.LogFilePath);
+                            var commits = ExtractCommits(result);
+                            var statistics = GetStatistics(commits);
+                            return new GetSummaryDataResponse { IsSuccess = true, Statistics = statistics, Commits = commits };
+                        }
+                    }
+
+                    {
+                        var result = _gateway.ReadFile(logFilePath);
                         var commits = ExtractCommits(result);
                         var statistics = GetStatistics(commits);
-                        return new GetSummaryDataResponse {IsSuccess = true, Statistics = statistics, Commits = commits };
+                        return new GetSummaryDataResponse
+                            { IsSuccess = true, Statistics = statistics, Commits = commits };
                     }
                 }
             }
             return new GetSummaryDataResponse { IsSuccess = false, Error = "Error trying to retrieve data!" };
+        }
+        private string GetLogFilePath(string githubUrl, string clonedRepositoryPath)
+        {
+            var repositoryName = Path.GetFileNameWithoutExtension(new Uri(githubUrl).AbsolutePath.TrimStart('/'));
+            var logFilePath = Path.Combine(clonedRepositoryPath, $"{repositoryName}.log");
+            return logFilePath;
         }
 
         private Statistics GetStatistics(ICollection<Commit> commits)
@@ -113,7 +131,6 @@ namespace HistoryTracker.Contexts
             response.NumberOfEntitiesChanged = entitiesChangedCount.Values.Sum();
             return response;
         }
-
 
         private ICollection<Commit> ExtractCommits(ICollection<string> result)
         {

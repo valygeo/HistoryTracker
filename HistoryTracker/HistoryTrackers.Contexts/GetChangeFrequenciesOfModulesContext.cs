@@ -1,6 +1,4 @@
 ﻿
-
-using Domain.Entities;
 using HistoryTracker.Contexts.Base;
 
 namespace HistoryTracker.Contexts
