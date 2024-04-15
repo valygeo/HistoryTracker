@@ -14,6 +14,7 @@ namespace HistoryTracker.Gateways
             process.StartInfo.FileName = "cmd.exe";
             process.StartInfo.Arguments = $"/c {command} > {repositoryName}.log";
             process.StartInfo.WorkingDirectory = clonedRepositoryPath;
+            process.StartInfo.CreateNoWindow = true;
             process.Start();
             process.WaitForExit();
 

@@ -11,13 +11,15 @@ namespace HistoryTracker.Contexts
         private readonly IGetSummaryDataGateway _gateway;
         private readonly CreateLogFileContext _createLogFileContext;
         private readonly CloneRepositoryContext _cloneRepositoryContext;
+        private readonly GenerateCsvWithNumberOfCodeLinesContext _context;
 
         public GetSummaryDataContext(IGetSummaryDataGateway gateway, CreateLogFileContext createLogFileContext,
-            CloneRepositoryContext cloneRepositoryContext)
+            CloneRepositoryContext cloneRepositoryContext, GenerateCsvWithNumberOfCodeLinesContext context)
         {
             _gateway = gateway;
             _createLogFileContext = createLogFileContext;
             _cloneRepositoryContext = cloneRepositoryContext;
+            _context = context;
         }
 
         public GetSummaryDataResponse Execute(string githubUrl)
@@ -83,6 +85,7 @@ namespace HistoryTracker.Contexts
                         var result = _gateway.ReadFile(logFilePath);
                         var commits = ExtractCommits(result);
                         var statistics = GetStatistics(commits);
+                        var r = _context.Execute(cloneRepositoryResponse.ClonedRepositoryPath);
                         return new GetSummaryDataResponse
                             { IsSuccess = true, Statistics = statistics, Commits = commits };
                     }

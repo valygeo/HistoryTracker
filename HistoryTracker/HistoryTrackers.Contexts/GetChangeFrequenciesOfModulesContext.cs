@@ -11,6 +11,7 @@ namespace HistoryTracker.Contexts
         {
             _summaryDataContext = summaryDataContext;
         }
+
         public GetChangeFrequenciesOfModulesResponse Execute(string repositoryUrl)
         {
             var commits = _summaryDataContext.Execute(repositoryUrl);

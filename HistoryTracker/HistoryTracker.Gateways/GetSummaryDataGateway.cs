@@ -30,7 +30,8 @@ namespace HistoryTracker.Gateways
                 Arguments = "fetch",
                 WorkingDirectory = repositoryClonedPath,
                 RedirectStandardOutput = true,
-                RedirectStandardError = true
+                RedirectStandardError = true,
+                CreateNoWindow = true
             };
 
             using (var process = Process.Start(verifyRepositoryProcessStartInfo))
@@ -60,7 +61,8 @@ namespace HistoryTracker.Gateways
             {
                 FileName = "git",
                 Arguments = "pull",
-                WorkingDirectory = repositoryClonedPath
+                WorkingDirectory = repositoryClonedPath,
+                CreateNoWindow = true
             };
             using (var process = Process.Start(fetchChangesProcessStartInfo))
             {
@@ -72,7 +74,5 @@ namespace HistoryTracker.Gateways
                 return true;
             }
         }
-
     }
 }
-
