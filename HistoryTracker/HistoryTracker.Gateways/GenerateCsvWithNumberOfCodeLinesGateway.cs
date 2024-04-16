@@ -18,6 +18,7 @@ namespace HistoryTracker.Gateways
                 CreateNoWindow = true,
                 WorkingDirectory = repositoryPath
             };
+            var repositoryName = Path.GetFileNameWithoutExtension(repositoryPath);
 
             using (var process = new Process())
             {

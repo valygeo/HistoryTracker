@@ -24,7 +24,9 @@ namespace HistoryTracker.Controllers
         [Route("{githubUrl:required}/get-summary-data")]
         public IActionResult GetSummaryData([FromRoute]string githubUrl)
         {
-            var context = new GetSummaryDataContext(new GetSummaryDataGateway(), new CreateLogFileContext(new CreateLogFileGateway()), new CloneRepositoryContext(new CloneRepositoryGateway()), new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway()));
+            var context = new GetSummaryDataContext(
+                new CloneRepositoryContext(new CloneRepositoryGateway()),
+                new CreateLogFileContext(new CreateLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext());
             var response = context.Execute(githubUrl);
             return Json(new { statistics = response.Statistics });
         }
@@ -33,9 +35,11 @@ namespace HistoryTracker.Controllers
         //[Route("{githubUrl:required}/get-change-frequencies")]
         //public IActionResult GetChangeFrequencies([FromRoute] string githubUrl)
         //{
-        //    var context = new GetChangeFrequenciesOfModulesContext(new GetSummaryDataContext(
-        //        new GetSummaryDataGateway(), new CreateLogFileContext(new CreateLogFileGateway()),
-        //        new CloneRepositoryContext(new CloneRepositoryGateway())));
+        //    var context = new GetChangeFrequenciesOfModulesContext(
+        //        new GetSummaryDataContext(new GetSummaryDataGateway(),
+        //            new CreateLogFileContext(new CreateLogFileGateway()),
+        //            new CloneRepositoryContext(new CloneRepositoryGateway())),
+        //        new GetChangeFrequenciesOfModulesGateway());
         //    var response = context.Execute(githubUrl);
         //    return Json(new { changeFrequencies = response.Revisions });
         //}
