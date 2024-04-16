@@ -31,18 +31,17 @@ namespace HistoryTracker.Controllers
             return Json(new { statistics = response.Statistics });
         }
 
-        //[HttpGet]
-        //[Route("{githubUrl:required}/get-change-frequencies")]
-        //public IActionResult GetChangeFrequencies([FromRoute] string githubUrl)
-        //{
-        //    var context = new GetChangeFrequenciesOfModulesContext(
-        //        new GetSummaryDataContext(new GetSummaryDataGateway(),
-        //            new CreateLogFileContext(new CreateLogFileGateway()),
-        //            new CloneRepositoryContext(new CloneRepositoryGateway())),
-        //        new GetChangeFrequenciesOfModulesGateway());
-        //    var response = context.Execute(githubUrl);
-        //    return Json(new { changeFrequencies = response.Revisions });
-        //}
+        [HttpGet]
+        [Route("{githubUrl:required}/get-change-frequencies")]
+        public IActionResult GetChangeFrequencies([FromRoute] string githubUrl)
+        {
+            var context = new GenerateCsvWithChangeFrequenciesOfModulesContext(new GenerateCsvWithChangeFrequenciesOfModulesGateway(),
+                new CloneRepositoryContext(new CloneRepositoryGateway()),
+                new CreateLogFileContext(new CreateLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()),
+                new ExtractAllCommitsContext());
+            var response = context.Execute(githubUrl);
+            return Json(new { changeFrequencies = response.Revisions });
+        }
 
         public IActionResult Privacy()
         {

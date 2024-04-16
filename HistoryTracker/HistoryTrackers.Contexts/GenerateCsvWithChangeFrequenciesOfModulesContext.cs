@@ -5,25 +5,23 @@ using System.Web;
 
 namespace HistoryTracker.Contexts
 {
-    public class GetChangeFrequenciesOfModulesContext
+    public class GenerateCsvWithChangeFrequenciesOfModulesContext
     {
-        private readonly GetSummaryDataContext _summaryDataContext;
-        private readonly IGetChangeFrequenciesOfModulesGateway _gateway;
+        private readonly IGenerateCsvWithChangeFrequenciesOfModulesGateway _gateway;
         private readonly CloneRepositoryContext _cloneRepositoryContext;
         private readonly CreateLogFileContext _createLogFileContext;
         private readonly ReadLogFileContext _readLogFileContext;
         private readonly ExtractAllCommitsContext _extractAllCommitsContext;
 
-        public GetChangeFrequenciesOfModulesContext(GetSummaryDataContext summaryDataContext, IGetChangeFrequenciesOfModulesGateway gateway,
-            ExtractAllCommitsContext extractAllCommitsContext, CloneRepositoryContext cloneRepositoryContext,
-            CreateLogFileContext createLogFileContext, ReadLogFileContext readLogFileContext)
+        public GenerateCsvWithChangeFrequenciesOfModulesContext(IGenerateCsvWithChangeFrequenciesOfModulesGateway gateway, CloneRepositoryContext cloneRepositoryContext,
+            CreateLogFileContext createLogFileContext, ReadLogFileContext readLogFileContext,
+            ExtractAllCommitsContext extractAllCommitsContext)
         {
-            _summaryDataContext = summaryDataContext;
             _gateway = gateway;
-            _extractAllCommitsContext = extractAllCommitsContext;
             _cloneRepositoryContext = cloneRepositoryContext;
             _createLogFileContext = createLogFileContext;
             _readLogFileContext = readLogFileContext;
+            _extractAllCommitsContext = extractAllCommitsContext;
         }
 
         public GetChangeFrequenciesOfModulesResponse Execute(string repositoryUrl)
@@ -32,6 +30,7 @@ namespace HistoryTracker.Contexts
             {
                 repositoryUrl = HttpUtility.UrlDecode(repositoryUrl);
                 var cloneRepositoryResponse = _cloneRepositoryContext.Execute(repositoryUrl);
+
                 if (cloneRepositoryResponse.IsSuccess)
                 {
                     var createLogFileResponse =
@@ -43,10 +42,9 @@ namespace HistoryTracker.Contexts
                         {
                             var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
                             var revisionsOfModules = GetChangeFrequencies(extractAllCommitsResponse);
-                            var response = _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules);
+                            var response = _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules,cloneRepositoryResponse.ClonedRepositoryPath);
                             return new GetChangeFrequenciesOfModulesResponse { IsSuccess = true, Revisions = revisionsOfModules };
                         }
-
                         return new GetChangeFrequenciesOfModulesResponse
                             { IsSuccess = false, Error = readLogFileResponse.Error };
                     }
@@ -64,6 +62,7 @@ namespace HistoryTracker.Contexts
         {
             var entitiesChangedCount = new Dictionary<string, int>();
             var uniqueEntities = new List<string>();
+
             foreach (var commit in commits.Commits)
             {
                 foreach (var commitDetail in commit.CommitDetails)
