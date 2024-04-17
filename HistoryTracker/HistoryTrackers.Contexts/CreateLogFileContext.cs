@@ -21,6 +21,8 @@ namespace HistoryTracker.Contexts
             var logFilePath = Path.Combine(clonedRepositoryPath, $"{repositoryName}.log");
             var isRepositoryUpToDate = _gateway.IsRepositoryUpToDate(clonedRepositoryPath);
 
+
+
             if (isRepositoryUpToDate)
             {
                 var logFileAlreadyExists = _gateway.LogFileAlreadyExists(logFilePath);
@@ -46,7 +48,7 @@ namespace HistoryTracker.Contexts
                 {
                     var createLogFileResult = _gateway.CreateLogFile(repositoryName, clonedRepositoryPath);
                     if (!String.IsNullOrWhiteSpace(createLogFileResult))
-                        return new CreateLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult };
+                        return new CreateLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult , ChangesFetched = true};
                     return new CreateLogFileResponse
                         { IsSuccess = false, Error = "Error occured while trying to create log file!" };
                 }
@@ -57,6 +59,7 @@ namespace HistoryTracker.Contexts
         public class CreateLogFileResponse : BaseResponse
         {
             public string LogFilePath { get; set; }
+            public bool ChangesFetched { get; set; }
         }
     }
 }
