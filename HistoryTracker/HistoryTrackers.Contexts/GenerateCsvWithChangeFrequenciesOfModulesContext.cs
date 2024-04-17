@@ -30,6 +30,9 @@ namespace HistoryTracker.Contexts
             {
                 repositoryUrl = HttpUtility.UrlDecode(repositoryUrl);
                 var cloneRepositoryResponse = _cloneRepositoryContext.Execute(repositoryUrl);
+                var repositoryName = Path.GetFileNameWithoutExtension(cloneRepositoryResponse.ClonedRepositoryPath);
+                var csvFileName = $"{repositoryName}_change_frequencies_of_modules.csv";
+                var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
 
                 if (cloneRepositoryResponse.IsSuccess)
                 {
@@ -42,7 +45,10 @@ namespace HistoryTracker.Contexts
                         {
                             var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
                             var revisionsOfModules = GetChangeFrequencies(extractAllCommitsResponse);
-                            var response = _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules,cloneRepositoryResponse.ClonedRepositoryPath);
+                            if (!_gateway.CsvAlreadyExists(csvFilePath))
+                            {
+                                var response = _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
+                            }
                             return new GetChangeFrequenciesOfModulesResponse { IsSuccess = true, Revisions = revisionsOfModules };
                         }
                         return new GetChangeFrequenciesOfModulesResponse

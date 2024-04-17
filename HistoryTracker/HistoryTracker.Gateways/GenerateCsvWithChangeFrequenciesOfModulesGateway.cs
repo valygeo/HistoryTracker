@@ -5,11 +5,8 @@ namespace HistoryTracker.Gateways
 {
     public class GenerateCsvWithChangeFrequenciesOfModulesGateway : IGenerateCsvWithChangeFrequenciesOfModulesGateway
     {
-        public bool CreateCsvFileWithChangeFrequenciesOfModules(Dictionary<string, int> dictionary, string clonedRepositoryPath)
+        public bool CreateCsvFileWithChangeFrequenciesOfModules(Dictionary<string, int> dictionary, string csvFilePath)
         {
-            var repositoryName = Path.GetFileNameWithoutExtension(clonedRepositoryPath);
-            var csvFileName = $"{repositoryName}ChangeFrequenciesOfModules.csv";
-            var csvFilePath = Path.Combine(clonedRepositoryPath, csvFileName);
             using (var writer = new StreamWriter(csvFilePath))
             {
                 writer.WriteLine("Module, Frequency");
@@ -20,6 +17,13 @@ namespace HistoryTracker.Gateways
                 }
             }
             return true;
+        }
+
+        public bool CsvAlreadyExists(string csvFilePath)
+        {
+            if (File.Exists(csvFilePath))
+                return true;
+            return false;
         }
     }
 }
