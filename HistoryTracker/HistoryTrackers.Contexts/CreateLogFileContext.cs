@@ -12,23 +12,30 @@ namespace HistoryTracker.Contexts
             _gateway = gateway;
         }
 
-        public CreateLogFileResponse Execute(string repositoryUrl, string clonedRepositoryPath)
+        public CreateLogFileResponse Execute(string clonedRepositoryPath)
         {
-            if (String.IsNullOrWhiteSpace(repositoryUrl))
-                return new CreateLogFileResponse { IsSuccess = false, Error = "Repository url is empty!" };
             if (String.IsNullOrWhiteSpace(clonedRepositoryPath))
                 return new CreateLogFileResponse { IsSuccess = false, Error = "Cloned repository path is empty!" };
 
+            var repositoryName = Path.GetFileNameWithoutExtension(clonedRepositoryPath);
+            var logFilePath = Path.Combine(clonedRepositoryPath, $"{repositoryName}.log");
             var isRepositoryUpToDate = _gateway.IsRepositoryUpToDate(clonedRepositoryPath);
 
             if (isRepositoryUpToDate)
             {
-                var createLogFileResult = _gateway.CreateLogFile(repositoryUrl, clonedRepositoryPath);
+                var logFileAlreadyExists = _gateway.LogFileAlreadyExists(logFilePath);
+                if (!logFileAlreadyExists)
+                {
+                    var logFileCreatedPath = _gateway.CreateLogFile(repositoryName, clonedRepositoryPath);
 
-                if (!String.IsNullOrWhiteSpace(createLogFileResult))
-                    return new CreateLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult };
-                return new CreateLogFileResponse
-                    { IsSuccess = false, Error = "Error occured while trying to create log file!" };
+                    if (!String.IsNullOrWhiteSpace(logFileCreatedPath))
+                        return new CreateLogFileResponse { IsSuccess = true, LogFilePath = logFileCreatedPath };
+                    return new CreateLogFileResponse
+                        { IsSuccess = false, Error = "Error occured while trying to create log file!" };
+                }
+
+                return new CreateLogFileResponse { IsSuccess = true, LogFilePath = logFilePath };
+
             }
 
             {
@@ -37,7 +44,7 @@ namespace HistoryTracker.Contexts
                 if (!fetchChangesResult)
                     return new CreateLogFileResponse { IsSuccess = false, Error = "Error trying to fetch changes!" };
                 {
-                    var createLogFileResult = _gateway.CreateLogFile(repositoryUrl, clonedRepositoryPath);
+                    var createLogFileResult = _gateway.CreateLogFile(repositoryName, clonedRepositoryPath);
                     if (!String.IsNullOrWhiteSpace(createLogFileResult))
                         return new CreateLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult };
                     return new CreateLogFileResponse

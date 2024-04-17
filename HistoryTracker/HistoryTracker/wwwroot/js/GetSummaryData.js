@@ -37,3 +37,22 @@ getChangeFrequencies = function () {
         }
     });
 }
+
+getLinesOfCode = function () {
+    var githubUrl = $('#githubUrl').val();
+    var encodedGithubUrl = encodeURIComponent(githubUrl);
+
+    $.ajax({
+        type: "GET",
+        url: "/" + encodedGithubUrl + "/get-lines-of-code",
+        dataType: "json",
+        success: function (response) {
+            $('#changeFrequenciesContainer').html(
+
+            );
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+}

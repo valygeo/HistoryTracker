@@ -24,7 +24,7 @@ namespace HistoryTracker.Gateways
             {
                 process.StartInfo = generateCsvProcessStartInfo;
                 process.Start();
-                process.StandardInput.WriteLine($"cloc {repositoryPath} --by-file --csv --quiet --report-file=countingLines.csv");
+                process.StandardInput.WriteLine($"cloc {repositoryPath} --by-file --csv --quiet --report-file={repositoryName}_counting_lines.csv");
                 process.StandardInput.Flush();
                 process.StandardInput.Close();
                 process.WaitForExit();

@@ -34,7 +34,7 @@ namespace HistoryTracker.Contexts
                 if (cloneRepositoryResponse.IsSuccess)
                 {
                     var createLogFileResponse =
-                        _createLogFileContext.Execute(repositoryUrl, cloneRepositoryResponse.ClonedRepositoryPath);
+                        _createLogFileContext.Execute(cloneRepositoryResponse.ClonedRepositoryPath);
                     if (createLogFileResponse.IsSuccess)
                     {
                         var readLogFileResponse = _readLogFileContext.Execute(createLogFileResponse.LogFilePath);

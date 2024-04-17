@@ -6,9 +6,8 @@ namespace HistoryTracker.Gateways
 {
     public class CreateLogFileGateway : ICreateLogFileGateway
     {
-        public string CreateLogFile(string githubUrl, string clonedRepositoryPath)
+        public string CreateLogFile(string repositoryName, string clonedRepositoryPath)
         {
-            var repositoryName = Path.GetFileNameWithoutExtension(new Uri(githubUrl).AbsolutePath.TrimStart('/'));
             var command = "git log --pretty=format:\"[%h] %an %ad %s\" --date=short --numstat";
             var process = new Process();
             process.StartInfo.FileName = "cmd.exe";
@@ -74,6 +73,13 @@ namespace HistoryTracker.Gateways
                 }
                 return true;
             }
+        }
+
+        public bool LogFileAlreadyExists(string logFilePath)
+        {
+            if (File.Exists(logFilePath))
+                return true;
+            return false;
         }
     }
 }

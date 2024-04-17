@@ -43,6 +43,15 @@ namespace HistoryTracker.Controllers
             return Json(new { changeFrequencies = response.Revisions });
         }
 
+        [HttpGet]
+        [Route("{githubUrl:required}/get-lines-of-code")]
+        public IActionResult GetLinesOfCode([FromRoute] string githubUrl)
+        {
+            var context = new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway(), new CloneRepositoryContext(new CloneRepositoryGateway()));
+            var response = context.Execute(githubUrl);
+            return Json("");
+        }
+
         public IActionResult Privacy()
         {
             return View();
