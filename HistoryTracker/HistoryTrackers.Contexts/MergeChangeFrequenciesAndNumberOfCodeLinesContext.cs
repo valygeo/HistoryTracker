@@ -13,13 +13,13 @@ namespace HistoryTracker.Contexts
         {
             _gateway = gateway;
         }
-
-        public MergeChangeFrequenciesAndNumberOfCodeLinesResponse Execute(string changeFrequenciesCsvPath, string numberOfCodeLinesCsvPath)
+public MergeChangeFrequenciesAndNumberOfCodeLinesResponse Execute(string changeFrequenciesCsvPath, string numberOfCodeLinesCsvPath)
         {
             var changeFrequenciesFile = File.ReadAllLines(changeFrequenciesCsvPath);
             var numberOfCodeLinesFile = File.ReadAllLines(numberOfCodeLinesCsvPath);
             var changeFrequenciesMetrics = new List<ChangeFrequency>();
             var numberOfCodeLinesMetrics = new List<CodeMetric>();
+            var mergedProperties = new List<ChangeFrequencyAndCodeMetric>();
 
             for (int i = 1; i < changeFrequenciesFile.Length; i++)
             {
@@ -43,9 +43,27 @@ namespace HistoryTracker.Contexts
                     CodeLines = int.Parse(parts[4]),
                 });
             }
-            return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse();
+
+
+            foreach (var codeMetric in numberOfCodeLinesMetrics)
+            {
+                var matchingChangeFrequency = changeFrequenciesMetrics.First(x => codeMetric.EntityPath.EndsWith(x.EntityPath));
+                mergedProperties.Add(new ChangeFrequencyAndCodeMetric 
+                { 
+                    EntityPath = matchingChangeFrequency.EntityPath,
+                    CodeLines = codeMetric.CodeLines,
+                    Revisions = matchingChangeFrequency.Revisions
+                });
+            }
+
+            var response =
+                _gateway.CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(changeFrequenciesMetrics,
+                    numberOfCodeLinesMetrics);
+
+            return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse{IsSuccess = true};
         }
 
+        
     }
 
     public class MergeChangeFrequenciesAndNumberOfCodeLinesResponse : BaseResponse
