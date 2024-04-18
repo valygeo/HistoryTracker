@@ -49,6 +49,10 @@ namespace HistoryTracker.Controllers
         {
             var context = new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway(), new CloneRepositoryContext(new CloneRepositoryGateway()));
             var response = context.Execute(githubUrl);
+            var context2 =
+                new MergeChangeFrequenciesAndNumberOfCodeLinesContext(
+                    new MergeChangeFrequenciesAndNumberOfCodeLinesGateway());
+            context2.Execute("C:\\Users\\Vali\\Documents\\ClonedRepositories\\HistoryTracker\\HistoryTracker_change_frequencies_of_modules.csv", "C:\\Users\\Vali\\Documents\\ClonedRepositories\\HistoryTracker\\HistoryTracker_counting_lines.csv");
             return Json("");
         }
 

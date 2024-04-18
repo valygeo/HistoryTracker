@@ -22,7 +22,6 @@ namespace HistoryTracker.Contexts
             var isRepositoryUpToDate = _gateway.IsRepositoryUpToDate(clonedRepositoryPath);
 
 
-
             if (isRepositoryUpToDate)
             {
                 var logFileAlreadyExists = _gateway.LogFileAlreadyExists(logFilePath);

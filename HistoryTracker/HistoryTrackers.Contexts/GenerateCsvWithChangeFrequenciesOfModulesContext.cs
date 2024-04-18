@@ -34,13 +34,6 @@ namespace HistoryTracker.Contexts
                 var csvFileName = $"{repositoryName}_change_frequencies_of_modules.csv";
                 var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
 
-                int version = 1;
-                do
-                {
-                    csvFileName = $"{repositoryName}_change_frequencies_of_modules_v{version}.csv";
-                    csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
-                    version++;
-                } while (_gateway.CsvAlreadyExists(csvFilePath));
 
                 if (cloneRepositoryResponse.IsSuccess)
                 {
@@ -53,10 +46,7 @@ namespace HistoryTracker.Contexts
                         {
                             var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
                             var revisionsOfModules = GetChangeFrequencies(extractAllCommitsResponse);
-                            if (createLogFileResponse.ChangesFetched)
-                            {
-                                _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
-                            }
+                            _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
                             return new GetChangeFrequenciesOfModulesResponse { IsSuccess = true, Revisions = revisionsOfModules };
                         }
                         return new GetChangeFrequenciesOfModulesResponse
