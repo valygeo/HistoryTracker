@@ -13,7 +13,7 @@ namespace HistoryTracker.Contexts
         {
             _gateway = gateway;
         }
-public MergeChangeFrequenciesAndNumberOfCodeLinesResponse Execute(string changeFrequenciesCsvPath, string numberOfCodeLinesCsvPath)
+        public MergeChangeFrequenciesAndNumberOfCodeLinesResponse Execute(string changeFrequenciesCsvPath, string numberOfCodeLinesCsvPath)
         {
             var changeFrequenciesFile = File.ReadAllLines(changeFrequenciesCsvPath);
             var numberOfCodeLinesFile = File.ReadAllLines(numberOfCodeLinesCsvPath);
@@ -47,23 +47,32 @@ public MergeChangeFrequenciesAndNumberOfCodeLinesResponse Execute(string changeF
 
             foreach (var codeMetric in numberOfCodeLinesMetrics)
             {
-                var matchingChangeFrequency = changeFrequenciesMetrics.First(x => codeMetric.EntityPath.EndsWith(x.EntityPath));
-                mergedProperties.Add(new ChangeFrequencyAndCodeMetric 
-                { 
-                    EntityPath = matchingChangeFrequency.EntityPath,
-                    CodeLines = codeMetric.CodeLines,
-                    Revisions = matchingChangeFrequency.Revisions
-                });
+                var matchingChangeFrequency = changeFrequenciesMetrics.FirstOrDefault(entity => entity.EntityPath.Equals(codeMetric.EntityPath));
+                if (matchingChangeFrequency != null)
+                {
+                    mergedProperties.Add(new ChangeFrequencyAndCodeMetric
+                    {
+                        EntityPath = codeMetric.EntityPath,
+                        CodeLines = codeMetric.CodeLines,
+                        Revisions = matchingChangeFrequency.Revisions
+                    });
+                }
             }
 
+            var sortedMetrics = SortAfterChangeFrequencyAndCodeSize(mergedProperties);
+
             var response =
-                _gateway.CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(changeFrequenciesMetrics,
-                    numberOfCodeLinesMetrics);
+                _gateway.CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(sortedMetrics, "C:\\Users\\Vali\\Documents\\ClonedRepositories\\HistoryTracker");
 
             return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse{IsSuccess = true};
         }
 
-        
+        public List<ChangeFrequencyAndCodeMetric> SortAfterChangeFrequencyAndCodeSize(List<ChangeFrequencyAndCodeMetric> metrics)
+        {
+            var sortedMetrics = metrics.OrderByDescending(metric => metric.Revisions)
+                .ThenByDescending(metric => metric.CodeLines).ToList();
+            return sortedMetrics;
+        }
     }
 
     public class MergeChangeFrequenciesAndNumberOfCodeLinesResponse : BaseResponse

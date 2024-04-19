@@ -19,12 +19,12 @@ namespace HistoryTracker.Gateways
                 WorkingDirectory = repositoryPath
             };
             var repositoryName = Path.GetFileNameWithoutExtension(repositoryPath);
-
+            
             using (var process = new Process())
             {
                 process.StartInfo = generateCsvProcessStartInfo;
                 process.Start();
-                process.StandardInput.WriteLine($"cloc {repositoryPath} --by-file --csv --quiet --report-file={repositoryName}_counting_lines.csv");
+                process.StandardInput.WriteLine($"cloc ./ --by-file --csv --quiet --report-file={repositoryName}_counting_lines.csv");
                 process.StandardInput.Flush();
                 process.StandardInput.Close();
                 process.WaitForExit();

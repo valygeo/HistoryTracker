@@ -71,17 +71,20 @@ namespace HistoryTracker.Contexts
             {
                 foreach (var commitDetail in commit.CommitDetails)
                 {
-                    if (!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName) &&
-                        !uniqueEntities.Contains(commitDetail.EntityChangedName))
+                    var pathWithWindowsSlashes = commitDetail.EntityChangedName.Replace("/","\\");
+                    var relativePath = $".\\{pathWithWindowsSlashes}";
+
+                    if (!String.IsNullOrWhiteSpace(relativePath) &&
+                        !uniqueEntities.Contains(relativePath))
                     {
-                        uniqueEntities.Add(commitDetail.EntityChangedName);
-                        entitiesChangedCount[commitDetail.EntityChangedName] = 0;
+                        uniqueEntities.Add(relativePath);
+                        entitiesChangedCount[relativePath] = 0;
                     }
 
-                    if (!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName) && uniqueEntities.Contains(commitDetail.EntityChangedName))
+                    if (!String.IsNullOrWhiteSpace(relativePath) && uniqueEntities.Contains(relativePath))
 
                     {
-                        entitiesChangedCount[commitDetail.EntityChangedName]++;
+                        entitiesChangedCount[relativePath]++;
                     }
                 }
             }

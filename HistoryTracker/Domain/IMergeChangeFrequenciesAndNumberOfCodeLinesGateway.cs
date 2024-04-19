@@ -5,6 +5,6 @@ namespace Domain
 {
     public interface IMergeChangeFrequenciesAndNumberOfCodeLinesGateway
     {
-        bool CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(ICollection<ChangeFrequency> changeFrequenciesMetric, ICollection<CodeMetric> codeMetric);
+        bool CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(ICollection<ChangeFrequencyAndCodeMetric> metrics, string csvFilePath);
     }
 }
