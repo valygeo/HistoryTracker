@@ -2,6 +2,7 @@
 using Domain;
 using HistoryTracker.Contexts.Base;
 using System.Web;
+using Domain.Entities;
 
 namespace HistoryTracker.Contexts
 {
@@ -45,7 +46,7 @@ namespace HistoryTracker.Contexts
                         if (readLogFileResponse.IsSuccess)
                         {
                             var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
-                            var revisionsOfModules = GetChangeFrequencies(extractAllCommitsResponse);
+                            var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractAllCommitsResponse);
                             _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
                             return new GetChangeFrequenciesOfModulesResponse { IsSuccess = true, Revisions = revisionsOfModules };
                         }
@@ -62,50 +63,54 @@ namespace HistoryTracker.Contexts
             return new GetChangeFrequenciesOfModulesResponse { IsSuccess = false, Error = "Repository url is empty!" };
         }
 
-        private Dictionary<string, int> GetChangeFrequencies(ExtractAllCommitsResponse commits)
+        private ICollection<ChangeFrequency> GetChangeFrequenciesAndAuthors(ExtractAllCommitsResponse commits)
         {
-            var entitiesChangedCount = new Dictionary<string, int>();
-            var uniqueEntities = new List<string>();
-
+            var modulesWithChangeFrequenciesAndAuthors = new List<ChangeFrequency>();
+            
             foreach (var commit in commits.Commits)
             {
                 foreach (var commitDetail in commit.CommitDetails)
                 {
-                    var pathWithWindowsSlashes = commitDetail.EntityChangedName.Replace("/","\\");
-                    var relativePath = $".\\{pathWithWindowsSlashes}";
+                    var pathWithWindowsSlashes = commitDetail.EntityChangedName.Replace("/", "\\");
+                    var pathWithoutComma = pathWithWindowsSlashes.Replace(",", "");
+                    var relativePath = $".\\{pathWithoutComma}";
 
-                    if (!String.IsNullOrWhiteSpace(relativePath) &&
-                        !uniqueEntities.Contains(relativePath))
+                    if (!string.IsNullOrWhiteSpace(relativePath))
                     {
-                        uniqueEntities.Add(relativePath);
-                        entitiesChangedCount[relativePath] = 0;
-                    }
-
-                    if (!String.IsNullOrWhiteSpace(relativePath) && uniqueEntities.Contains(relativePath))
-
-                    {
-                        entitiesChangedCount[relativePath]++;
+                        var existingEntity = modulesWithChangeFrequenciesAndAuthors.FirstOrDefault(e => e.EntityPath.Equals(relativePath));
+                        if (existingEntity == null)
+                        {
+                            var entity = new ChangeFrequency
+                            {
+                                EntityPath = relativePath,
+                                Revisions = 1,
+                                Authors = new List<string>()
+                            };
+                            entity.Authors.Add(commit.Author);
+                            modulesWithChangeFrequenciesAndAuthors.Add(entity);
+                        }
+                        else
+                        {
+                            existingEntity.Revisions++;
+                            if(!existingEntity.Authors.Contains(commit.Author))
+                                existingEntity.Authors.Add(commit.Author);
+                        }
                     }
                 }
             }
-            var sortedEntitiesChangedCount = SortDictionaryInDescendingOrder(entitiesChangedCount);
-            return sortedEntitiesChangedCount;
+
+            return SortInDescendingOrder(modulesWithChangeFrequenciesAndAuthors);
         }
 
-        private Dictionary<string, int> SortDictionaryInDescendingOrder(Dictionary<string, int> dictionary)
+        private static ICollection<ChangeFrequency> SortInDescendingOrder(
+            ICollection<ChangeFrequency> changeFrequenciesAndAuthorsOfModules)
         {
-            var sortedDictionary = new Dictionary<string, int>();
-            foreach (var kv in dictionary.OrderByDescending(kv => kv.Value))
-            {
-                var kvKeyWithoutComma = kv.Key.Replace(",", "");
-                sortedDictionary.Add(kvKeyWithoutComma, kv.Value);
-            }
-            return sortedDictionary;
+            return changeFrequenciesAndAuthorsOfModules.OrderByDescending(module => module.Revisions).ToList();
         }
 
         public class GetChangeFrequenciesOfModulesResponse : BaseResponse
         {
-            public Dictionary<string, int> Revisions;
+            public ICollection<ChangeFrequency> Revisions;
         }
     }
 }

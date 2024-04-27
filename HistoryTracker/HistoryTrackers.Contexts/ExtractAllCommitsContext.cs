@@ -1,4 +1,5 @@
 ﻿
+using System.Text.RegularExpressions;
 using Domain.Entities;
 using HistoryTracker.Contexts.Base;
 
@@ -20,10 +21,21 @@ namespace HistoryTracker.Contexts
                     string[] parts = line.Split(' ', 4);
                     if (parts.Length >= 4)
                     {
-                        commitToAdd.Id = parts[0];
-                        commitToAdd.Author = parts[1];
-                        commitToAdd.CommitDate = parts[2];
-                        commitToAdd.Message = parts[3];
+                        if (IsDate(parts[2]))
+                        {
+                            commitToAdd.Id = parts[0];
+                            commitToAdd.Author = parts[1];
+                            commitToAdd.CommitDate = parts[2];
+                            commitToAdd.Message = parts[3];
+                        }
+                        else
+                        {
+                            string[] partsForMultipleNameOfAuthor = line.Split(' ', 5);
+                            commitToAdd.Id = partsForMultipleNameOfAuthor[0];
+                            commitToAdd.Author = partsForMultipleNameOfAuthor[1] + partsForMultipleNameOfAuthor[2];
+                            commitToAdd.CommitDate = partsForMultipleNameOfAuthor[3];
+                            commitToAdd.Message = partsForMultipleNameOfAuthor[4];
+                        }
                     }
 
                     if (i + 1 < result.Count)
@@ -60,7 +72,13 @@ namespace HistoryTracker.Contexts
             if (!commits.Contains(commitToAdd))
                 commits.Add(commitToAdd);
 
-            return new ExtractAllCommitsResponse{IsSuccess = true, Commits = commits};
+            return new ExtractAllCommitsResponse {IsSuccess = true, Commits = commits};
+        }
+
+        private static bool IsDate(string date)
+        {
+            var regex = "^\\d{4}-\\d{2}-\\d{2}$";
+            return Regex.IsMatch(date, regex);
         }
     }
 

@@ -1,19 +1,20 @@
 ﻿
 using Domain;
+using Domain.Entities;
 
 namespace HistoryTracker.Gateways
 {
     public class GenerateCsvWithChangeFrequenciesOfModulesGateway : IGenerateCsvWithChangeFrequenciesOfModulesGateway
     {
-        public bool CreateCsvFileWithChangeFrequenciesOfModules(Dictionary<string, int> dictionary, string csvFilePath)
+        public bool CreateCsvFileWithChangeFrequenciesOfModules(ICollection<ChangeFrequency> modulesChangeFrequenciesAndAuthors, string csvFilePath)
         {
             using (var writer = new StreamWriter(csvFilePath))
             {
-                writer.WriteLine("Module, Frequency");
-
-                foreach (var kvp in dictionary)
+                writer.WriteLine("Module, Frequency, Authors");
+                foreach (var module in modulesChangeFrequenciesAndAuthors)
                 {
-                    writer.WriteLine($"{kvp.Key}, {kvp.Value}");
+                    var authors = string.Join(";", module.Authors);
+                    writer.WriteLine($"{module.EntityPath}, {module.Revisions}, {authors}");
                 }
             }
             return true;

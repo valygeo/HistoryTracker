@@ -52,7 +52,7 @@ namespace HistoryTracker.Controllers
             var context2 =
                 new MergeChangeFrequenciesAndNumberOfCodeLinesContext(
                     new MergeChangeFrequenciesAndNumberOfCodeLinesGateway());
-            context2.Execute("C:\\Users\\Vali\\Documents\\ClonedRepositories\\HistoryTracker\\HistoryTracker_change_frequencies_of_modules.csv", "C:\\Users\\Vali\\Documents\\ClonedRepositories\\HistoryTracker\\HistoryTracker_counting_lines.csv");
+            context2.Execute("C:\\Users\\Vali\\Documents\\ClonedRepositories\\app-stagiatura-2023\\app-stagiatura-2023_change_frequencies_of_modules.csv", "C:\\Users\\Vali\\Documents\\ClonedRepositories\\app-stagiatura-2023\\app-stagiatura-2023_counting_lines.csv");
             return Json("");
         }
 
