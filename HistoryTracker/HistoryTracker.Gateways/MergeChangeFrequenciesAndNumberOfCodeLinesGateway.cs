@@ -11,10 +11,11 @@ namespace HistoryTracker.Gateways
             var csvFileName = Path.Combine(csvFilePath, "dd.csv");
             using (var writer = new StreamWriter(csvFileName))
             {
-                writer.WriteLine("Module, Revisions, Code");
+                writer.WriteLine("Module, Revisions, Code, Authors");
                 foreach (var metric in metrics)
-                { 
-                    writer.WriteLine($"{metric.EntityPath}, {metric.Revisions}, {metric.CodeLines}");
+                {
+                    var authors = string.Join(";", metric.Authors);
+                    writer.WriteLine($"{metric.EntityPath}, {metric.Revisions}, {metric.CodeLines}, {authors}");
                 }
             }
             return true;

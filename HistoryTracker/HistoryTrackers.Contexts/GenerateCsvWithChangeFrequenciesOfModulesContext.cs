@@ -46,9 +46,12 @@ namespace HistoryTracker.Contexts
                         if (readLogFileResponse.IsSuccess)
                         {
                             var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
-                            var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractAllCommitsResponse);
-                            _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
-                            return new GetChangeFrequenciesOfModulesResponse { IsSuccess = true, Revisions = revisionsOfModules };
+                            var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractAllCommitsResponse); 
+                            var createCsvResponse =  _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
+                            if(createCsvResponse)
+                               return new GetChangeFrequenciesOfModulesResponse { IsSuccess = true, Revisions = revisionsOfModules };
+                            return new GetChangeFrequenciesOfModulesResponse
+                                { IsSuccess = false, Error = "Error trying to create csv file!" };
                         }
                         return new GetChangeFrequenciesOfModulesResponse
                             { IsSuccess = false, Error = readLogFileResponse.Error };
