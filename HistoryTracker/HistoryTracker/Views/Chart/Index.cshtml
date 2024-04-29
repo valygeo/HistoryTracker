@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Page</title>
+</head>
+<body>
+
+    <div id="chartContainer"></div>
+    <script src="js/d3.v7.min.js"></script>
+    <script src="js/CreateZoomableCircleChart.js"></script>
+    <script>
+        function processDataAndDisplayChart() {
+            const data = {
+                name: "flare",
+                children: [
+                    {
+                        name: "A",
+                        value: 10,
+                        children: [
+                            { name: "A1", value: 5 },
+                            { name: "A2", value: 5 }
+                        ]
+                    },
+                    {
+                        name: "B",
+                        value: 15,
+                        children: [
+                            { name: "B1", value: 8 },
+                            { name: "B2", value: 7 }
+                        ]
+                    },
+                    {
+                        name: "C",
+                        value: 20,
+                        children: [
+                            { name: "C1", value: 10 },
+                            { name: "C2", value: 10 }
+                        ]
+                    }
+                ]
+            };
+
+
+            const chartContainer = document.getElementById('chartContainer');
+
+        
+            const chart = createChart(data);
+
+            
+            chartContainer.appendChild(chart);
+        }
+
+       
+        document.addEventListener('DOMContentLoaded', function () {
+            processDataAndDisplayChart();
+        });
+    </script>
+
+</body>
+</html>

@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <input type="text" id="githubUrl"/> 
@@ -11,5 +10,8 @@
         
     </div>
     <input type="button" value="Get Complexity Metrics" onclick="getComplexityMetrics()" />
+    <input type="button" value="Display chart" onclick="redirectToChartPage()">
 </div>
 <script src="js/GetSummaryData.js"></script>
+<script src="js/d3.v7.min.js"></script>
+<script src="js/CreateZoomableCircleChart.js"></script>
