@@ -6,7 +6,7 @@ namespace HistoryTracker.Gateways
 {
     public class GenerateCsvWithNumberOfCodeLinesGateway : IGenerateCsvWithNumberOfCodeLinesGateway
     {
-        public bool GenerateCsvWithNumberOfCodeLines(string repositoryPath)
+        public string GenerateCsvWithNumberOfCodeLines(string repositoryPath)
         {
             var generateCsvProcessStartInfo = new ProcessStartInfo
             {
@@ -19,21 +19,23 @@ namespace HistoryTracker.Gateways
                 WorkingDirectory = repositoryPath
             };
             var repositoryName = Path.GetFileNameWithoutExtension(repositoryPath);
-            
+            var csvFileName = $"{repositoryName}_counting_lines.csv";
+            var csvFilePath = Path.Combine(repositoryPath, csvFileName);
+
             using (var process = new Process())
             {
                 process.StartInfo = generateCsvProcessStartInfo;
                 process.Start();
-                process.StandardInput.WriteLine($"cloc ./ --by-file --csv --quiet --report-file={repositoryName}_counting_lines.csv");
+                process.StandardInput.WriteLine($"cloc ./ --by-file --csv --quiet --report-file={csvFileName}");
                 process.StandardInput.Flush();
                 process.StandardInput.Close();
                 process.WaitForExit();
 
                 if (process.ExitCode != 0)
                 {
-                    return false;
+                    return "";
                 }
-                return true;
+                return csvFilePath;
             }
         }
 

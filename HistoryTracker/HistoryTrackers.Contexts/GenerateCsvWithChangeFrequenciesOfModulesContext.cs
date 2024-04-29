@@ -1,7 +1,6 @@
 ﻿
 using Domain;
 using HistoryTracker.Contexts.Base;
-using System.Web;
 using Domain.Entities;
 
 namespace HistoryTracker.Contexts
@@ -9,63 +8,44 @@ namespace HistoryTracker.Contexts
     public class GenerateCsvWithChangeFrequenciesOfModulesContext
     {
         private readonly IGenerateCsvWithChangeFrequenciesOfModulesGateway _gateway;
-        private readonly CloneRepositoryContext _cloneRepositoryContext;
         private readonly CreateLogFileContext _createLogFileContext;
         private readonly ReadLogFileContext _readLogFileContext;
         private readonly ExtractAllCommitsContext _extractAllCommitsContext;
 
-        public GenerateCsvWithChangeFrequenciesOfModulesContext(IGenerateCsvWithChangeFrequenciesOfModulesGateway gateway, CloneRepositoryContext cloneRepositoryContext,
+        public GenerateCsvWithChangeFrequenciesOfModulesContext(IGenerateCsvWithChangeFrequenciesOfModulesGateway gateway,
             CreateLogFileContext createLogFileContext, ReadLogFileContext readLogFileContext,
             ExtractAllCommitsContext extractAllCommitsContext)
         {
             _gateway = gateway;
-            _cloneRepositoryContext = cloneRepositoryContext;
             _createLogFileContext = createLogFileContext;
             _readLogFileContext = readLogFileContext;
             _extractAllCommitsContext = extractAllCommitsContext;
         }
 
-        public GetChangeFrequenciesOfModulesResponse Execute(string repositoryUrl)
+        public GetChangeFrequenciesOfModulesResponse Execute(string clonedRepositoryPath)
         {
-            if (!String.IsNullOrWhiteSpace(repositoryUrl))
+            var repositoryName = Path.GetFileNameWithoutExtension(clonedRepositoryPath);
+            var csvFileName = $"{repositoryName}_change_frequencies_of_modules.csv";
+            var csvFilePath = Path.Combine(clonedRepositoryPath, csvFileName);
+
+            var createLogFileResponse = _createLogFileContext.Execute(clonedRepositoryPath);
+            if (createLogFileResponse.IsSuccess)
             {
-                repositoryUrl = HttpUtility.UrlDecode(repositoryUrl);
-                var cloneRepositoryResponse = _cloneRepositoryContext.Execute(repositoryUrl);
-                var repositoryName = Path.GetFileNameWithoutExtension(cloneRepositoryResponse.ClonedRepositoryPath);
-                var csvFileName = $"{repositoryName}_change_frequencies_of_modules.csv";
-                var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
-
-
-                if (cloneRepositoryResponse.IsSuccess)
+                var readLogFileResponse = _readLogFileContext.Execute(createLogFileResponse.LogFilePath);
+                if (readLogFileResponse.IsSuccess)
                 {
-                    var createLogFileResponse =
-                        _createLogFileContext.Execute(cloneRepositoryResponse.ClonedRepositoryPath);
-                    if (createLogFileResponse.IsSuccess)
-                    {
-                        var readLogFileResponse = _readLogFileContext.Execute(createLogFileResponse.LogFilePath);
-                        if (readLogFileResponse.IsSuccess)
-                        {
-                            var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
-                            var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractAllCommitsResponse); 
-                            var createCsvResponse =  _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
-                            if(createCsvResponse)
-                               return new GetChangeFrequenciesOfModulesResponse { IsSuccess = true, Revisions = revisionsOfModules };
-                            return new GetChangeFrequenciesOfModulesResponse
-                                { IsSuccess = false, Error = "Error trying to create csv file!" };
-                        }
-                        return new GetChangeFrequenciesOfModulesResponse
-                            { IsSuccess = false, Error = readLogFileResponse.Error };
-                    }
-                    return new GetChangeFrequenciesOfModulesResponse
-                        { IsSuccess = false, Error = createLogFileResponse.Error };
+                    var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
+                    var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractAllCommitsResponse); 
+                    var createCsvResponse =  _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
+                    if(createCsvResponse)
+                        return new GetChangeFrequenciesOfModulesResponse { IsSuccess = true, GeneratedCsvPath = csvFilePath};
+                    return new GetChangeFrequenciesOfModulesResponse { IsSuccess = false, Error = "Error trying to create csv file!" };
                 }
-                return new GetChangeFrequenciesOfModulesResponse
-                    { IsSuccess = false, Error = cloneRepositoryResponse.Error };
+                return new GetChangeFrequenciesOfModulesResponse { IsSuccess = false, Error = readLogFileResponse.Error };
             }
-
-            return new GetChangeFrequenciesOfModulesResponse { IsSuccess = false, Error = "Repository url is empty!" };
+            return new GetChangeFrequenciesOfModulesResponse { IsSuccess = false, Error = createLogFileResponse.Error };
         }
-
+        
         private ICollection<ChangeFrequency> GetChangeFrequenciesAndAuthors(ExtractAllCommitsResponse commits)
         {
             var modulesWithChangeFrequenciesAndAuthors = new List<ChangeFrequency>();
@@ -113,7 +93,7 @@ namespace HistoryTracker.Contexts
 
         public class GetChangeFrequenciesOfModulesResponse : BaseResponse
         {
-            public ICollection<ChangeFrequency> Revisions;
+            public string GeneratedCsvPath { get; set; }
         }
     }
 }

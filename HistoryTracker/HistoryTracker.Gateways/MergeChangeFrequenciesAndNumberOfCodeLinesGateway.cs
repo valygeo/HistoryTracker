@@ -8,8 +8,7 @@ namespace HistoryTracker.Gateways
     {
         public bool CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(ICollection<ChangeFrequencyAndCodeMetric> metrics, string csvFilePath)
         {
-            var csvFileName = Path.Combine(csvFilePath, "dd.csv");
-            using (var writer = new StreamWriter(csvFileName))
+            using (var writer = new StreamWriter(csvFilePath))
             {
                 writer.WriteLine("Module, Revisions, Code, Authors");
                 foreach (var metric in metrics)
