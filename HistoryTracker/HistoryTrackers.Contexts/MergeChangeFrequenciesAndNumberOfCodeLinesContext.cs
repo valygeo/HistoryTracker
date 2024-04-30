@@ -36,9 +36,16 @@ namespace HistoryTracker.Contexts
                     var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
 
                     if (generateCsvWithChangeFrequenciesAndAuthorsResponse.IsSuccess && generateCsvWithNumberOfCodeLinesResponse.IsSuccess)
-                    {
-                        GenerateMergedCsv(generateCsvWithChangeFrequenciesAndAuthorsResponse.GeneratedCsvPath, generateCsvWithNumberOfCodeLinesResponse.GeneratedCsvPath, csvFilePath);
-                        return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = true };
+                    { 
+                        var generateCsvResponse = GenerateMergedCsv(generateCsvWithChangeFrequenciesAndAuthorsResponse.GeneratedCsvPath, generateCsvWithNumberOfCodeLinesResponse.GeneratedCsvPath, csvFilePath);
+                        if (generateCsvResponse)
+                        {
+                            var metrics = ConvertCsvDataToJson(csvFilePath);
+                            return metrics;
+                        }
+                            
+                        return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse
+                            { IsSuccess = false, Error = "Error trying to generate the csv file!" };
                     }
                     if (!generateCsvWithChangeFrequenciesAndAuthorsResponse.IsSuccess) 
                         return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = false, Error = generateCsvWithChangeFrequenciesAndAuthorsResponse.Error };
@@ -54,7 +61,7 @@ namespace HistoryTracker.Contexts
 
         }
 
-        private void GenerateMergedCsv(string changeFrequenciesCsvPath, string numberOfCodeLinesCsvPath, string csvFilePath)
+        private bool GenerateMergedCsv(string changeFrequenciesCsvPath, string numberOfCodeLinesCsvPath, string csvFilePath)
         {
             var changeFrequenciesFile = File.ReadAllLines(changeFrequenciesCsvPath);
             var numberOfCodeLinesFile = File.ReadAllLines(numberOfCodeLinesCsvPath);
@@ -65,15 +72,11 @@ namespace HistoryTracker.Contexts
             for (int i = 1; i < changeFrequenciesFile.Length; i++)
             {
                 var parts = changeFrequenciesFile[i].Split(',', 3);
-                var authors = new List<string>
-                {
-                    parts[2]
-                };
                 changeFrequenciesMetrics.Add(new ChangeFrequency
                 {
                     EntityPath = parts[0],
                     Revisions = int.Parse(parts[1]),
-                    Authors = authors
+                    Authors = parts[2]
                 });
             }
 
@@ -107,6 +110,7 @@ namespace HistoryTracker.Contexts
 
             var sortedMetrics = SortAfterChangeFrequencyAndCodeSize(mergedProperties);
             var response = _gateway.CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(sortedMetrics, csvFilePath);
+            return response;
         }
 
         public List<ChangeFrequencyAndCodeMetric> SortAfterChangeFrequencyAndCodeSize(List<ChangeFrequencyAndCodeMetric> metrics)
@@ -114,6 +118,28 @@ namespace HistoryTracker.Contexts
             var sortedMetrics = metrics.OrderByDescending(metric => metric.Revisions)
                 .ThenByDescending(metric => metric.CodeLines).ToList();
             return sortedMetrics;
+        }
+        private MergeChangeFrequenciesAndNumberOfCodeLinesResponse ConvertCsvDataToJson(string csvFilePath)
+        {
+            var metrics = new List<ChangeFrequencyAndCodeMetric>();
+            using (var reader = new StreamReader(csvFilePath))
+            {
+                reader.ReadLine();
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var parts = line.Split(",");
+                    var metric = new ChangeFrequencyAndCodeMetric
+                    {
+                        EntityPath = parts[0],
+                        Revisions = int.Parse(parts[1]),
+                        CodeLines = int.Parse(parts[2]),
+                        Authors = parts[3]
+                    };
+                    metrics.Add(metric);
+                }
+            }
+            return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = true, ComplexityMetrics = metrics };
         }
     }
 

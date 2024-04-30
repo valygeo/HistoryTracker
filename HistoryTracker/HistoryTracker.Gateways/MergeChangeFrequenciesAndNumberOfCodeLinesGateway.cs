@@ -8,16 +8,23 @@ namespace HistoryTracker.Gateways
     {
         public bool CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(ICollection<ChangeFrequencyAndCodeMetric> metrics, string csvFilePath)
         {
-            using (var writer = new StreamWriter(csvFilePath))
+            try
             {
-                writer.WriteLine("Module, Revisions, Code, Authors");
-                foreach (var metric in metrics)
+                using (var writer = new StreamWriter(csvFilePath))
                 {
-                    var authors = string.Join(";", metric.Authors);
-                    writer.WriteLine($"{metric.EntityPath}, {metric.Revisions}, {metric.CodeLines}, {authors}");
+                    writer.WriteLine("Module, Revisions, Code, Authors");
+                    foreach (var metric in metrics)
+                    {
+                        var authors = string.Join(";", metric.Authors);
+                        writer.WriteLine($"{metric.EntityPath}, {metric.Revisions}, {metric.CodeLines}, {authors}");
+                    }
                 }
+                return true;
             }
-            return true;
+            catch
+            {
+                return false;
+            }
         }
     }
 }

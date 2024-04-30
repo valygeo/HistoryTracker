@@ -1,4 +1,5 @@
 ﻿
+using System.Text;
 using Domain;
 using HistoryTracker.Contexts.Base;
 using Domain.Entities;
@@ -67,16 +68,19 @@ namespace HistoryTracker.Contexts
                             {
                                 EntityPath = relativePath,
                                 Revisions = 1,
-                                Authors = new List<string>()
+                                Authors = commit.Author
                             };
-                            entity.Authors.Add(commit.Author);
                             modulesWithChangeFrequenciesAndAuthors.Add(entity);
                         }
                         else
                         {
                             existingEntity.Revisions++;
-                            if(!existingEntity.Authors.Contains(commit.Author))
-                                existingEntity.Authors.Add(commit.Author);
+                            var stringBuilder = new StringBuilder(existingEntity.Authors);
+                            if (!existingEntity.Authors.Contains(commit.Author))
+                            {
+                                stringBuilder.Append(';').Append(commit.Author);
+                                existingEntity.Authors = stringBuilder.ToString();
+                            }
                         }
                     }
                 }

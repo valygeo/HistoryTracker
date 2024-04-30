@@ -5,6 +5,6 @@ namespace Domain.Entities
     {
         public string EntityPath { get; set; }
         public int Revisions { get; set; }
-        public List<string> Authors { get; set; }
+        public string Authors { get; set; }
     }
 }
