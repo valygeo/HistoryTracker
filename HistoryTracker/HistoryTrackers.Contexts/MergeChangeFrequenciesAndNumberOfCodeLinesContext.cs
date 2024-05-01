@@ -39,19 +39,16 @@ namespace HistoryTracker.Contexts
                     { 
                         var generateCsvResponse = GenerateMergedCsv(generateCsvWithChangeFrequenciesAndAuthorsResponse.GeneratedCsvPath, generateCsvWithNumberOfCodeLinesResponse.GeneratedCsvPath, csvFilePath);
                         if (generateCsvResponse)
-                        {
-                            var metrics = ConvertCsvDataToJson(csvFilePath);
-                            return metrics;
-                        }
-                            
+                            return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse
+                                { IsSuccess = true, MergedCsvFilePath = csvFilePath };
                         return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse
                             { IsSuccess = false, Error = "Error trying to generate the csv file!" };
                     }
+
                     if (!generateCsvWithChangeFrequenciesAndAuthorsResponse.IsSuccess) 
                         return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = false, Error = generateCsvWithChangeFrequenciesAndAuthorsResponse.Error };
                     if (!generateCsvWithNumberOfCodeLinesResponse.IsSuccess) 
                         return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = false, Error = generateCsvWithNumberOfCodeLinesResponse.Error };
-
                 }
                 return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse
                     { IsSuccess = false, Error = cloneRepositoryResponse.Error };
@@ -107,7 +104,6 @@ namespace HistoryTracker.Contexts
                     });
                 }
             }
-
             var sortedMetrics = SortAfterChangeFrequencyAndCodeSize(mergedProperties);
             var response = _gateway.CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(sortedMetrics, csvFilePath);
             return response;
@@ -119,32 +115,11 @@ namespace HistoryTracker.Contexts
                 .ThenByDescending(metric => metric.CodeLines).ToList();
             return sortedMetrics;
         }
-        private MergeChangeFrequenciesAndNumberOfCodeLinesResponse ConvertCsvDataToJson(string csvFilePath)
-        {
-            var metrics = new List<ChangeFrequencyAndCodeMetric>();
-            using (var reader = new StreamReader(csvFilePath))
-            {
-                reader.ReadLine();
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    var parts = line.Split(",");
-                    var metric = new ChangeFrequencyAndCodeMetric
-                    {
-                        EntityPath = parts[0],
-                        Revisions = int.Parse(parts[1]),
-                        CodeLines = int.Parse(parts[2]),
-                        Authors = parts[3]
-                    };
-                    metrics.Add(metric);
-                }
-            }
-            return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = true, ComplexityMetrics = metrics };
-        }
+        
     }
 
     public class MergeChangeFrequenciesAndNumberOfCodeLinesResponse : BaseResponse
     {
-        public ICollection<ChangeFrequencyAndCodeMetric> ComplexityMetrics { get; set; }
+        public string MergedCsvFilePath { get; set; }
     }
 }

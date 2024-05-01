@@ -13,7 +13,7 @@ namespace HistoryTracker.Gateways
                 writer.WriteLine("Module, Frequency, Authors");
                 foreach (var module in modulesChangeFrequenciesAndAuthors)
                 {
-                    writer.WriteLine($"{module.EntityPath}, {module.Revisions}, {module.Authors}");
+                    writer.WriteLine($"{module.EntityPath},{module.Revisions},{module.Authors}");
                 }
             }
             return true;

@@ -15,8 +15,8 @@ namespace HistoryTracker.Gateways
                     writer.WriteLine("Module, Revisions, Code, Authors");
                     foreach (var metric in metrics)
                     {
-                        var authors = string.Join(";", metric.Authors);
-                        writer.WriteLine($"{metric.EntityPath}, {metric.Revisions}, {metric.CodeLines}, {authors}");
+                        var authors = string.Join(";",metric.Authors);
+                        writer.WriteLine($"{metric.EntityPath},{metric.Revisions},{metric.CodeLines},{authors}");
                     }
                 }
                 return true;
