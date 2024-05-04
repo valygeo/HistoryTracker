@@ -40,9 +40,9 @@ namespace HistoryTracker.Contexts
                     parent = new Parent
                     {
                         ModuleName = pathParts[1],
-                        ModuleSize = metric.CodeLines, // sau altceva, dacă e relevant
+                        ModuleSize = metric.CodeLines, 
                         Revisions = metric.Revisions,
-                        Authors = metric.Authors, // sau altceva, dacă e relevant
+                        Authors = metric.Authors,
                         Children = new List<Child>()
                     };
                     hierarchy.Add(parent);
@@ -82,8 +82,6 @@ namespace HistoryTracker.Contexts
           
             AddToHierarchy(parent, pathParts, metric, index + 1);
         }
-
-
 
         public class ExtractDataFromMergedCsvFileResponse : BaseResponse
         {
