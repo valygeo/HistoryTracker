@@ -1,8 +1,10 @@
 ﻿
 using System.Text;
+using System.Text.RegularExpressions;
 using Domain;
 using HistoryTracker.Contexts.Base;
 using Domain.Entities;
+using static System.Collections.Specialized.BitVector32;
 
 namespace HistoryTracker.Contexts
 {
@@ -59,6 +61,19 @@ namespace HistoryTracker.Contexts
                     var pathWithoutComma = pathWithWindowsSlashes.Replace(",", "");
                     var relativePath = $".\\{pathWithoutComma}";
 
+                    if (IsThereARenameOrMove(relativePath))
+                    {
+                       var initialAndNewIntegratedValue =  ProcessRenameOrMovePattern(relativePath);
+                       relativePath = initialAndNewIntegratedValue[1];
+                       foreach (var module in modulesWithChangeFrequenciesAndAuthors)
+                       {
+                           if (module.EntityPath == initialAndNewIntegratedValue[0])
+                           {
+                               module.EntityPath = relativePath;
+                           }
+                       }
+                    }
+
                     if (!string.IsNullOrWhiteSpace(relativePath))
                     {
                         var existingEntity = modulesWithChangeFrequenciesAndAuthors.FirstOrDefault(e => e.EntityPath.Equals(relativePath));
@@ -85,10 +100,36 @@ namespace HistoryTracker.Contexts
                     }
                 }
             }
-
             return SortInDescendingOrder(modulesWithChangeFrequenciesAndAuthors);
         }
+        private static string[] ProcessRenameOrMovePattern(string value)
+        {
+            //Regex renameOrMovePattern = new Regex(@"\/\{+[a-zA-Z0-9\/\.]*[\s]=>[\s][a-zA-Z0-9\/\.]*[\s]*\}");
+            Regex renameOrMovePattern = new Regex(@"\\{+[^{}]*[\s]=>[\s][^{}]*[\s]*\}");
 
+            var matches = renameOrMovePattern.Matches(value);
+
+            if (matches.Count > 0)
+            {
+                var names = matches[0].Value.Replace("\\{", "").Replace("}", "").Split(new[] { " => " }, StringSplitOptions.None);
+                var initial = names[0];
+                var @new = names[1];
+
+                var initialIntegrated = value.Replace(matches[0].Value, string.IsNullOrEmpty(initial) ? "" : "\\" + initial);
+                var newIntegrated = value.Replace(matches[0].Value, string.IsNullOrEmpty(@new) ? "" : "\\" + @new);
+
+                return new[] { initialIntegrated, newIntegrated };
+            }
+            return new string[] { };
+        }
+
+        private static bool IsThereARenameOrMove(string result)
+        {
+            if (string.IsNullOrEmpty(result))
+                return false;
+
+            return result.IndexOf("{", StringComparison.InvariantCulture) > -1;
+        }
         private static ICollection<ChangeFrequency> SortInDescendingOrder(
             ICollection<ChangeFrequency> changeFrequenciesAndAuthorsOfModules)
         {

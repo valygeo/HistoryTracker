@@ -35,14 +35,14 @@ namespace HistoryTracker.Contexts
                 var pathParts = metric.EntityPath.Split("\\");
                 var existingParent = hierarchy.FirstOrDefault(p => p.ModuleName == pathParts[1]);
        
-                if (existingParent == null || parent == null)
+                if (existingParent == null)
                 {
                     parent = new Parent
                     {
                         ModuleName = pathParts[1],
-                        ModuleSize = metric.CodeLines, 
-                        Revisions = metric.Revisions,
-                        Authors = metric.Authors,
+                        ModuleSize = 0, 
+                        Revisions = 0,
+                        Authors = "",
                         Children = new List<Child>()
                     };
                     hierarchy.Add(parent);
@@ -52,7 +52,6 @@ namespace HistoryTracker.Contexts
                 {
                     AddToHierarchy(existingParent, pathParts, metric, 2);
                 }
-               
             }
             return new ExtractDataFromMergedCsvFileResponse { IsSuccess = true, ComplexityMetrics = metrics, Hierarchy = hierarchy};
         }
@@ -70,8 +69,8 @@ namespace HistoryTracker.Contexts
                 currentChild = new Child
                 {
                     ModuleName = part,
-                    ModuleSize = metric.CodeLines,
-                    Authors = metric.Authors,
+                    ModuleSize = 0,
+                    Authors = "",
                     Parent = parent,
                     Children = new List<Child>()
                 };

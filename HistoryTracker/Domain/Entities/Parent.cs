@@ -18,7 +18,7 @@ namespace Domain.Entities
         public int ModuleSize { get; set; }
         public int Revisions { get; set; }
 
-    public string Authors { get; set; }
+        public string Authors { get; set; }
         public ICollection<Child>? Children { get; set; }
 
         public Parent ConvertToParent(Child child)
