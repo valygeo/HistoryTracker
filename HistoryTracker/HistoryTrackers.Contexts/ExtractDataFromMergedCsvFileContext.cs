@@ -9,7 +9,6 @@ namespace HistoryTracker.Contexts
         public ExtractDataFromMergedCsvFileResponse Execute(string csvFilePath)
         {
             var metrics = new List<ChangeFrequencyAndCodeMetric>();
-            var parent = new Parent();
             var hierarchy = new List<Parent>();
             using (var reader = new StreamReader(csvFilePath))
             {
@@ -33,54 +32,73 @@ namespace HistoryTracker.Contexts
             foreach (var metric in metrics)
             {
                 var pathParts = metric.EntityPath.Split("\\");
-                var existingParent = hierarchy.FirstOrDefault(p => p.ModuleName == pathParts[1]);
+                var existingParent = hierarchy.FirstOrDefault(p => p.Name == pathParts[1]);
        
                 if (existingParent == null)
                 {
-                    parent = new Parent
+                    var parent = new Parent
                     {
-                        ModuleName = pathParts[1],
-                        ModuleSize = 0, 
+                        Name = pathParts[1],
+                        Size = 0,
                         Revisions = 0,
                         Authors = "",
                         Children = new List<Child>()
                     };
                     hierarchy.Add(parent);
-                    AddToHierarchy(parent, pathParts, metric, 2);
+                    AddChildrensToHierarchy(parent, pathParts, metric, 2);
                 }
                 else
                 {
-                    AddToHierarchy(existingParent, pathParts, metric, 2);
+                    AddChildrensToHierarchy(existingParent, pathParts, metric, 2);
                 }
             }
             return new ExtractDataFromMergedCsvFileResponse { IsSuccess = true, ComplexityMetrics = metrics, Hierarchy = hierarchy};
         }
 
-        private void AddToHierarchy(Parent parent, string[] pathParts, ChangeFrequencyAndCodeMetric metric, int index)
+        private void AddChildrensToHierarchy(Parent parent, string[] pathParts, ChangeFrequencyAndCodeMetric metric, int index)
         {
+            Child currentChild;
+            if (index == pathParts.Length - 1)
+            {
+                var lastPart = pathParts[index];
+                currentChild = parent.Children.FirstOrDefault(c => c.Name == lastPart);
+
+                if (currentChild == null)
+                {
+                    currentChild = new Child
+                    {
+                        Name = lastPart,
+                        Size = metric.CodeLines,
+                        Authors = metric.Authors,
+                        Revisions = metric.Revisions,
+                        Children = new List<Child>()
+                    };
+                    parent.Children.Add(currentChild);
+                }
+                return; 
+            }
+
             if (index >= pathParts.Length)
                 return;
 
             var part = pathParts[index];
-            var currentChild = parent.Children.FirstOrDefault(c => c.ModuleName == part);
-
+            currentChild = parent.Children.FirstOrDefault(c => c.Name == part);
             if (currentChild == null)
             {
                 currentChild = new Child
                 {
-                    ModuleName = part,
-                    ModuleSize = 0,
+                    Name = part,
+                    Size = 0,
                     Authors = "",
-                    Parent = parent,
                     Children = new List<Child>()
                 };
                 parent.Children.Add(currentChild);
             }
-
             parent = currentChild.ConvertToParent(currentChild);
-          
-            AddToHierarchy(parent, pathParts, metric, index + 1);
+
+            AddChildrensToHierarchy(parent, pathParts, metric, index + 1);
         }
+
 
         public class ExtractDataFromMergedCsvFileResponse : BaseResponse
         {

@@ -11,6 +11,20 @@
     <script src="js/d3.v7.min.js"></script>
     <script src="js/CreateZoomableCircleChart.js"></script>
     <script>
+        // function getHierarchyData(){
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "Chart",
+        //         dataType: "json",
+        //         success: function (response) {
+        //             processDataAndDisplayChart(response);
+        //         },
+        //         error: function (xhr, status, error) {
+        //             console.error(xhr.responseText);
+        //         }
+        //     });
+        // }
+
         function processDataAndDisplayChart() {
             const data = {
                 name: "flare",
@@ -50,13 +64,9 @@
                 ]
             };
 
-
+          
             const chartContainer = document.getElementById('chartContainer');
-
-        
             const chart = createChart(data);
-
-            
             chartContainer.appendChild(chart);
         }
 
