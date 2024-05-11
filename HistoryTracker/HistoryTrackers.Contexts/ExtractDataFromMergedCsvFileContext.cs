@@ -39,7 +39,7 @@ namespace HistoryTracker.Contexts
                     var parent = new Parent
                     {
                         Name = pathParts[1],
-                        Size = 0,
+                        Value = 0,
                         Revisions = 0,
                         Authors = "",
                         Children = new List<Child>()
@@ -68,7 +68,7 @@ namespace HistoryTracker.Contexts
                     currentChild = new Child
                     {
                         Name = lastPart,
-                        Size = metric.CodeLines,
+                        Value = metric.CodeLines,
                         Authors = metric.Authors,
                         Revisions = metric.Revisions,
                         Children = new List<Child>()
@@ -88,7 +88,7 @@ namespace HistoryTracker.Contexts
                 currentChild = new Child
                 {
                     Name = part,
-                    Size = 0,
+                    Value = 0,
                     Authors = "",
                     Children = new List<Child>()
                 };

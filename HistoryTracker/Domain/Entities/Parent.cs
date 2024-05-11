@@ -4,7 +4,7 @@ namespace Domain.Entities
     public class Parent
     {
         public string Name { get; set; }
-        public int Size { get; set; }
+        public int Value { get; set; }
         public int Revisions { get; set; }
         public string Authors { get; set; }
         public ICollection<Child>? Children { get; set; }
@@ -14,7 +14,7 @@ namespace Domain.Entities
     public class Child
     {
         public string Name { get; set; }
-        public int Size { get; set; }
+        public int Value { get; set; }
         public int Revisions { get; set; }
 
         public string Authors { get; set; }
@@ -25,7 +25,7 @@ namespace Domain.Entities
             return new Parent
             {
                 Name = child.Name,
-                Size = child.Size,
+                Value = child.Value,
                 Authors = child.Authors,
                 Children = child.Children,
             };

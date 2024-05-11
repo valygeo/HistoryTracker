@@ -38,7 +38,7 @@ getChangeFrequencies = function () {
     });
 }
 function redirectToChartPage() {
-    window.location.href = '/Chart'; // Schimbă 'pagina-cu-chart.html' cu calea către pagina ta
+    window.location.href = '/Chart'; 
 }
 getComplexityMetrics = function () {
     var githubUrl = $('#githubUrl').val();
