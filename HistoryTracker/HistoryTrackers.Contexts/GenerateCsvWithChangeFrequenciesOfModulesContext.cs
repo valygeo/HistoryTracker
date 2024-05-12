@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using Domain;
 using HistoryTracker.Contexts.Base;
 using Domain.Entities;
-using static System.Collections.Specialized.BitVector32;
 
 namespace HistoryTracker.Contexts
 {
@@ -104,7 +103,6 @@ namespace HistoryTracker.Contexts
         }
         private static string[] ProcessRenameOrMovePattern(string value)
         {
-            //Regex renameOrMovePattern = new Regex(@"\/\{+[a-zA-Z0-9\/\.]*[\s]=>[\s][a-zA-Z0-9\/\.]*[\s]*\}");
             Regex renameOrMovePattern = new Regex(@"\\{+[^{}]*[\s]=>[\s][^{}]*[\s]*\}");
 
             var matches = renameOrMovePattern.Matches(value);

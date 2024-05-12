@@ -24,7 +24,7 @@ namespace HistoryTracker.Controllers
         [Route("{githubUrl:required}/get-summary-data")]
         public IActionResult GetSummaryData([FromRoute]string githubUrl)
         {
-            var context = new GetSummaryDataContext(
+            var context = new GetSummaryStatisticsContext(
                 new CloneRepositoryContext(new CloneRepositoryGateway()),
                 new CreateLogFileContext(new CreateLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext());
             var response = context.Execute(githubUrl);

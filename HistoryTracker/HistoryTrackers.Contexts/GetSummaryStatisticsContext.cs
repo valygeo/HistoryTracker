@@ -5,14 +5,14 @@ using HistoryTracker.Contexts.Base;
 
 namespace HistoryTracker.Contexts
 {
-    public class GetSummaryDataContext
+    public class GetSummaryStatisticsContext
     {
         private readonly CloneRepositoryContext _cloneRepositoryContext;
         private readonly CreateLogFileContext _createLogFileContext;
         private readonly ReadLogFileContext _readLogFileContext;
         private readonly ExtractAllCommitsContext _extractAllCommitsContext;
 
-        public GetSummaryDataContext(CloneRepositoryContext cloneRepositoryContext, CreateLogFileContext createLogFileContext,
+        public GetSummaryStatisticsContext(CloneRepositoryContext cloneRepositoryContext, CreateLogFileContext createLogFileContext,
            ReadLogFileContext readLogFileContext, ExtractAllCommitsContext extractAllCommitsContext)
         {
             _cloneRepositoryContext = cloneRepositoryContext;
@@ -21,10 +21,10 @@ namespace HistoryTracker.Contexts
             _extractAllCommitsContext = extractAllCommitsContext;
         }
 
-        public GetSummaryDataResponse Execute(string githubUrl)
+        public GetSummaryDataStatistics Execute(string githubUrl)
         {
             if (String.IsNullOrWhiteSpace(githubUrl))
-                return new GetSummaryDataResponse { IsSuccess = false, Error = "Github url is empty!" };
+                return new GetSummaryDataStatistics { IsSuccess = false, Error = "Github url is empty!" };
 
             githubUrl = HttpUtility.UrlDecode(githubUrl);
             var cloneRepositoryResponse = _cloneRepositoryContext.Execute(githubUrl);
@@ -38,11 +38,11 @@ namespace HistoryTracker.Contexts
                     var logFileResponse = _readLogFileContext.Execute(createLogFileResponse.LogFilePath);
                     var extractAllCommitsResponse = _extractAllCommitsContext.Execute(logFileResponse.LogFileContent);
                     var statistics = GetStatistics(extractAllCommitsResponse.Commits);
-                    return new GetSummaryDataResponse { IsSuccess = true, Statistics = statistics};
+                    return new GetSummaryDataStatistics { IsSuccess = true, Statistics = statistics};
                 }
-                return new GetSummaryDataResponse { IsSuccess = false, Error = createLogFileResponse.Error };
+                return new GetSummaryDataStatistics { IsSuccess = false, Error = createLogFileResponse.Error };
             }
-            return new GetSummaryDataResponse { IsSuccess = false, Error = cloneRepositoryResponse.Error };
+            return new GetSummaryDataStatistics { IsSuccess = false, Error = cloneRepositoryResponse.Error };
         }
 
         private Statistics GetStatistics(ICollection<Commit> commits)
@@ -83,7 +83,7 @@ namespace HistoryTracker.Contexts
     }
 
 
-    public class GetSummaryDataResponse : BaseResponse
+    public class GetSummaryDataStatistics : BaseResponse
     {
         public Statistics Statistics { get; set; } = new Statistics();
     }
