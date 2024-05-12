@@ -8,12 +8,10 @@ namespace HistoryTracker.Controllers
     public class ChartAPIController : Controller
     {
         [HttpGet]
-        public JsonResult GetHierarchyData()
+        public JsonResult GetHierarchyData(string filePath)
         {
             var context = new GetHotspotsFrequenciesAndComplexityPerFileContext();
-            var result =
-                context.Execute(
-                    "C:\\Users\\Vali\\Documents\\ClonedRepositories\\app-stagiatura-2023\\app-stagiatura-2023_complexity_metrics.csv");
+            var result = context.Execute(filePath);
             return Json(result.Hierarchy);
         }
     }

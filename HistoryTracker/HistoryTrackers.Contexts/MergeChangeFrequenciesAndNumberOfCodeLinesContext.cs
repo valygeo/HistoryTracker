@@ -36,7 +36,7 @@ namespace HistoryTracker.Contexts
                     var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
 
                     if (generateCsvWithChangeFrequenciesAndAuthorsResponse.IsSuccess && generateCsvWithNumberOfCodeLinesResponse.IsSuccess)
-                    { 
+                    {
                         var generateCsvResponse = GenerateMergedCsv(generateCsvWithChangeFrequenciesAndAuthorsResponse.GeneratedCsvPath, generateCsvWithNumberOfCodeLinesResponse.GeneratedCsvPath, csvFilePath);
                         if (generateCsvResponse)
                             return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse

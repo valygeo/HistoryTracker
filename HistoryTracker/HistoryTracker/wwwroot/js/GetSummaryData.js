@@ -40,6 +40,16 @@ getChangeFrequencies = function () {
 function redirectToChartPage() {
     window.location.href = '/Chart'; 
 }
+function showLoader() {
+    var loader = document.getElementById("loader");
+    loader.style.display = "block";
+}
+
+function hideLoader() {
+    var loader = document.getElementById("loader");
+    loader.style.display = "none";
+}
+var complexityAndFrequenciesPerFilePath = "";
 getComplexityMetrics = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
@@ -48,11 +58,19 @@ getComplexityMetrics = function () {
         type: "GET",
         url: "/" + encodedGithubUrl + "/get-complexity-metrics",
         dataType: "json",
+        beforeSend: function () {
+            showLoader();
+        },
         success: function (response) {
-            
+            var hotspotsButton = document.getElementById("displayHotspotsFrequencyAndComplexityButton");
+            complexityAndFrequenciesPerFilePath = response;
+            hideLoader();
+            hotspotsButton.style.display = "block";
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
+            hideLoader();
         }
     });
 }
+
