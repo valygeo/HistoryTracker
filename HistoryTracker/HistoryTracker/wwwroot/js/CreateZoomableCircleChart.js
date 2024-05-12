@@ -1,6 +1,6 @@
-
+﻿
 function createChart(data) {
-    // Specify the chart�s dimensions.
+    // Specify the chart’s dimensions.
     const width = 928;
     const height = width;
 
@@ -31,7 +31,18 @@ function createChart(data) {
         .selectAll("circle")
         .data(root.descendants().slice(1))
         .join("circle")
-        .attr("fill", d => d.children ? color(d.depth) : "white")
+        .style("fill", function (d) {
+            if (d.data.weight > 0.0) {
+                return `rgba(255, 0, 0, ${d.data.weight})`;
+            } else if (d.children) {
+                return color(d.depth); 
+            } else {
+                return "WhiteSmoke"; 
+            }
+        })
+        .style("fill-opacity", function (d) {
+            return d.weight; 
+        })
         .attr("pointer-events", d => !d.children ? "none" : null)
         .on("mouseover", function () { d3.select(this).attr("stroke", "#000"); })
         .on("mouseout", function () { d3.select(this).attr("stroke", null); })
@@ -84,7 +95,27 @@ function createChart(data) {
             .on("start", function (d) { if (d.parent === focus) this.style.display = "inline"; })
             .on("end", function (d) { if (d.parent !== focus) this.style.display = "none"; });
     }
-
     return svg.node();
 }
+document.addEventListener('DOMContentLoaded', function () {
+    getHierarchyData();
+});
+function getHierarchyData() {
+    $.ajax({
+        type: "GET",
+        url: "chart-api-controller",
+        dataType: "json",
+        success: function (data) {
+            processDataAndDisplayChart(data);
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+}
 
+function processDataAndDisplayChart(data) {
+    const chart = createChart({ name: "flare", children: data });
+    const chartContainer = document.getElementById('chartContainer');
+    chartContainer.appendChild(chart);
+}

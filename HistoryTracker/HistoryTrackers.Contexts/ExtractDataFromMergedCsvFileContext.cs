@@ -8,69 +8,58 @@ namespace HistoryTracker.Contexts
     {
         public ExtractDataFromMergedCsvFileResponse Execute(string csvFilePath)
         {
-            var metrics = new List<ChangeFrequencyAndCodeMetric>();
             var hierarchy = new List<Parent>();
-            using (var reader = new StreamReader(csvFilePath))
-            {
-                reader.ReadLine();
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    var parts = line.Split(",");
-                    var filePath = parts[0];
-                    var metric = new ChangeFrequencyAndCodeMetric
-                    {
-                        EntityPath = filePath,
-                        Revisions = int.Parse(parts[1]),
-                        CodeLines = int.Parse(parts[2]),
-                        Authors = parts[3]
-                    };
-                    metrics.Add(metric);
-                }
-            }
+            var fileLines = File.ReadAllLines(csvFilePath);
+            var maxRevisionsMetric = 0;
 
-            foreach (var metric in metrics)
+            for (int i = 1; i < fileLines.Length; i++)
             {
-                var pathParts = metric.EntityPath.Split("\\");
-                var existingParent = hierarchy.FirstOrDefault(p => p.Name == pathParts[1]);
-       
+                var line = fileLines[i];
+                var metricParts = line.Split(",");
+                if (maxRevisionsMetric == 0)
+                {
+                    maxRevisionsMetric = int.Parse(metricParts[1]);
+                }
+                var modulePathParts = metricParts[0].Split("\\");
+                var existingParent = hierarchy.FirstOrDefault(p => p.Name == modulePathParts[1]);
+
                 if (existingParent == null)
                 {
                     var parent = new Parent
                     {
-                        Name = pathParts[1],
+                        Name = modulePathParts[1],
                         Value = 0,
-                        Revisions = 0,
+                        Weight = 0,
                         Authors = "",
                         Children = new List<Child>()
                     };
                     hierarchy.Add(parent);
-                    AddChildrensToHierarchy(parent, pathParts, metric, 2);
+                    AddChildrenToHierarchy(parent, modulePathParts, metricParts, 2, maxRevisionsMetric);
                 }
                 else
                 {
-                    AddChildrensToHierarchy(existingParent, pathParts, metric, 2);
+                    AddChildrenToHierarchy(existingParent, modulePathParts, metricParts, 2, maxRevisionsMetric);
                 }
             }
-            return new ExtractDataFromMergedCsvFileResponse { IsSuccess = true, ComplexityMetrics = metrics, Hierarchy = hierarchy};
+            return new ExtractDataFromMergedCsvFileResponse { IsSuccess = true, Hierarchy = hierarchy};
         }
 
-        private void AddChildrensToHierarchy(Parent parent, string[] pathParts, ChangeFrequencyAndCodeMetric metric, int index)
+        private void AddChildrenToHierarchy(Parent parent, string[] pathParts, string[] metricParts, int index, int maxRevisionsMetric)
         {
             Child currentChild;
             if (index == pathParts.Length - 1)
             {
                 var lastPart = pathParts[index];
                 currentChild = parent.Children.FirstOrDefault(c => c.Name == lastPart);
-
+                var revisionsMetric = int.Parse(metricParts[1]);
                 if (currentChild == null)
                 {
                     currentChild = new Child
                     {
                         Name = lastPart,
-                        Value = metric.CodeLines,
-                        Authors = metric.Authors,
-                        Revisions = metric.Revisions,
+                        Value = int.Parse(metricParts[2]),
+                        Authors = metricParts[3],
+                        Weight = (double)revisionsMetric/ maxRevisionsMetric,
                         Children = new List<Child>()
                     };
                     parent.Children.Add(currentChild);
@@ -96,13 +85,12 @@ namespace HistoryTracker.Contexts
             }
             parent = currentChild.ConvertToParent(currentChild);
 
-            AddChildrensToHierarchy(parent, pathParts, metric, index + 1);
+            AddChildrenToHierarchy(parent, pathParts, metricParts, index + 1, maxRevisionsMetric);
         }
 
 
         public class ExtractDataFromMergedCsvFileResponse : BaseResponse
         {
-            public ICollection<ChangeFrequencyAndCodeMetric> ComplexityMetrics { get; set; }
             public ICollection<Parent> Hierarchy { get; set; }
         }
     }

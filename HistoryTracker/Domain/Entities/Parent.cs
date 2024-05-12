@@ -5,7 +5,7 @@ namespace Domain.Entities
     {
         public string Name { get; set; }
         public int Value { get; set; }
-        public int Revisions { get; set; }
+        public double Weight { get; set; }
         public string Authors { get; set; }
         public ICollection<Child>? Children { get; set; }
    
@@ -15,7 +15,7 @@ namespace Domain.Entities
     {
         public string Name { get; set; }
         public int Value { get; set; }
-        public int Revisions { get; set; }
+        public double Weight { get; set; }
 
         public string Authors { get; set; }
         public ICollection<Child>? Children { get; set; }
@@ -28,6 +28,7 @@ namespace Domain.Entities
                 Value = child.Value,
                 Authors = child.Authors,
                 Children = child.Children,
+                Weight = child.Weight
             };
         }
     }
