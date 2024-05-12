@@ -10,7 +10,7 @@ namespace HistoryTracker.Controllers
         [HttpGet]
         public JsonResult GetHierarchyData()
         {
-            var context = new ExtractDataFromMergedCsvFileContext();
+            var context = new GetHotspotsFrequenciesAndComplexityPerFileContext();
             var result =
                 context.Execute(
                     "C:\\Users\\Vali\\Documents\\ClonedRepositories\\app-stagiatura-2023\\app-stagiatura-2023_complexity_metrics.csv");

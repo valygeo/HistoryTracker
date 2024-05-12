@@ -4,9 +4,9 @@ using HistoryTracker.Contexts.Base;
 
 namespace HistoryTracker.Contexts
 {
-    public class ExtractDataFromMergedCsvFileContext
+    public class GetHotspotsFrequenciesAndComplexityPerFileContext
     {
-        public ExtractDataFromMergedCsvFileResponse Execute(string csvFilePath)
+        public GetHotspotsFrequenciesAndComplexityPerFileResponse Execute(string csvFilePath)
         {
             var hierarchy = new List<Parent>();
             var fileLines = File.ReadAllLines(csvFilePath);
@@ -41,10 +41,10 @@ namespace HistoryTracker.Contexts
                     AddChildrenToHierarchy(existingParent, modulePathParts, metricParts, 2, maxRevisionsMetric);
                 }
             }
-            return new ExtractDataFromMergedCsvFileResponse { IsSuccess = true, Hierarchy = hierarchy};
+            return new GetHotspotsFrequenciesAndComplexityPerFileResponse { IsSuccess = true, Hierarchy = hierarchy};
         }
 
-        private void AddChildrenToHierarchy(Parent parent, string[] pathParts, string[] metricParts, int index, int maxRevisionsMetric)
+        private static void AddChildrenToHierarchy(Parent parent, string[] pathParts, string[] metricParts, int index, int maxRevisionsMetric)
         {
             Child currentChild;
             if (index == pathParts.Length - 1)
@@ -89,7 +89,7 @@ namespace HistoryTracker.Contexts
         }
 
 
-        public class ExtractDataFromMergedCsvFileResponse : BaseResponse
+        public class GetHotspotsFrequenciesAndComplexityPerFileResponse : BaseResponse
         {
             public ICollection<Parent> Hierarchy { get; set; }
         }
