@@ -13,9 +13,9 @@ namespace HistoryTracker.Contexts
             _gateway = gateway;
         }
 
-        public GenerateCsvWithNumberOfCodeLinesResponse Execute(string clonedRepositoryPath)
+        public GenerateCsvWithNumberOfCodeLinesResponse Execute(string clonedRepositoryPath, string clocPath)
         {
-            var generatedCsvPath = _gateway.GenerateCsvWithNumberOfCodeLines(clonedRepositoryPath);
+            var generatedCsvPath = _gateway.GenerateCsvWithNumberOfCodeLines(clonedRepositoryPath, clocPath);
             if (!string.IsNullOrWhiteSpace(generatedCsvPath))
                 return new GenerateCsvWithNumberOfCodeLinesResponse { IsSuccess = true, GeneratedCsvPath = generatedCsvPath};
             return new GenerateCsvWithNumberOfCodeLinesResponse { IsSuccess = false, Error = "Error trying to generate csv file!" };
