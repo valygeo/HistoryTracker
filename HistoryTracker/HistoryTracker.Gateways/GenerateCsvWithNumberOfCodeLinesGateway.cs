@@ -2,15 +2,16 @@
 using System.Diagnostics;
 using Domain;
 
+
 namespace HistoryTracker.Gateways
 {
     public class GenerateCsvWithNumberOfCodeLinesGateway : IGenerateCsvWithNumberOfCodeLinesGateway
     {
-        public string GenerateCsvWithNumberOfCodeLines(string repositoryPath)
+        public string GenerateCsvWithNumberOfCodeLines(string repositoryPath, string clocPath)
         {
             var generateCsvProcessStartInfo = new ProcessStartInfo
             {
-                FileName = "cmd",
+                FileName = clocPath,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -26,7 +27,7 @@ namespace HistoryTracker.Gateways
             {
                 process.StartInfo = generateCsvProcessStartInfo;
                 process.Start();
-                process.StandardInput.WriteLine($"cloc ./ --by-file --csv --quiet --report-file={csvFileName}");
+                process.StandardInput.WriteLine($"./ --by-file --csv --quiet --report-file={csvFileName}");
                 process.StandardInput.Flush();
                 process.StandardInput.Close();
                 process.WaitForExit();

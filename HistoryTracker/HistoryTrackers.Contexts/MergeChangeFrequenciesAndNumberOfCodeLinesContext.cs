@@ -20,7 +20,7 @@ namespace HistoryTracker.Contexts
             _numberOfCodeLinesContext = numberOfCodeLinesContext;
             _gateway = gateway;
         }
-        public MergeChangeFrequenciesAndNumberOfCodeLinesResponse Execute(string repositoryUrl)
+        public MergeChangeFrequenciesAndNumberOfCodeLinesResponse Execute(string repositoryUrl, string clocPath)
         {
             if (!String.IsNullOrWhiteSpace(repositoryUrl))
             {
@@ -28,9 +28,9 @@ namespace HistoryTracker.Contexts
                 var cloneRepositoryResponse = _cloneRepositoryContext.Execute(repositoryUrl);
 
                 if (cloneRepositoryResponse.IsSuccess)
-                {
+                {   
                     var generateCsvWithChangeFrequenciesAndAuthorsResponse = _changeFrequenciesContext.Execute(cloneRepositoryResponse.ClonedRepositoryPath);
-                    var generateCsvWithNumberOfCodeLinesResponse = _numberOfCodeLinesContext.Execute(cloneRepositoryResponse.ClonedRepositoryPath);
+                    var generateCsvWithNumberOfCodeLinesResponse = _numberOfCodeLinesContext.Execute(cloneRepositoryResponse.ClonedRepositoryPath,clocPath);
                     var repositoryName = Path.GetFileNameWithoutExtension(cloneRepositoryResponse.ClonedRepositoryPath);
                     var csvFileName = $"{repositoryName}_complexity_metrics.csv";
                     var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);

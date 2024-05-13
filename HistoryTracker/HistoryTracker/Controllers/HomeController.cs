@@ -9,10 +9,12 @@ namespace HistoryTracker.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
@@ -36,13 +38,14 @@ namespace HistoryTracker.Controllers
         [Route("{repositoryUrl:required}/get-complexity-metrics")]
         public IActionResult GetComplexityMetrics([FromRoute] string repositoryUrl)
         {
+            var clocPath = _configuration["AppSettings:ClocPath"];
             var context = new MergeChangeFrequenciesAndNumberOfCodeLinesContext(
                 new CloneRepositoryContext(new CloneRepositoryGateway()),
                 new GenerateCsvWithChangeFrequenciesOfModulesContext(
                     new GenerateCsvWithChangeFrequenciesOfModulesGateway(), new CreateLogFileContext(new CreateLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext()),
                 new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway()),
                 new MergeChangeFrequenciesAndNumberOfCodeLinesGateway());
-            var response = context.Execute(repositoryUrl);
+            var response = context.Execute(repositoryUrl,clocPath);
             return Json(response.MergedCsvFilePath);
         }
 
