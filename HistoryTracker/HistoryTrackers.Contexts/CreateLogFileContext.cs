@@ -6,33 +6,59 @@ namespace HistoryTracker.Contexts
     public class CreateLogFileContext
     {
         private readonly ICreateLogFileGateway _gateway;
-        private readonly CloneRepositoryContext _cloneRepositoryContext;
 
-        public CreateLogFileContext(ICreateLogFileGateway gateway, CloneRepositoryContext cloneRepositoryContext)
+        public CreateLogFileContext(ICreateLogFileGateway gateway)
         {
             _gateway = gateway;
-            _cloneRepositoryContext = cloneRepositoryContext;
         }
 
-        public CreateLogFileResponse Execute(string githubUrl)
+        public CreateLogFileResponse Execute(string clonedRepositoryPath)
         {
-            var cloneRepositoryResponse = _cloneRepositoryContext.Execute(githubUrl);
-            if (cloneRepositoryResponse.IsSuccess)
+            if (String.IsNullOrWhiteSpace(clonedRepositoryPath))
+                return new CreateLogFileResponse { IsSuccess = false, Error = "Cloned repository path is empty!" };
+
+            var repositoryName = Path.GetFileNameWithoutExtension(clonedRepositoryPath);
+            var logFilePath = Path.Combine(clonedRepositoryPath, $"{repositoryName}.log");
+            var isRepositoryUpToDate = _gateway.IsRepositoryUpToDate(clonedRepositoryPath);
+
+
+            if (isRepositoryUpToDate)
             {
-                var createLogFileResult = _gateway.CreateLogFile(githubUrl, cloneRepositoryResponse.ClonedRepositoryPath);
-                if (!String.IsNullOrWhiteSpace(createLogFileResult))
-                    return new CreateLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult };
-                return new CreateLogFileResponse { IsSuccess = false, Error = "Error occured while trying to create log file!" };
+                var logFileAlreadyExists = _gateway.LogFileAlreadyExists(logFilePath);
+                if (!logFileAlreadyExists)
+                {
+                    var logFileCreatedPath = _gateway.CreateLogFile(repositoryName, clonedRepositoryPath);
+
+                    if (!String.IsNullOrWhiteSpace(logFileCreatedPath))
+                        return new CreateLogFileResponse { IsSuccess = true, LogFilePath = logFileCreatedPath };
+                    return new CreateLogFileResponse
+                        { IsSuccess = false, Error = "Error occured while trying to create log file!" };
+                }
+
+                return new CreateLogFileResponse { IsSuccess = true, LogFilePath = logFilePath };
+
             }
 
-            return new CreateLogFileResponse
-                { IsSuccess = false, Error = "Error occured while trying to clone the repository!" };
-        }
-          
-    }
+            {
+                var fetchChangesResult = _gateway.FetchChanges(clonedRepositoryPath);
 
-    public class CreateLogFileResponse : BaseResponse
-    {
-        public string LogFilePath { get; set; }
+                if (!fetchChangesResult)
+                    return new CreateLogFileResponse { IsSuccess = false, Error = "Error trying to fetch changes!" };
+                {
+                    var createLogFileResult = _gateway.CreateLogFile(repositoryName, clonedRepositoryPath);
+                    if (!String.IsNullOrWhiteSpace(createLogFileResult))
+                        return new CreateLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult , ChangesFetched = true};
+                    return new CreateLogFileResponse
+                        { IsSuccess = false, Error = "Error occured while trying to create log file!" };
+                }
+            }
+            
+        }
+
+        public class CreateLogFileResponse : BaseResponse
+        {
+            public string LogFilePath { get; set; }
+            public bool ChangesFetched { get; set; }
+        }
     }
 }

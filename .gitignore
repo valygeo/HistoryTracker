@@ -9,8 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-
-
+.vs/
 HistoryTracker\.vs\HistoryTracker\v17\DocumentLayout.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -351,6 +350,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-
 
 *.db-*

@@ -1,7 +1,7 @@
 ﻿
 namespace Domain.Entities
 {
-    public class SummaryData
+    public class Statistics
     {
         public int NumberOfCommits { get; set; }
         public int NumberOfEntities { get; set; }
