@@ -102,11 +102,13 @@ document.addEventListener('DOMContentLoaded', function () {
     getHierarchyData();
 });
 
-const getHierarchyData = function() {
+const getHierarchyData = function () {
+    const filePath = localStorage.getItem('filePath');
+    localStorage.removeItem('filePath');
     $.ajax({
         type: "GET",
         url: "chart-api-controller",
-        data: { filePath: complexityAndFrequenciesPerFilePath },
+        data: { filePath: filePath },
         dataType: "json",
         success: function (response) {
             processDataAndDisplayChart(response);
