@@ -97,16 +97,24 @@ function createChart(data) {
     }
     return svg.node();
 }
+
+
+function redirectToChartPage() {
+    window.location.href = "/Chart";
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     getHierarchyData();
 });
+
 function getHierarchyData() {
     $.ajax({
         type: "GET",
         url: "chart-api-controller",
+        data: { filePath: "C:\\Users\\Vali\\Documents\\ClonedRepositories\\app-stagiatura-2023\\app-stagiatura-2023_complexity_metrics.csv"},
         dataType: "json",
-        success: function (data) {
-            processDataAndDisplayChart(data);
+        success: function (response) {
+            processDataAndDisplayChart(response);
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
@@ -114,8 +122,8 @@ function getHierarchyData() {
     });
 }
 
-function processDataAndDisplayChart(data) {
-    const chart = createChart({ name: "flare", children: data });
+function processDataAndDisplayChart(response) {
+    const chart = createChart({ name: "flare", children: response });
     const chartContainer = document.getElementById('chartContainer');
     chartContainer.appendChild(chart);
 }

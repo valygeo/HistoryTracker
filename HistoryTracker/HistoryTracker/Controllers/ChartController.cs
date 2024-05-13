@@ -1,5 +1,4 @@
 ﻿
-using HistoryTracker.Contexts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HistoryTracker.Controllers

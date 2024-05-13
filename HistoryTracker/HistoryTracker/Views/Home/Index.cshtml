@@ -2,16 +2,19 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<link rel="stylesheet" href="css/loader.css" />
+
 <div class="text-center">
+    <input type="hidden" id="csvFilePath" value="" />
     <h1 class="display-4">Welcome</h1>
-    <input type="text" id="githubUrl"/> 
+    <input type="text" id="githubUrl"/>
     <input type="button" value="Get Summary Data" onclick="getData()"/>
-    <div id="summaryDataContainer" >
-        
+    <div id="summaryDataContainer">
+
     </div>
-    <input type="button" value="Get Complexity Metrics" onclick="getComplexityMetrics()" />
-    <input type="button" value="Display chart" onclick="redirectToChartPage()">
+    <input type="button" value="Get Complexity Metrics" onclick="getComplexityMetrics()"/>
+    <div id="loader" class="loader"></div>
+    <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none "type="button" value="Display Hotspots Frequency And Complexity" onclick="redirectToChartPage()">
 </div>
 <script src="js/GetSummaryData.js"></script>
 <script src="js/d3.v7.min.js"></script>
-<script src="js/CreateZoomableCircleChart.js"></script>
