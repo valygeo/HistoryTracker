@@ -98,11 +98,6 @@ function createChart(data) {
     return svg.node();
 }
 
-
-function redirectToChartPage() {
-    window.location.href = "/Chart";
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     getHierarchyData();
 });
@@ -111,7 +106,7 @@ function getHierarchyData() {
     $.ajax({
         type: "GET",
         url: "chart-api-controller",
-        data: { filePath: "C:\\Users\\Vali\\Documents\\ClonedRepositories\\app-stagiatura-2023\\app-stagiatura-2023_complexity_metrics.csv"},
+        data: { filePath: complexityAndFrequenciesPerFilePath },
         dataType: "json",
         success: function (response) {
             processDataAndDisplayChart(response);

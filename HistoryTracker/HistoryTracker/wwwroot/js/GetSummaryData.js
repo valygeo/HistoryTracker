@@ -49,7 +49,8 @@ function hideLoader() {
     var loader = document.getElementById("loader");
     loader.style.display = "none";
 }
-var complexityAndFrequenciesPerFilePath = "";
+
+
 getComplexityMetrics = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
