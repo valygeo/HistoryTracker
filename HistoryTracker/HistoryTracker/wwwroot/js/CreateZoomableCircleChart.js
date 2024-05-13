@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
     getHierarchyData();
 });
 
-function getHierarchyData() {
+const getHierarchyData = function() {
     $.ajax({
         type: "GET",
         url: "chart-api-controller",
