@@ -1,4 +1,4 @@
-﻿getData = function () {
+﻿const getData = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
 
@@ -19,7 +19,7 @@
         }
     });
 }
-getChangeFrequencies = function () {
+const getChangeFrequencies = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
 
@@ -37,20 +37,20 @@ getChangeFrequencies = function () {
         }
     });
 }
-function redirectToChartPage() {
+const redirectToChartPage = function() {
     window.location.href = '/Chart'; 
 }
-function showLoader() {
+const  showLoader = function() {
     var loader = document.getElementById("loader");
     loader.style.display = "block";
 }
 
-function hideLoader() {
+const hideLoader = function() {
     var loader = document.getElementById("loader");
     loader.style.display = "none";
 }
-var complexityAndFrequenciesPerFilePath = "";
-getComplexityMetrics = function () {
+
+const getComplexityMetrics = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
 
