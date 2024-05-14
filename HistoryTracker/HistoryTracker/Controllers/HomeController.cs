@@ -31,7 +31,7 @@ namespace HistoryTracker.Controllers
         {
             var context = new GetSummaryStatisticsContext(
                 new CloneRepositoryContext(new CloneRepositoryGateway()),
-                new CreateLogFileContext(new CreateLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext());
+                new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext());
             var response = context.Execute(githubUrl);
             return Json(new { statistics = response.Statistics });
         }
@@ -45,7 +45,7 @@ namespace HistoryTracker.Controllers
             var context = new MergeChangeFrequenciesAndNumberOfCodeLinesContext(
                 new CloneRepositoryContext(new CloneRepositoryGateway()),
                 new GenerateCsvWithChangeFrequenciesOfModulesContext(
-                    new GenerateCsvWithChangeFrequenciesOfModulesGateway(), new CreateLogFileContext(new CreateLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext()),
+                    new GenerateCsvWithChangeFrequenciesOfModulesGateway(), new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext()),
                 new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway()),
                 new MergeChangeFrequenciesAndNumberOfCodeLinesGateway());
             var response = context.Execute(repositoryUrl,clocPath);

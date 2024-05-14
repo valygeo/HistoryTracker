@@ -10,12 +10,12 @@ namespace HistoryTracker.Contexts
     public class GenerateCsvWithChangeFrequenciesOfModulesContext
     {
         private readonly IGenerateCsvWithChangeFrequenciesOfModulesGateway _gateway;
-        private readonly CreateLogFileContext _createLogFileContext;
+        private readonly CreateAllTimeLogFileContext _createLogFileContext;
         private readonly ReadLogFileContext _readLogFileContext;
         private readonly ExtractAllCommitsContext _extractAllCommitsContext;
 
         public GenerateCsvWithChangeFrequenciesOfModulesContext(IGenerateCsvWithChangeFrequenciesOfModulesGateway gateway,
-            CreateLogFileContext createLogFileContext, ReadLogFileContext readLogFileContext,
+            CreateAllTimeLogFileContext createLogFileContext, ReadLogFileContext readLogFileContext,
             ExtractAllCommitsContext extractAllCommitsContext)
         {
             _gateway = gateway;

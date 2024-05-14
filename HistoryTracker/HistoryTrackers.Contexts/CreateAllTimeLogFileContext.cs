@@ -3,19 +3,19 @@ using HistoryTracker.Contexts.Base;
 
 namespace HistoryTracker.Contexts
 {
-    public class CreateLogFileContext
+    public class CreateAllTimeLogFileContext
     {
-        private readonly ICreateLogFileGateway _gateway;
+        private readonly ICreateAllTimeLogFileGateway _gateway;
 
-        public CreateLogFileContext(ICreateLogFileGateway gateway)
+        public CreateAllTimeLogFileContext(ICreateAllTimeLogFileGateway gateway)
         {
             _gateway = gateway;
         }
 
-        public CreateLogFileResponse Execute(string clonedRepositoryPath)
+        public CreateAllTimeLogFileResponse Execute(string clonedRepositoryPath)
         {
             if (String.IsNullOrWhiteSpace(clonedRepositoryPath))
-                return new CreateLogFileResponse { IsSuccess = false, Error = "Cloned repository path is empty!" };
+                return new CreateAllTimeLogFileResponse { IsSuccess = false, Error = "Cloned repository path is empty!" };
 
             var repositoryName = Path.GetFileNameWithoutExtension(clonedRepositoryPath);
             var logFilePath = Path.Combine(clonedRepositoryPath, $"{repositoryName}.log");
@@ -30,12 +30,12 @@ namespace HistoryTracker.Contexts
                     var logFileCreatedPath = _gateway.CreateLogFile(repositoryName, clonedRepositoryPath);
 
                     if (!String.IsNullOrWhiteSpace(logFileCreatedPath))
-                        return new CreateLogFileResponse { IsSuccess = true, LogFilePath = logFileCreatedPath };
-                    return new CreateLogFileResponse
+                        return new CreateAllTimeLogFileResponse { IsSuccess = true, LogFilePath = logFileCreatedPath };
+                    return new CreateAllTimeLogFileResponse
                         { IsSuccess = false, Error = "Error occured while trying to create log file!" };
                 }
 
-                return new CreateLogFileResponse { IsSuccess = true, LogFilePath = logFilePath };
+                return new CreateAllTimeLogFileResponse { IsSuccess = true, LogFilePath = logFilePath };
 
             }
 
@@ -43,22 +43,21 @@ namespace HistoryTracker.Contexts
                 var fetchChangesResult = _gateway.FetchChanges(clonedRepositoryPath);
 
                 if (!fetchChangesResult)
-                    return new CreateLogFileResponse { IsSuccess = false, Error = "Error trying to fetch changes!" };
+                    return new CreateAllTimeLogFileResponse { IsSuccess = false, Error = "Error trying to fetch changes!" };
                 {
                     var createLogFileResult = _gateway.CreateLogFile(repositoryName, clonedRepositoryPath);
                     if (!String.IsNullOrWhiteSpace(createLogFileResult))
-                        return new CreateLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult , ChangesFetched = true};
-                    return new CreateLogFileResponse
+                        return new CreateAllTimeLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult};
+                    return new CreateAllTimeLogFileResponse
                         { IsSuccess = false, Error = "Error occured while trying to create log file!" };
                 }
             }
             
         }
 
-        public class CreateLogFileResponse : BaseResponse
+        public class CreateAllTimeLogFileResponse : BaseResponse
         {
             public string LogFilePath { get; set; }
-            public bool ChangesFetched { get; set; }
         }
     }
 }

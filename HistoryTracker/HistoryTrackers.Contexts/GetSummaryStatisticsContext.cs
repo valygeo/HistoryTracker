@@ -8,11 +8,11 @@ namespace HistoryTracker.Contexts
     public class GetSummaryStatisticsContext
     {
         private readonly CloneRepositoryContext _cloneRepositoryContext;
-        private readonly CreateLogFileContext _createLogFileContext;
+        private readonly CreateAllTimeLogFileContext _createLogFileContext;
         private readonly ReadLogFileContext _readLogFileContext;
         private readonly ExtractAllCommitsContext _extractAllCommitsContext;
 
-        public GetSummaryStatisticsContext(CloneRepositoryContext cloneRepositoryContext, CreateLogFileContext createLogFileContext,
+        public GetSummaryStatisticsContext(CloneRepositoryContext cloneRepositoryContext, CreateAllTimeLogFileContext createLogFileContext,
            ReadLogFileContext readLogFileContext, ExtractAllCommitsContext extractAllCommitsContext)
         {
             _cloneRepositoryContext = cloneRepositoryContext;

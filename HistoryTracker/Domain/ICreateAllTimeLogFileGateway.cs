@@ -1,7 +1,7 @@
 ﻿
 namespace Domain
 {
-    public interface ICreateLogFileGateway
+    public interface ICreateAllTimeLogFileGateway
     {
         string CreateLogFile(string repositoryName, string clonedRepositoryPath);
         bool LogFileAlreadyExists(string logFilePath);

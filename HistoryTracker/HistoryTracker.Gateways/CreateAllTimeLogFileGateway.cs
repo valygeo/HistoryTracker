@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace HistoryTracker.Gateways
 {
-    public class CreateLogFileGateway : ICreateLogFileGateway
+    public class CreateAllTimeLogFileGateway : ICreateAllTimeLogFileGateway
     {
         public string CreateLogFile(string repositoryName, string clonedRepositoryPath)
         {
