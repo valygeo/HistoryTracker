@@ -1,6 +1,6 @@
 ﻿
 using System.Text.RegularExpressions;
-using Domain.Entities;
+using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
 
 namespace HistoryTracker.Contexts

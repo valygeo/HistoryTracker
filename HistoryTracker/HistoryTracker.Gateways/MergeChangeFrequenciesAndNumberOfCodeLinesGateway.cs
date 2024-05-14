@@ -1,6 +1,6 @@
 ﻿
 using Domain;
-using Domain.Entities;
+using Domain.MetaData;
 
 namespace HistoryTracker.Gateways
 {

@@ -2,8 +2,8 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using Domain;
+using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
-using Domain.Entities;
 
 namespace HistoryTracker.Contexts
 {

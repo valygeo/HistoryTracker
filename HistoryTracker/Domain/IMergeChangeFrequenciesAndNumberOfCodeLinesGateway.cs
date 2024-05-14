@@ -1,5 +1,5 @@
 ﻿
-using Domain.Entities;
+using Domain.MetaData;
 
 namespace Domain
 {

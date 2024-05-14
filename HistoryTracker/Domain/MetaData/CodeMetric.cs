@@ -1,5 +1,5 @@
 ﻿
-namespace Domain.Entities
+namespace Domain.MetaData
 {
     public class CodeMetric
     {
