@@ -4,7 +4,7 @@ using Domain.MetaData;
 
 namespace HistoryTracker.Gateways
 {
-    public class GenerateCsvWithChangeFrequenciesOfModulesGateway : IGenerateCsvWithChangeFrequenciesOfModulesGateway
+    public class GenerateCsvWithChangeFrequenciesOfAllModulesGateway : IGenerateCsvWithChangeFrequenciesOfAllModulesGateway
     {
         public bool CreateCsvFileWithChangeFrequenciesOfModules(ICollection<ChangeFrequency> modulesChangeFrequenciesAndAuthors, string csvFilePath)
         {

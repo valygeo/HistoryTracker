@@ -9,11 +9,11 @@ namespace HistoryTracker.Contexts
     public class MergeChangeFrequenciesAndNumberOfCodeLinesContext
     {
         private readonly CloneRepositoryContext _cloneRepositoryContext;
-        private readonly GenerateCsvWithChangeFrequenciesOfModulesContext _changeFrequenciesContext;
+        private readonly GenerateCsvWithChangeFrequenciesOfAllModulesContext _changeFrequenciesContext;
         private readonly GenerateCsvWithNumberOfCodeLinesContext _numberOfCodeLinesContext;
         private readonly IMergeChangeFrequenciesAndNumberOfCodeLinesGateway _gateway;
 
-        public MergeChangeFrequenciesAndNumberOfCodeLinesContext(CloneRepositoryContext cloneRepositoryContext, GenerateCsvWithChangeFrequenciesOfModulesContext changeFrequenciesContext, GenerateCsvWithNumberOfCodeLinesContext numberOfCodeLinesContext, IMergeChangeFrequenciesAndNumberOfCodeLinesGateway gateway)
+        public MergeChangeFrequenciesAndNumberOfCodeLinesContext(CloneRepositoryContext cloneRepositoryContext, GenerateCsvWithChangeFrequenciesOfAllModulesContext changeFrequenciesContext, GenerateCsvWithNumberOfCodeLinesContext numberOfCodeLinesContext, IMergeChangeFrequenciesAndNumberOfCodeLinesGateway gateway)
         {
             _cloneRepositoryContext = cloneRepositoryContext;
             _changeFrequenciesContext = changeFrequenciesContext;

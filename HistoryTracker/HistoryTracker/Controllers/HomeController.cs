@@ -44,8 +44,8 @@ namespace HistoryTracker.Controllers
             var clocPath = Path.GetFullPath(_configuration["AppSettings:ClocPath"]);
             var context = new MergeChangeFrequenciesAndNumberOfCodeLinesContext(
                 new CloneRepositoryContext(new CloneRepositoryGateway()),
-                new GenerateCsvWithChangeFrequenciesOfModulesContext(
-                    new GenerateCsvWithChangeFrequenciesOfModulesGateway(), new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext()),
+                new GenerateCsvWithChangeFrequenciesOfAllModulesContext(
+                    new GenerateCsvWithChangeFrequenciesOfAllModulesGateway(), new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext()),
                 new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway()),
                 new MergeChangeFrequenciesAndNumberOfCodeLinesGateway());
             var response = context.Execute(repositoryUrl,clocPath);

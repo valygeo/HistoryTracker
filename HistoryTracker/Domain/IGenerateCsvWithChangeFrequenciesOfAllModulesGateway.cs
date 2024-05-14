@@ -3,7 +3,7 @@ using Domain.MetaData;
 
 namespace Domain
 {
-    public interface IGenerateCsvWithChangeFrequenciesOfModulesGateway
+    public interface IGenerateCsvWithChangeFrequenciesOfAllModulesGateway
     {
         bool CreateCsvFileWithChangeFrequenciesOfModules(ICollection<ChangeFrequency> changeFrequenciesOfModules, string csvFilePath);
         bool CsvAlreadyExists(string csvFilePath);
