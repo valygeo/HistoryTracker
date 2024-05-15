@@ -19,26 +19,14 @@ namespace HistoryTracker.Contexts
             if (String.IsNullOrWhiteSpace(createLogFileData.clonedRepositoryPath))
                 return new CreateLogFileFromSpecifiedPeriodResponse { IsSuccess = false, Error = "Cloned repository path is empty!" };
 
-            var repositoryName = Path.GetFileNameWithoutExtension(createLogFileData.clonedRepositoryPath);
-            var logFilePath = Path.Combine(createLogFileData.clonedRepositoryPath, $"{repositoryName}.log");
             var isRepositoryUpToDate = _gateway.IsRepositoryUpToDate(createLogFileData.clonedRepositoryPath);
-
-
             if (isRepositoryUpToDate)
             {
-                var logFileAlreadyExists = _gateway.LogFileAlreadyExists(logFilePath);
-                if (!logFileAlreadyExists)
-                {
-                    var logFileCreatedPath = _gateway.CreateLogFile(createLogFileData);
-
-                    if (!String.IsNullOrWhiteSpace(logFileCreatedPath))
-                        return new CreateLogFileFromSpecifiedPeriodResponse { IsSuccess = true, GeneratedLogFilePath = logFileCreatedPath };
-                    return new CreateLogFileFromSpecifiedPeriodResponse
-                    { IsSuccess = false, Error = "Error occured while trying to create log file!" };
-                }
-
-                return new CreateLogFileFromSpecifiedPeriodResponse { IsSuccess = true, GeneratedLogFilePath = logFilePath };
-
+                var logFileCreatedPath = _gateway.CreateLogFile(createLogFileData);
+                if (!String.IsNullOrWhiteSpace(logFileCreatedPath))
+                    return new CreateLogFileFromSpecifiedPeriodResponse { IsSuccess = true, GeneratedLogFilePath = logFileCreatedPath };
+                return new CreateLogFileFromSpecifiedPeriodResponse { IsSuccess = false, Error = "Error occured while trying to create log file!" };
+                    
             }
 
             {

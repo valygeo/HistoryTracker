@@ -1,12 +1,12 @@
-﻿using Domain.MetaData;
+﻿
+using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
-
 
 namespace HistoryTracker.Contexts
 {
-    public class GetHotspotsFrequenciesAndComplexityPerFileContext
+    public class GetHotspotsFrequenciesAndComplexityPerFileFromSpecificPeriodContext
     {
-        public GetHotspotsFrequenciesAndComplexityPerFileResponse Execute(string csvFilePath)
+        public GetHotspotsFrequenciesAndComplexityPerFileFromSpecificPeriodResponse Execute(string csvFilePath)
         {
             var hierarchy = new List<Parent>();
             var fileLines = File.ReadAllLines(csvFilePath);
@@ -41,7 +41,7 @@ namespace HistoryTracker.Contexts
                     AddChildrenToHierarchy(existingParent, modulePathParts, metricParts, 2, maxRevisionsMetric);
                 }
             }
-            return new GetHotspotsFrequenciesAndComplexityPerFileResponse { IsSuccess = true, Hierarchy = hierarchy};
+            return new GetHotspotsFrequenciesAndComplexityPerFileFromSpecificPeriodResponse { IsSuccess = true, Hierarchy = hierarchy };
         }
 
         private static void AddChildrenToHierarchy(Parent parent, string[] pathParts, string[] metricParts, int index, int maxRevisionsMetric)
@@ -59,12 +59,12 @@ namespace HistoryTracker.Contexts
                         Name = lastPart,
                         Value = int.Parse(metricParts[2]),
                         Authors = metricParts[3],
-                        Weight = (double)revisionsMetric/ maxRevisionsMetric,
+                        Weight = (double)revisionsMetric / maxRevisionsMetric,
                         Children = new List<Child>()
                     };
                     parent.Children.Add(currentChild);
                 }
-                return; 
+                return;
             }
 
             if (index >= pathParts.Length)
@@ -87,11 +87,10 @@ namespace HistoryTracker.Contexts
 
             AddChildrenToHierarchy(parent, pathParts, metricParts, index + 1, maxRevisionsMetric);
         }
+    }
 
-
-        public class GetHotspotsFrequenciesAndComplexityPerFileResponse : BaseResponse
-        {
-            public ICollection<Parent> Hierarchy { get; set; }
-        }
+    public class GetHotspotsFrequenciesAndComplexityPerFileFromSpecificPeriodResponse : BaseResponse
+    {
+        public ICollection<Parent> Hierarchy { get; set; }
     }
 }

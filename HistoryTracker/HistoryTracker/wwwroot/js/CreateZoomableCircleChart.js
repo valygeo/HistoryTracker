@@ -103,8 +103,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 const getHierarchyData = function () {
-    const filePath = localStorage.getItem('filePath');
-    localStorage.removeItem('filePath');
+    const filePath = localStorage.getItem('filePathForHotspotsFrequencyAndComplexityFromAllTime');
+    localStorage.removeItem('filePathForHotspotsFrequencyAndComplexityFromAllTime');
     $.ajax({
         type: "GET",
         url: "chart-api-controller",

@@ -1,6 +1,7 @@
 ﻿
 using Domain;
 using System.Diagnostics;
+using System.Globalization;
 using Domain.MetaData;
 
 namespace HistoryTracker.Gateways
@@ -9,16 +10,19 @@ namespace HistoryTracker.Gateways
     {
         public string CreateLogFile(CreateLogFileFromSpecifiedPeriodData createLogFileRequest)
         {
-            var command = $"git log --pretty=format:\"[%h] %an %ad %s\" --before={createLogFileRequest.periodStartDate} --after={createLogFileRequest.periodEndDate} --date=short --numstat";
+            var formattedStartDate = createLogFileRequest.periodStartDate.ToString("yyyy-MM-dd",CultureInfo.InvariantCulture);
+            var formattedEndDate = createLogFileRequest.periodEndDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            var logFileName = $"{createLogFileRequest.repositoryName}_from_{formattedStartDate}_to_{formattedEndDate}.log";
+            var command = $"git log --pretty=format:\"[%h] %an %ad %s\" --before={formattedEndDate} --after={formattedStartDate} --date=short --numstat";
             var process = new Process();
             process.StartInfo.FileName = "cmd.exe";
-            process.StartInfo.Arguments = $"/c {command} > {createLogFileRequest.repositoryName}.log";
+            process.StartInfo.Arguments = $"/c {command} > {logFileName}";
             process.StartInfo.WorkingDirectory = createLogFileRequest.clonedRepositoryPath;
             process.StartInfo.CreateNoWindow = true;
             process.Start();
             process.WaitForExit();
 
-            var logFilePath = Path.Combine(createLogFileRequest.clonedRepositoryPath, $"{createLogFileRequest.repositoryName}.log");
+            var logFilePath = Path.Combine(createLogFileRequest.clonedRepositoryPath, logFileName);
             if (process.ExitCode != 0 || !File.Exists(logFilePath))
                 return "";
             return logFilePath;

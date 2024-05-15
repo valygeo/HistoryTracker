@@ -1,5 +1,5 @@
 ﻿
-const getData = function () {
+const getSummaryData = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
 
@@ -63,7 +63,37 @@ const hideLoader = function() {
         },
         success: function (response) {
             var hotspotsButton = document.getElementById("displayHotspotsFrequencyAndComplexityButton");
-            localStorage.setItem('filePath', response);
+            localStorage.setItem('filePathForHotspotsFrequencyAndComplexityFromAllTime', response);
+            hideLoader();
+            hotspotsButton.style.display = "block";
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+            hideLoader();
+        }
+    });
+}
+ const getComplexityMetricsForSpecificPeriod = function () {
+    var githubUrl = $('#githubUrl').val();
+    var encodedGithubUrl = encodeURIComponent(githubUrl);
+    var startDatePeriod = $('#startDate').val();
+    var endDatePeriod = $('#endDate').val();
+
+    $.ajax({
+        type: "GET",
+        url: "/get-complexity-metrics-for-specific-period",
+        data: {
+            RepositoryUrl: encodedGithubUrl,
+            startDatePeriod: startDatePeriod,
+            endDatePeriod : endDatePeriod
+              },
+        dataType: "json",
+        beforeSend: function () {
+            showLoader();
+        },
+        success: function (response) {
+            var hotspotsButton = document.getElementById("displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod");
+            localStorage.setItem('filePathForHotspotsFrequencyAndComplexityForSpecificPeriod', response);
             hideLoader();
             hotspotsButton.style.display = "block";
         },

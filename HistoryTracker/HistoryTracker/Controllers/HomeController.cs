@@ -1,6 +1,7 @@
 ﻿using HistoryTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Domain.MetaData;
 using HistoryTracker.Contexts;
 using HistoryTracker.Gateways;
 
@@ -8,16 +9,16 @@ namespace HistoryTracker.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IConfiguration _configuration;
+        private readonly string _clocPath;
 
         public HomeController(IConfiguration configuration)
         {
-            if (configuration["AppSettings:ClocPath"] == null)
+            var clocPathConfig = configuration["AppSettings:ClocPath"];
+            if (string.IsNullOrWhiteSpace(clocPathConfig))
             {
-                throw new ArgumentNullException("");
+                throw new ArgumentNullException(nameof(clocPathConfig), "ClocPath configuration is missing or empty.");
             }
-            _configuration = configuration;
-
+            _clocPath = Path.GetFullPath(clocPathConfig);
         }
 
         public IActionResult Index()
@@ -41,14 +42,28 @@ namespace HistoryTracker.Controllers
         [Route("{repositoryUrl:required}/get-complexity-metrics")]
         public IActionResult GetComplexityMetrics([FromRoute] string repositoryUrl)
         {
-            var clocPath = Path.GetFullPath(_configuration["AppSettings:ClocPath"]);
             var context = new MergeChangeFrequenciesAndNumberOfCodeLinesContext(
                 new CloneRepositoryContext(new CloneRepositoryGateway()),
                 new GenerateCsvWithChangeFrequenciesOfAllModulesContext(
                     new GenerateCsvWithChangeFrequenciesOfAllModulesGateway(), new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()), new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext()),
                 new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway()),
                 new MergeChangeFrequenciesAndNumberOfCodeLinesGateway());
-            var response = context.Execute(repositoryUrl,clocPath);
+            var response = context.Execute(repositoryUrl,_clocPath);
+            return Json(response.MergedCsvFilePath);
+        }
+
+        [HttpGet("get-complexity-metrics-for-specific-period")]
+        public IActionResult GetComplexityMetricsForSpecificPeriod([FromQuery] ComplexityMetricsRequest request)
+        {
+            var context = new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodContext(
+                new CloneRepositoryContext(new CloneRepositoryGateway()),
+                new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodContext(
+                    new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodGateway(),
+                    new CreateLogFileFromSpecifiedPeriodContext(new CreateLogFileFromSpecifiedPeriodGateway()),
+                    new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext()),
+                new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway()),
+                new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodGateway());
+            var response = context.Execute(request, _clocPath);
             return Json(response.MergedCsvFilePath);
         }
 

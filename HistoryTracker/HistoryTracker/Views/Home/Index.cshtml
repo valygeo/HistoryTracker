@@ -8,14 +8,24 @@
     <input type="hidden" id="csvFilePath" value="" />
     <h1 class="display-4">Welcome</h1>
     <input type="text" id="githubUrl"/>
-    <input type="button" value="Get Summary Data" onclick="getData()"/>
+    <input type="button" value="Get Summary Data" onclick="getSummaryData()"/>
     <div id="summaryDataContainer">
 
     </div>
     <input type="button" value="Get Complexity Metrics" onclick="getComplexityMetrics()"/>
+    <div>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" required/>
+    </div>
+    <div>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" required/>
+    </div>
+    <input type="button" value="Get Complexity Metrics For Specific Period" onclick="getComplexityMetricsForSpecificPeriod()" />
     <div id="loader" class="loader"></div>
     <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none "type="button" value="Display Hotspots Frequency And Complexity"  onclick="redirectToChartPage()">
+    <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" style="display:none "type="button" value="Display Hotspots Frequency And Complexity For Specific Period"  onclick="redirectToChartForSpecificPeriodPage()">
     <input id="filePath"/>
 </div>
-<script src="js/GetSummaryData.js"></script>
+<script src="js/HomePage.js"></script>
 <script src="js/d3.v7.min.js"></script>
