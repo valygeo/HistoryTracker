@@ -6,12 +6,14 @@
 
 <div class="text-center">
     <input type="hidden" id="csvFilePath" value="" />
+    <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
     <h1 class="display-4">Welcome</h1>
     <input type="text" id="githubUrl"/>
-    <input type="button" value="Get Summary Data" onclick="getSummaryData()"/>
+    <input type="button" id ="getSummaryDataButton" value="Get Summary Data" onclick="getSummaryData()"/>
     <div id="summaryDataContainer">
 
     </div>
+
     <input type="button" value="Get Complexity Metrics" onclick="getComplexityMetrics()"/>
     <div>
         <label for="startDate">Start Date:</label>
@@ -24,7 +26,8 @@
     <input type="button" value="Get Complexity Metrics For Specific Period" onclick="getComplexityMetricsForSpecificPeriod()" />
     <div id="loader" class="loader"></div>
     <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none "type="button" value="Display Hotspots Frequency And Complexity"  onclick="redirectToChartPage()">
-    <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" style="display:none "type="button" value="Display Hotspots Frequency And Complexity For Specific Period"  onclick="redirectToChartForSpecificPeriodPage()">
+    <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" style="display:none "type="button" value="Display Hotspots Frequency And Complexity For Specific Period" onclick="redirectToChartForSpecificPeriodPage()">
+
     <input id="filePath"/>
 </div>
 <script src="js/HomePage.js"></script>

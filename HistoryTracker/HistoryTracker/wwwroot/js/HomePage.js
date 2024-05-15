@@ -1,24 +1,43 @@
-﻿
-const getSummaryData = function () {
-    var githubUrl = $('#githubUrl').val();
-    var encodedGithubUrl = encodeURIComponent(githubUrl);
+﻿function validateAndShowMessage() {
+    let isValid = true;
+    const githubUrlPattern = /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+(\/[A-Za-z0-9_-]+)?(\.git)?\/?$/;
+    const githubUrlInput = document.getElementById('githubUrl').value;
+    const errorMessage = document.getElementById('error-message');
 
-    $.ajax({
-        type: "GET",
-        url: "/" + encodedGithubUrl + "/get-summary-data",
-        dataType: "json", 
-        success: function (response) {
-            $('#summaryDataContainer').html(
-                '<p>Number of commits: ' + response.statistics.numberOfCommits + '</p>' +
-                '<p>Number of authors: ' + response.statistics.numberOfAuthors + '</p>' +
-                '<p>Number of entities: ' + response.statistics.numberOfEntities + '</p>' +
-                '<p>Number of entitites changed: ' + response.statistics.numberOfEntitiesChanged + '</p>'
-            );
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-        }
-    });
+    if (githubUrlInput.trim() === '' || !githubUrlPattern.test(githubUrlInput)) {
+        errorMessage.style.display = 'block'; 
+        isValid = false;
+    } else {
+        errorMessage.style.display = 'none'; 
+    }
+    return isValid;
+}
+
+   
+const getSummaryData = function () {
+    var isValid = validateAndShowMessage();
+    if (isValid) {
+        var githubUrl = $('#githubUrl').val();
+        var encodedGithubUrl = encodeURIComponent(githubUrl);
+
+        $.ajax({
+            type: "GET",
+            url: "/" + encodedGithubUrl + "/get-summary-data",
+            dataType: "json",
+            success: function (response) {
+                $('#summaryDataContainer').html(
+                    '<p>Number of commits: ' + response.statistics.numberOfCommits + '</p>' +
+                    '<p>Number of authors: ' + response.statistics.numberOfAuthors + '</p>' +
+                    '<p>Number of entities: ' + response.statistics.numberOfEntities + '</p>' +
+                    '<p>Number of entitites changed: ' + response.statistics.numberOfEntitiesChanged + '</p>'
+                );
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+  
 }
 const getChangeFrequencies = function () {
     var githubUrl = $('#githubUrl').val();
