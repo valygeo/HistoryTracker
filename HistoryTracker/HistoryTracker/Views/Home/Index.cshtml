@@ -8,17 +8,10 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Home Page for History Traker</title>
+	<title>Home Page for History Tracker</title>
 </head>
 
-<div class="text-center">
-    <input type="hidden" id="csvFilePath" value="" />
-    <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
-    <h1 class="display-4">Welcome</h1>
-    <input type="text" id="githubUrl"/>
-    <input type="button" id ="getSummaryDataButton" value="Get Summary Data" onclick="getSummaryData()"/>
-    <div id="summaryDataContainer">
-<body>
+    <body>
 @*<div class="container">
 	<div class="row justify-content-center">
 
@@ -59,57 +52,40 @@
 		        <form class="form-signin" action="" name="form">
 		        <input type="hidden" id="csvFilePath" value=""/>
 		        <label>Enter URL GitHub:</label>
-		        <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
+                <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
+                <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
 		        <div class="button-container">
-			        <input class="btn-testing" type="button" value="Get summary data" onclick="getData()"/>
+			        <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
 		       
 			        <div id="summaryDataContainer">
 
 			        </div>
-			        <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
+                    <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
+                    <div id="loader" class="loader"></div>
+                    <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-testing" type="button" value="Display Hotspots Frequency And Complexity" onclick="redirectToChartPage()">
+                    <div>
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="startDate" required/>
+                    </div>
+                    <div>
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="endDate" required/>
+                    </div>
+                    <input type="button" value="Get Complexity Metrics For Specific Period" onclick="getComplexityMetricsForSpecificPeriod()" />
 		        </div>
 
-		        <div id="loader" class="loader"></div>
-					<input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-testing" type="button" value="Display Hotspots Frequency And Complexity" onclick="redirectToChartPage()">
+                <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" style="display:none "type="button" value="Display Hotspots Frequency And Complexity For Specific Period" onclick="redirectToChartForSpecificPeriodPage()">
 
 	            </form>
-
-
             </div>
-
-            
-
-           
         </div>
-
-        
     </div>
 
-    <input type="button" value="Get Complexity Metrics" onclick="getComplexityMetrics()"/>
-    <div>
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="startDate" required/>
-    </div>
-    <div>
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate" required/>
-    </div>
-    <input type="button" value="Get Complexity Metrics For Specific Period" onclick="getComplexityMetricsForSpecificPeriod()" />
-    <div id="loader" class="loader"></div>
-    <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none "type="button" value="Display Hotspots Frequency And Complexity"  onclick="redirectToChartPage()">
-    <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" style="display:none "type="button" value="Display Hotspots Frequency And Complexity For Specific Period" onclick="redirectToChartForSpecificPeriodPage()">
-
-    <input id="filePath"/>
-</div>
-<script src="js/HomePage.js"></script>
-<script src="js/d3.v7.min.js"></script>
 </body>
 </html>
 
-
-<script src="js/GetSummaryData.js"></script>
+<script src="js/HomePage.js"></script>
 <script src="js/d3.v7.min.js"></script>
-
 <link rel="stylesheet" href="css/loader.css" />
 <link href="~/css/google.fonts.nunito.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="~/css/Home/Home.css" />

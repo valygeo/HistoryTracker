@@ -107,7 +107,7 @@ const getHierarchyData = function () {
     localStorage.removeItem('filePathForHotspotsFrequencyAndComplexityFromAllTime');
     $.ajax({
         type: "GET",
-        url: "chart-api-controller",
+        url: "chart-api-controller/hierarchy-data-for-all-time",
         data: { filePath: filePath },
         dataType: "json",
         success: function (response) {
