@@ -9,15 +9,13 @@ namespace HistoryTracker.Contexts
     {
         private readonly CloneRepositoryContext _cloneRepositoryContext;
         private readonly CreateAllTimeLogFileContext _createLogFileContext;
-        private readonly ReadLogFileContext _readLogFileContext;
         private readonly ExtractAllCommitsContext _extractAllCommitsContext;
 
         public GetSummaryStatisticsContext(CloneRepositoryContext cloneRepositoryContext, CreateAllTimeLogFileContext createLogFileContext,
-           ReadLogFileContext readLogFileContext, ExtractAllCommitsContext extractAllCommitsContext)
+           ExtractAllCommitsContext extractAllCommitsContext)
         {
             _cloneRepositoryContext = cloneRepositoryContext;
             _createLogFileContext = createLogFileContext;
-            _readLogFileContext = readLogFileContext;
             _extractAllCommitsContext = extractAllCommitsContext;
         }
 
@@ -35,8 +33,7 @@ namespace HistoryTracker.Contexts
 
                 if (createLogFileResponse.IsSuccess)
                 {
-                    var logFileResponse = _readLogFileContext.Execute(createLogFileResponse.LogFilePath);
-                    var extractAllCommitsResponse = _extractAllCommitsContext.Execute(logFileResponse.LogFileContent);
+                    var extractAllCommitsResponse = _extractAllCommitsContext.Execute(createLogFileResponse.LogFilePath);
                     var statistics = GetStatistics(extractAllCommitsResponse.Commits);
                     return new GetSummaryDataStatistics { IsSuccess = true, Statistics = statistics};
                 }
@@ -79,7 +76,6 @@ namespace HistoryTracker.Contexts
             response.NumberOfEntitiesChanged = entitiesChangedCount.Values.Sum();
             return response;
         }
-
     }
 
 

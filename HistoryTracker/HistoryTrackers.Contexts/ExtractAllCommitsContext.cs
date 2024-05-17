@@ -1,5 +1,6 @@
 ﻿
 using System.Text.RegularExpressions;
+using Domain;
 using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
 
@@ -7,14 +8,21 @@ namespace HistoryTracker.Contexts
 {
     public class ExtractAllCommitsContext
     {
-        public ExtractAllCommitsResponse Execute(ICollection<string> result)
+        private readonly IExtractAllCommitsGateway _extractAllCommitsGateway;
+
+        public ExtractAllCommitsContext(IExtractAllCommitsGateway extractAllCommitsGateway)
         {
+            _extractAllCommitsGateway = extractAllCommitsGateway;
+        }
+        public ExtractAllCommitsResponse Execute(string logFilePath)
+        {
+            var logFileContent = _extractAllCommitsGateway.ReadLogFile(logFilePath);
             List<Commit> commits = new List<Commit>();
             var commitToAdd = new Commit();
 
-            for (int i = 0; i < result.Count; i++)
+            for (int i = 0; i < logFileContent.Count; i++)
             {
-                var line = result.ElementAt(i);
+                var line = logFileContent.ElementAt(i);
                 if (line.StartsWith("["))
                 {
                     commitToAdd = new Commit();
@@ -38,9 +46,9 @@ namespace HistoryTracker.Contexts
                         }
                     }
 
-                    if (i + 1 < result.Count)
+                    if (i + 1 < logFileContent.Count)
                     {
-                        var nextLine = result.ElementAt(i + 1);
+                        var nextLine = logFileContent.ElementAt(i + 1);
                         if (nextLine.StartsWith("["))
                         {
                             commits.Add(commitToAdd);

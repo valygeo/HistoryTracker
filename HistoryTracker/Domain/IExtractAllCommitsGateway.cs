@@ -1,8 +1,8 @@
 ﻿
 namespace Domain
 {
-    public interface IReadLogFileGateway
-    {
+    public interface IExtractAllCommitsGateway
+    { 
         ICollection<string> ReadLogFile(string logFilePath);
     }
 }

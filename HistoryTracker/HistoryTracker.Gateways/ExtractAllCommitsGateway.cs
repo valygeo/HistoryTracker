@@ -3,7 +3,7 @@ using Domain;
 
 namespace HistoryTracker.Gateways
 {
-    public class ReadLogFileGateway : IReadLogFileGateway
+    public class ExtractAllCommitsGateway : IExtractAllCommitsGateway
     {
         public ICollection<string> ReadLogFile(string logFilePath)
         {
