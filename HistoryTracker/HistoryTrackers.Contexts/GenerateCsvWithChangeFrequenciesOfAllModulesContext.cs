@@ -11,16 +11,14 @@ namespace HistoryTracker.Contexts
     {
         private readonly IGenerateCsvWithChangeFrequenciesOfAllModulesGateway _gateway;
         private readonly CreateAllTimeLogFileContext _createLogFileContext;
-        private readonly ReadLogFileContext _readLogFileContext;
         private readonly ExtractAllCommitsContext _extractAllCommitsContext;
 
         public GenerateCsvWithChangeFrequenciesOfAllModulesContext(IGenerateCsvWithChangeFrequenciesOfAllModulesGateway gateway,
-            CreateAllTimeLogFileContext createLogFileContext, ReadLogFileContext readLogFileContext,
+            CreateAllTimeLogFileContext createLogFileContext,
             ExtractAllCommitsContext extractAllCommitsContext)
         {
             _gateway = gateway;
             _createLogFileContext = createLogFileContext;
-            _readLogFileContext = readLogFileContext;
             _extractAllCommitsContext = extractAllCommitsContext;
         }
 
@@ -33,17 +31,13 @@ namespace HistoryTracker.Contexts
             var createLogFileResponse = _createLogFileContext.Execute(clonedRepositoryPath);
             if (createLogFileResponse.IsSuccess)
             {
-                var readLogFileResponse = _readLogFileContext.Execute(createLogFileResponse.LogFilePath);
-                if (readLogFileResponse.IsSuccess)
-                {
-                    var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
-                    var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractAllCommitsResponse); 
-                    var createCsvResponse =  _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
-                    if(createCsvResponse)
-                        return new GenerateCsvWithChangeFrequenciesOfAllModulesResponse { IsSuccess = true, GeneratedCsvPath = csvFilePath};
-                    return new GenerateCsvWithChangeFrequenciesOfAllModulesResponse { IsSuccess = false, Error = "Error trying to create csv file!" };
-                }
-                return new GenerateCsvWithChangeFrequenciesOfAllModulesResponse { IsSuccess = false, Error = readLogFileResponse.Error };
+                var extractAllCommitsResponse = _extractAllCommitsContext.Execute(createLogFileResponse.LogFilePath);
+                var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractAllCommitsResponse); 
+                var createCsvResponse =  _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
+                if(createCsvResponse)
+                    return new GenerateCsvWithChangeFrequenciesOfAllModulesResponse { IsSuccess = true, GeneratedCsvPath = csvFilePath};
+                return new GenerateCsvWithChangeFrequenciesOfAllModulesResponse { IsSuccess = false, Error = "Error trying to create csv file!" };
+                    
             }
             return new GenerateCsvWithChangeFrequenciesOfAllModulesResponse { IsSuccess = false, Error = createLogFileResponse.Error };
         }

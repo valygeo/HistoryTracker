@@ -1,7 +1,7 @@
 ﻿
 namespace Domain
 {
-    public interface IReadLogFileGateway
+    public interface IExtractCommitsForSpecifiedPeriodFromLogFileGateway
     {
         ICollection<string> ReadLogFile(string logFilePath);
     }
