@@ -95,7 +95,6 @@ const hideLoader = function() {
  const getComplexityMetricsForSpecificPeriod = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
-    var startDatePeriod = $('#startDate').val();
     var endDatePeriod = $('#endDate').val();
 
     $.ajax({
@@ -103,7 +102,6 @@ const hideLoader = function() {
         url: "/get-complexity-metrics-for-specific-period",
         data: {
             RepositoryUrl: encodedGithubUrl,
-            startDatePeriod: startDatePeriod,
             endDatePeriod : endDatePeriod
               },
         dataType: "json",

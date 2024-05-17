@@ -30,7 +30,7 @@ namespace HistoryTracker.Contexts
                 var readLogFileResponse = _readLogFileContext.Execute(createLogFileResponse.GeneratedLogFilePath);
                 if (readLogFileResponse.IsSuccess)
                 {   
-                    var csvFileName = $"{request.repositoryName}_change_frequencies_of_modules_from_{request.periodStartDate:yyyy-MM-dd}_to_{request.periodEndDate:yyyy-MM-dd}.csv";
+                    var csvFileName = $"{request.repositoryName}_change_frequencies_of_modules_before_{request.periodEndDate:yyyy-MM-dd}.csv";
                     var csvFilePath = Path.Combine(request.clonedRepositoryPath, csvFileName);
                     var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
                     var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractAllCommitsResponse);

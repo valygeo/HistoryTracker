@@ -32,14 +32,14 @@ namespace HistoryTracker.Contexts
                 if (cloneRepositoryResponse.IsSuccess)
                 {
                     var repositoryName = Path.GetFileNameWithoutExtension(cloneRepositoryResponse.ClonedRepositoryPath);
-                    var csvFileName = $"{repositoryName}_complexity_metrics_from_{request.StartDatePeriod:yyyy-MM-dd}_to_{request.EndDatePeriod:yyyy-MM-dd}.csv";
+                    var csvFileName = $"{repositoryName}_complexity_metrics_before_{request.EndDatePeriod:yyyy-MM-dd}.csv";
                     var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
+
                     var generateCsvWithChangeFrequenciesAndAuthorsResponse =
                         _generateCsvWithChangeFrequenciesOfModules.Execute(new CreateLogFileFromSpecifiedPeriodData
                         {
                             clonedRepositoryPath = cloneRepositoryResponse.ClonedRepositoryPath,
                             repositoryName = repositoryName,
-                            periodStartDate = request.StartDatePeriod,
                             periodEndDate = request.EndDatePeriod,
                         });
 
