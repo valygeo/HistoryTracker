@@ -10,10 +10,9 @@ namespace HistoryTracker.Gateways
     {
         public string CreateLogFile(CreateLogFileFromSpecifiedPeriodData createLogFileRequest)
         {
-            var formattedStartDate = createLogFileRequest.periodStartDate.ToString("yyyy-MM-dd",CultureInfo.InvariantCulture);
             var formattedEndDate = createLogFileRequest.periodEndDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-            var logFileName = $"{createLogFileRequest.repositoryName}_from_{formattedStartDate}_to_{formattedEndDate}.log";
-            var command = $"git log --pretty=format:\"[%h] %an %ad %s\" --before={formattedEndDate} --after={formattedStartDate} --date=short --numstat";
+            var logFileName = $"{createLogFileRequest.repositoryName}_before_{formattedEndDate}.log";
+            var command = $"git log --pretty=format:\"[%h] %an %ad %s\" --before={formattedEndDate} --date=short --numstat";
             var process = new Process();
             process.StartInfo.FileName = "cmd.exe";
             process.StartInfo.Arguments = $"/c {command} > {logFileName}";
