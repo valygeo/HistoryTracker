@@ -59,8 +59,9 @@ namespace HistoryTracker.Controllers
                 new CloneRepositoryContext(new CloneRepositoryGateway()),
                 new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodContext(
                     new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodGateway(),
-                    new CreateLogFileFromSpecifiedPeriodContext(new CreateLogFileFromSpecifiedPeriodGateway()),
-                    new ReadLogFileContext(new ReadLogFileGateway()), new ExtractAllCommitsContext()),
+                    new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()),
+                    new ExtractCommitsForSpecifiedPeriodFromLogFileContext(
+                        new ExtractCommitsForSpecifiedPeriodFromLogFileGateway())),
                 new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway()),
                 new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodGateway());
             var response = context.Execute(request, _clocPath);

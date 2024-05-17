@@ -10,44 +10,39 @@ namespace HistoryTracker.Contexts
     public class GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodContext
     {
         private readonly IGenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodGateway _gateway;
-        private readonly CreateLogFileFromSpecifiedPeriodContext _createLogFileContext;
-        private readonly ReadLogFileContext _readLogFileContext;
-        private readonly ExtractAllCommitsContext _extractAllCommitsContext;
+        private readonly CreateAllTimeLogFileContext _createLogFileContext;
+        private readonly ExtractCommitsForSpecifiedPeriodFromLogFileContext _extractCommitsForSpecifiedPeriodContext;
 
-        public GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodContext(IGenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodGateway gateway, CreateLogFileFromSpecifiedPeriodContext createLogFileContext,
-            ReadLogFileContext readLogFileContext, ExtractAllCommitsContext extractAllCommitsContext)
+        public GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodContext(IGenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodGateway gateway, CreateAllTimeLogFileContext createLogFileContext,
+              ExtractCommitsForSpecifiedPeriodFromLogFileContext extractCommitsForSpecifiedPeriodContext)
         {
             _gateway = gateway;
             _createLogFileContext = createLogFileContext;
-            _readLogFileContext = readLogFileContext;
-            _extractAllCommitsContext = extractAllCommitsContext;
+            _extractCommitsForSpecifiedPeriodContext = extractCommitsForSpecifiedPeriodContext;
         }
         public GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse Execute(CreateLogFileFromSpecifiedPeriodData request)
         {
-            var createLogFileResponse = _createLogFileContext.Execute(request);
+            var createLogFileResponse = _createLogFileContext.Execute(request.clonedRepositoryPath);
             if (createLogFileResponse.IsSuccess)
             {
-                var readLogFileResponse = _readLogFileContext.Execute(createLogFileResponse.GeneratedLogFilePath);
-                if (readLogFileResponse.IsSuccess)
-                {   
-                    var csvFileName = $"{request.repositoryName}_change_frequencies_of_modules_before_{request.periodEndDate:yyyy-MM-dd}.csv";
+                    var formattedPeriodEndDate = $"{request.periodEndDate:yyyy-MM-dd}";
+                    var csvFileName = $"{request.repositoryName}_change_frequencies_of_modules_before_{formattedPeriodEndDate}.csv";
                     var csvFilePath = Path.Combine(request.clonedRepositoryPath, csvFileName);
-                    var extractAllCommitsResponse = _extractAllCommitsContext.Execute(readLogFileResponse.LogFileContent);
-                    var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractAllCommitsResponse);
+                    var extractCommits = _extractCommitsForSpecifiedPeriodContext.Execute(createLogFileResponse.LogFilePath, formattedPeriodEndDate);
+                    var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractCommits);
                     var createCsvResponse = _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
                     if (createCsvResponse)
                         return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = true, GeneratedCsvPath = csvFilePath };
                     return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = false, Error = "Error trying to create csv file!" };
-                }
-                return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = false, Error = readLogFileResponse.Error };
+                    
             }
             return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = false, Error = createLogFileResponse.Error };
         }
-        private ICollection<ChangeFrequency> GetChangeFrequenciesAndAuthors(ExtractAllCommitsResponse commits)
+        private ICollection<ChangeFrequency> GetChangeFrequenciesAndAuthors(ExtractAllCommitsForSpecifiedPeriodResponse commits)
         {
             var modulesWithChangeFrequenciesAndAuthors = new List<ChangeFrequency>();
 
-            foreach (var commit in commits.Commits)
+            foreach (var commit in commits.CommitsBeforeEndDate)
             {
                 foreach (var commitDetail in commit.CommitDetails)
                 {
@@ -89,6 +84,27 @@ namespace HistoryTracker.Contexts
                             {
                                 stringBuilder.Append(';').Append(commit.Author);
                                 existingEntity.Authors = stringBuilder.ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (var commit in commits.CommitsAfterEndDate.Reverse())
+            {
+                foreach (var commitDetail in commit.CommitDetails)
+                {
+                    var pathWithWindowsSlashes = commitDetail.EntityChangedName.Replace("/", "\\");
+                    var pathWithoutComma = pathWithWindowsSlashes.Replace(",", "");
+                    var relativePath = $".\\{pathWithoutComma}";
+                    if (IsThereARenameOrMove(relativePath))
+                    {
+                        var initialAndNewIntegratedValue = ProcessRenameOrMovePattern(relativePath);
+                        relativePath = initialAndNewIntegratedValue[1];
+                        foreach (var module in modulesWithChangeFrequenciesAndAuthors)
+                        {
+                            if (module.EntityPath == initialAndNewIntegratedValue[0])
+                            {
+                                module.EntityPath = relativePath;
                             }
                         }
                     }
