@@ -48,35 +48,33 @@
                     <li class="testing-active"><a class="btn">Testing tool</a></li>
                 </ul>
             </div>
-	        <div ng-app ng-init="checked = false">
-		        <form class="form-signin" action="" name="form">
-		        <input type="hidden" id="csvFilePath" value=""/>
-		        <label>Enter URL GitHub:</label>
-                <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
-                <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
-		        <div class="button-container">
-			        <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
-		       
-			        <div id="summaryDataContainer">
+            <div ng-app ng-init="checked = false">
+                <form class="form-signin" action="" name="form">
+                    <input type="hidden" id="csvFilePath" value=""/>
+                    <label>Enter URL GitHub:</label>
+                    <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
+                    <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
+                    <div class="button-container">
+                        <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
+                        <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
 
-			        </div>
-                    <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
+                        <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-testing" type="button" value="Display Hotspots Frequency And Complexity" onclick="redirectToChartPage()">
+                        <div>
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" id="startDate" name="startDate" required/>
+                        </div>
+                        <div>
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate" name="endDate" required/>
+                        </div>
+                        <input type="button" value="Get complexity metrics for specific period" class="btn-testing" onclick="getComplexityMetricsForSpecificPeriod()" />
+                    </div>
                     <div id="loader" class="loader"></div>
-                    <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-testing" type="button" value="Display Hotspots Frequency And Complexity" onclick="redirectToChartPage()">
-                    <div>
-                        <label for="startDate">Start Date:</label>
-                        <input type="date" id="startDate" name="startDate" required/>
-                    </div>
-                    <div>
-                        <label for="endDate">End Date:</label>
-                        <input type="date" id="endDate" name="endDate" required/>
-                    </div>
-                    <input type="button" value="Get Complexity Metrics For Specific Period" onclick="getComplexityMetricsForSpecificPeriod()" />
-		        </div>
+                    <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-testing" style="display:none " type="button" value="Display Hotspots Frequency And Complexity For Specific Period" onclick="redirectToChartForSpecificPeriodPage()">
+                </form>
+            </div>
+            <div id="summaryDataContainer">
 
-                <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" style="display:none "type="button" value="Display Hotspots Frequency And Complexity For Specific Period" onclick="redirectToChartForSpecificPeriodPage()">
-
-	            </form>
             </div>
         </div>
     </div>
