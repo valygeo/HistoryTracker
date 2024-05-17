@@ -21,20 +21,24 @@
             </div>
             <div ng-app ng-init="checked = false">
                 <form class="form-signin" action="" name="form">
-                    <input type="hidden" id="csvFilePath" value=""/>
-                    <label>Enter URL GitHub:</label>
-                    <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
-                    <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
+	                <input type="hidden" id="csvFilePath" value=""/>
+	                <div class="form-label">
+		                <label id="urlGit">Enter URL GitHub:</label>
+		                <label id="endDateLabel">End Date:</label>
+	                </div>
+                <div class="button-container">
+	                <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
+	                <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
+
+                        <input type="date" class="form-styling" style="margin-left:79%"id="endDate" name="endDate" required />
+                </div>
                     <div class="button-container">
                         <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
                         <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
 
                         <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-testing" type="button" value="Display hotspots frequency and complexity" onclick="redirectToChartPage()">
-                        <div>
-                            <label for="endDate">End Date:</label>
-                            <input type="date" class="btn-testing"  id="endDate" name="endDate" required />
-                        </div>
-                        <input type="button" value="Get complexity metrics for specific period" class="btn-testing" onclick="getComplexityMetricsForSpecificPeriod()" />
+                      
+                        <input type="button" value="Get complexity metrics for specific period" class="btn-testing" style="margin-left:135px" onclick="getComplexityMetricsForSpecificPeriod()" />
                     </div>
                     <div id="loader" class="loader"></div>
                     <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-testing" style="display:none " type="button" value="Display hotspots frequency and complexity for specific period" onclick="redirectToChartForSpecificPeriodPage()">
@@ -55,6 +59,5 @@
 <link href="~/css/google.fonts.nunito.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="~/css/Home/Home.css" />
 
-@*<link href="~/css/Home/all.min.css" rel="stylesheet" type="text/css">
-<link href="~/css/Home/sb-admin-2.css" rel="stylesheet" type="text/css">*@
+
 

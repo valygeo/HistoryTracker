@@ -133,8 +133,9 @@ li {
 }
 
 .form-signin {
-    width: 430px;
-    height: 375px;
+    width: 100%; 
+    max-width: 430px;
+    height: auto; 
     font-size: 16px;
     font-weight: 300;
     padding-left: 37px;
@@ -220,7 +221,7 @@ form-signin input, .form-signup input {
 }
 
 .form-styling {
-    width: 100%;
+    width: auto;
     height: 40px;
     padding-left: 10px;
     border: solid;
@@ -228,27 +229,25 @@ form-signin input, .form-signup input {
     border-color: #0c4073;
     background: rgb(235 214 214 / 20%);
     margin-bottom: 20px;
+    transition: none;
 }
-label {
+.form-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 167%;
+}
+    label {
     font-weight: 400;
-    text-transform: math-auto;
+    text-transform: none; 
     font-size: 20px;
-    padding-left: 15px;
     padding-bottom: 20px;
     color: #0c4073;
     display: block;
     text-shadow: 0 0 black;
 }
-focus {
-  outline: none;
-}
 
-.form-signin input:focus, textarea:focus, .form-signup input:focus, textarea:focus {
-    background: rgba(255,255,255,.3);
-    border: none;
-    padding-right: 40px;
-    transition: background .5s ease;
-}
+
 
 [type="checkbox"]:not(:checked),
 [type="checkbox"]:checked {
