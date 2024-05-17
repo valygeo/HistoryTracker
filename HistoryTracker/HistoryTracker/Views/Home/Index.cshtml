@@ -12,40 +12,11 @@
 </head>
 
     <body>
-@*<div class="container">
-	<div class="row justify-content-center">
-
-		<div class="col-xl-10 col-lg-12 col-md-9">
-
-			<div class="card o-hidden border-0 shadow-lg my-5">
-				<div class="card-body p-0">
-					<div class="row">
-						<div class="p-5">
-							<input type="hidden" id="csvFilePath" value=""/>
-							<h1 class="display-4">Testing tool </h1>
-							<input type="text" id="githubUrl"/>
-							<input type="button" value="Get Summary Data" onclick="getData()"/>
-							<div id="summaryDataContainer">
-
-							</div>
-							<input type="button" value="Get Complexity Metrics" onclick="getComplexityMetrics()"/>
-							<div id="loader" class="loader"></div>
-							<input id="displayHotspotsFrequencyAndComplexityButton" style="display:none "type="button" value="Display Hotspots Frequency And Complexity" onclick="redirectToChartPage()">
-							<input id="filePath"/>
-
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>*@
-
     <div class="container">
         <div class="frame">
             <div class="nav">
                 <ul class="links">
-                    <li class="testing-active"><a class="btn">Testing tool</a></li>
+                    <li class="testing-active"><a class="btn"> History Tracker - Testing tool</a></li>
                 </ul>
             </div>
             <div ng-app ng-init="checked = false">
@@ -58,19 +29,19 @@
                         <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
                         <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
 
-                        <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-testing" type="button" value="Display Hotspots Frequency And Complexity" onclick="redirectToChartPage()">
+                        <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-testing" type="button" value="Display hotspots frequency and complexity" onclick="redirectToChartPage()">
                         <div>
                             <label for="startDate">Start Date:</label>
-                            <input type="date" id="startDate" name="startDate" required/>
+                            <input type="date"  id="startDate" name="startDate" required/>
                         </div>
                         <div>
                             <label for="endDate">End Date:</label>
-                            <input type="date" id="endDate" name="endDate" required/>
+                            <input type="date" class="btn-testing"  id="endDate" name="endDate" required />
                         </div>
                         <input type="button" value="Get complexity metrics for specific period" class="btn-testing" onclick="getComplexityMetricsForSpecificPeriod()" />
                     </div>
                     <div id="loader" class="loader"></div>
-                    <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-testing" style="display:none " type="button" value="Display Hotspots Frequency And Complexity For Specific Period" onclick="redirectToChartForSpecificPeriodPage()">
+                    <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-testing" style="display:none " type="button" value="Display hotspots frequency and complexity for specific period" onclick="redirectToChartForSpecificPeriodPage()">
                 </form>
             </div>
             <div id="summaryDataContainer">

@@ -42,17 +42,19 @@ h3 {
 
 
 .container {
-    width: 100%;
+    width: 160%;
     padding-top: 60px;
     padding-bottom: 100px;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    padding-left:0px;
-    left:574px;
+    padding-left: 0px;
+    position: fixed;
+    top: 1%;
+    left: 40%;
+    transform: translateX(-52%);
 }
-
-.frame {
+    .frame {
     height: 700px;
     width: inherit;
     background: linear-gradient(rgb(193 196 213 / 75%), rgb(104 115 169 / 88%)), no-repeat center center;
@@ -351,7 +353,7 @@ focus {
 
 .btn-testing {
     padding-top: 8px;
-    width: 50%;
+    width: auto;
     height: 40px;
     border: solid;
     border-color: #0c4073;
