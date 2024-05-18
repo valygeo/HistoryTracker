@@ -7,7 +7,7 @@ namespace HistoryTracker.Controllers
     [Produces("application/json")]
     public class ChartAPIController : Controller
     {
-        [HttpGet("hierarchy-data-for-all-time")]
+        [HttpGet("hotspots-frequencies-and-complexity-for-all-time")]
         public JsonResult GetHierarchyData(string filePath)
         {
             var context = new GetHotspotsFrequenciesAndComplexityPerFileFromAllTimeContext();
@@ -15,8 +15,8 @@ namespace HistoryTracker.Controllers
             return Json(result.Hierarchy);
         }
 
-        [HttpGet("hierarchy-data-for-specific-period")]
-        public JsonResult GetHierarchyDataFromSpecificPeriod(string filePath)
+        [HttpGet("hotspots-frequencies-and-complexity-for-specific-period")]
+        public JsonResult GetHotspotsFrequenciesAndComplexityForSpecificPeriod(string filePath)
         {
             var context = new GetHotspotsFrequenciesAndComplexityPerFileFromSpecificPeriodContext();
             var result = context.Execute(filePath);

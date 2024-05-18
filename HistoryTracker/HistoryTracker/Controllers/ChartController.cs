@@ -12,5 +12,11 @@ namespace HistoryTracker.Controllers
         {
             return View();
         }
+
+        [HttpGet("hotspots-frequency-and-complexity-for-specific-period")]
+        public IActionResult HotspotsFrequencyAndComplexityForSpecificPeriod()
+        {
+            return View();
+        }
     }
 }

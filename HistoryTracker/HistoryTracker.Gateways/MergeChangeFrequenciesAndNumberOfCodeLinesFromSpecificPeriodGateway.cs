@@ -6,7 +6,7 @@ namespace HistoryTracker.Gateways
 {
     public class MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodGateway : IMergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodGateway
     {
-        public bool CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(ICollection<ChangeFrequencyAndCodeMetricPerFileForSpecificPeriod> metrics, string csvFilePath)
+        public bool CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(ICollection<ChangeFrequencyAndCodeMetric> metrics, string csvFilePath)
         {
             try
             {

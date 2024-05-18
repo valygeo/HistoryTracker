@@ -71,7 +71,7 @@ namespace HistoryTracker.Contexts
             var numberOfCodeLinesFile = File.ReadAllLines(numberOfCodeLinesCsvPath);
             var changeFrequenciesMetrics = new List<ChangeFrequency>();
             var numberOfCodeLinesMetrics = new List<CodeMetric>();
-            var mergedProperties = new List<ChangeFrequencyAndCodeMetricPerFileForSpecificPeriod>();
+            var mergedProperties = new List<ChangeFrequencyAndCodeMetric>();
 
             for (int i = 1; i < changeFrequenciesFile.Length; i++)
             {
@@ -102,22 +102,20 @@ namespace HistoryTracker.Contexts
                 var matchingChangeFrequency = changeFrequenciesMetrics.FirstOrDefault(entity => entity.EntityPath.Equals(codeMetric.EntityPath));
                 if (matchingChangeFrequency != null)
                 {
-                    mergedProperties.Add(new ChangeFrequencyAndCodeMetricPerFileForSpecificPeriod
+                    mergedProperties.Add(new ChangeFrequencyAndCodeMetric
                     {
                         EntityPath = codeMetric.EntityPath,
                         CodeLines = codeMetric.CodeLines,
                         Revisions = matchingChangeFrequency.Revisions,
                         Authors = matchingChangeFrequency.Authors,
-                        WasModifiedInSpecificPeriod = true
                     });
                 }
                 else
                 {
-                    mergedProperties.Add(new ChangeFrequencyAndCodeMetricPerFileForSpecificPeriod
+                    mergedProperties.Add(new ChangeFrequencyAndCodeMetric
                     {
                         EntityPath = codeMetric.EntityPath,
                         CodeLines = codeMetric.CodeLines,
-                        WasModifiedInSpecificPeriod = false,
                         Revisions = 0,
                         Authors = ""
                     });
@@ -128,7 +126,7 @@ namespace HistoryTracker.Contexts
             return response;
         }
 
-        public List<ChangeFrequencyAndCodeMetricPerFileForSpecificPeriod> SortAfterChangeFrequencyAndCodeSize(List<ChangeFrequencyAndCodeMetricPerFileForSpecificPeriod> metrics)
+        public List<ChangeFrequencyAndCodeMetric> SortAfterChangeFrequencyAndCodeSize(List<ChangeFrequencyAndCodeMetric> metrics)
         {
             var sortedMetrics = metrics.OrderByDescending(metric => metric.Revisions)
                 .ThenByDescending(metric => metric.CodeLines).ToList();

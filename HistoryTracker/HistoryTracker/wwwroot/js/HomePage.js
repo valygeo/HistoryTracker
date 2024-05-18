@@ -60,6 +60,9 @@ const getChangeFrequencies = function () {
 const redirectToChartPage = function () {
     window.location.href = "/Chart";
 }
+const redirectToChartForSpecificPeriodPage = function () {
+    window.location.href = "/Chart/hotspots-frequency-and-complexity-for-specific-period";
+}
 const showLoader = function() {
     var loader = document.getElementById("loader");
     loader.style.display = "block";
