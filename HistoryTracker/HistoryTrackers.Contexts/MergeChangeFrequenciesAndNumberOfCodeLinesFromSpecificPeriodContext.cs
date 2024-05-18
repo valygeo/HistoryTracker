@@ -84,7 +84,7 @@ namespace HistoryTracker.Contexts
                 });
             }
 
-            for (int i = 1; i < numberOfCodeLinesFile.Length; i++)
+            for (int i = 1; i < numberOfCodeLinesFile.Length - 1; i++)
             {
                 var parts = numberOfCodeLinesFile[i].Split(",", 5);
                 numberOfCodeLinesMetrics.Add(new CodeMetric
