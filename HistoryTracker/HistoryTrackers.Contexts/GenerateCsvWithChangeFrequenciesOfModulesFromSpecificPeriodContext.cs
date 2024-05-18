@@ -25,16 +25,20 @@ namespace HistoryTracker.Contexts
             var createLogFileResponse = _createLogFileContext.Execute(request.clonedRepositoryPath);
             if (createLogFileResponse.IsSuccess)
             {
-                    var formattedPeriodEndDate = $"{request.periodEndDate:yyyy-MM-dd}";
-                    var csvFileName = $"{request.repositoryName}_change_frequencies_of_modules_before_{formattedPeriodEndDate}.csv";
-                    var csvFilePath = Path.Combine(request.clonedRepositoryPath, csvFileName);
-                    var extractCommits = _extractCommitsForSpecifiedPeriodContext.Execute(createLogFileResponse.LogFilePath, formattedPeriodEndDate);
-                    var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractCommits);
+                var formattedPeriodEndDate = $"{request.periodEndDate:yyyy-MM-dd}";
+                var csvFileName = $"{request.repositoryName}_change_frequencies_of_modules_before_{formattedPeriodEndDate}.csv";
+                var csvFilePath = Path.Combine(request.clonedRepositoryPath, csvFileName);
+                var extractCommitsResponse = _extractCommitsForSpecifiedPeriodContext.Execute(createLogFileResponse.LogFilePath, formattedPeriodEndDate);
+                if (extractCommitsResponse.IsSuccess)
+                {
+                    var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractCommitsResponse);
                     var createCsvResponse = _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
                     if (createCsvResponse)
                         return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = true, GeneratedCsvPath = csvFilePath };
                     return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = false, Error = "Error trying to create csv file!" };
-                    
+                }
+                return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse
+                    { IsSuccess = false, Error = extractCommitsResponse.Error };
             }
             return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = false, Error = createLogFileResponse.Error };
         }

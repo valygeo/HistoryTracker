@@ -65,7 +65,9 @@ namespace HistoryTracker.Controllers
                 new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway()),
                 new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodGateway());
             var response = context.Execute(request, _clocPath);
-            return Json(response.MergedCsvFilePath);
+            if(response.IsSuccess)
+                return Json(response.MergedCsvFilePath);
+            return Json(response.Error);
         }
 
         public IActionResult Privacy()
