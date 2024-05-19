@@ -67,7 +67,7 @@ namespace HistoryTracker.Controllers
             var response = context.Execute(request, _clocPath);
             if(response.IsSuccess)
                 return Json(response.MergedCsvFilePath);
-            return Json(response.Error);
+            return Json(new { Error = response.Error});
         }
 
         public IActionResult Privacy()

@@ -134,7 +134,7 @@ namespace HistoryTracker.Contexts
                             endDateIsGreaterOrEqualsThanFirstCommitDate =
                                 DateTime.Parse(endDatePeriod, CultureInfo.InvariantCulture) >=
                             DateTime.Parse(commitParts[2], CultureInfo.InvariantCulture);
-
+                            break;
                         }
                         else
                         {
@@ -142,6 +142,7 @@ namespace HistoryTracker.Contexts
                             endDateIsGreaterOrEqualsThanFirstCommitDate =
                                 DateTime.Parse(endDatePeriod, CultureInfo.InvariantCulture) >=
                                 DateTime.Parse(partsForMultipleNameOfAuthor[3], CultureInfo.InvariantCulture);
+                            break;
                         }
                     }
                 }
