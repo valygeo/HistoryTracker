@@ -32,14 +32,16 @@
 
                         <input type="date" class="form-styling" style="margin-left:79%"id="endDate" name="endDate" required />
                 </div>
-                    <div class="button-container">
-                        <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
-                        <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
-
-                        <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-testing" type="button" value="Display hotspots frequency and complexity" onclick="redirectToChartPage()">
+	                <div class="button-container">
+		                <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
+		                <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
                       
-                        <input type="button" value="Get complexity metrics for specific period" class="btn-testing" style="margin-left:135px" onclick="getComplexityMetricsForSpecificPeriod()" />
-                    </div>
+		                <input type="button" value="Get complexity metrics for specific period" class="btn-testing" style="margin-left:135px" onclick="getComplexityMetricsForSpecificPeriod()" />
+	                </div>
+	                <div class="button-container">
+		                <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-display" type="button" value="Display hotspots frequency and complexity" onclick="redirectToChartPage()">
+	                </div>
+	               
                     <div id="loader" class="loader"></div>
                     <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-testing" style="display:none " type="button" value="Display hotspots frequency and complexity for specific period" onclick="redirectToChartForSpecificPeriodPage()">
                 </form>

@@ -368,6 +368,24 @@ form-signin input, .form-signup input {
     margin-inline:5px;
 }
 
+.btn-display {
+    padding-top: 8px;
+    width: auto;
+    height: 40px;
+    border: solid;
+    border-color: #0c4073;
+    border-radius: 20px;
+    background-color: rgb(109 168 195 / 39%);
+    margin-top: 9px;
+    text-transform: math-auto;
+    text-shadow: 0 0 black;
+    color: #0c4073;
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    margin-inline: 5px;
+}
+
 .button-container {
     display: flex;
     justify-content: space-between;
