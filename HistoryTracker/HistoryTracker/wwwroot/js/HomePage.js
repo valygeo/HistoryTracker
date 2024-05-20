@@ -112,14 +112,26 @@ const hideLoader = function() {
             showLoader();
         },
         success: function (response) {
-            var hotspotsButton = document.getElementById("displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod");
-            localStorage.setItem('filePathForHotspotsFrequencyAndComplexityForSpecificPeriod', response);
-            hideLoader();
-            hotspotsButton.style.display = "block";
+            if (response.error) {
+                displayError(response.error);
+                hideLoader();
+            }
+            else
+            {
+                var hotspotsButton = document.getElementById("displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod");
+                localStorage.setItem('filePathForHotspotsFrequencyAndComplexityForSpecificPeriod', response);
+                hideLoader();
+                hotspotsButton.style.display = "block";
+            }
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
             hideLoader();
         }
     });
+}
+const displayError = function (errorMessage) {
+    var errorParagraph = document.getElementById("error-message-for-end-date");
+    errorParagraph.innerText = errorMessage;
+    errorParagraph.style.display = "inline";
 }
