@@ -6,7 +6,6 @@ namespace Domain.MetaData
         public string Name { get; set; }
         public int Value { get; set; }
         public double Weight { get; set; }
-        public string Authors { get; set; }
         public ICollection<Child>? Children { get; set; }
    
     }
@@ -17,7 +16,6 @@ namespace Domain.MetaData
         public int Value { get; set; }
         public double Weight { get; set; }
 
-        public string Authors { get; set; }
         public ICollection<Child>? Children { get; set; }
 
         public Parent ConvertToParent(Child child)
@@ -26,7 +24,6 @@ namespace Domain.MetaData
             {
                 Name = child.Name,
                 Value = child.Value,
-                Authors = child.Authors,
                 Children = child.Children,
                 Weight = child.Weight
             };

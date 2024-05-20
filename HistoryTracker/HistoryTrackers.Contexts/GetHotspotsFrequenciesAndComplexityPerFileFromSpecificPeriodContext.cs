@@ -30,7 +30,6 @@ namespace HistoryTracker.Contexts
                         Name = modulePathParts[1],
                         Value = 0,
                         Weight = 0,
-                        Authors = "",
                         Children = new List<Child>()
                     };
                     hierarchy.Add(parent);
@@ -58,7 +57,6 @@ namespace HistoryTracker.Contexts
                     {
                         Name = lastPart,
                         Value = int.Parse(metricParts[2]),
-                        Authors = metricParts[3],
                         Weight = (double)revisionsMetric / maxRevisionsMetric,
                         Children = new List<Child>()
                     };
@@ -78,7 +76,6 @@ namespace HistoryTracker.Contexts
                 {
                     Name = part,
                     Value = 0,
-                    Authors = "",
                     Children = new List<Child>()
                 };
                 parent.Children.Add(currentChild);

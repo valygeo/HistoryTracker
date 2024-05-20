@@ -10,10 +10,10 @@ namespace HistoryTracker.Gateways
         {
             using (var writer = new StreamWriter(csvFilePath))
             {
-                writer.WriteLine("Module, Frequency, Authors");
+                writer.WriteLine("Module, Frequency");
                 foreach (var module in modulesChangeFrequenciesAndAuthors)
                 {
-                    writer.WriteLine($"{module.EntityPath},{module.Revisions},{module.Authors}");
+                    writer.WriteLine($"{module.EntityPath},{module.Revisions}");
                 }
             }
             return true;

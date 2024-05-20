@@ -31,7 +31,7 @@ namespace HistoryTracker.Contexts
                 var extractCommitsResponse = _extractCommitsForSpecifiedPeriodContext.Execute(createLogFileResponse.LogFilePath, formattedPeriodEndDate);
                 if (extractCommitsResponse.IsSuccess)
                 {
-                    var revisionsOfModules = GetChangeFrequenciesAndAuthors(extractCommitsResponse);
+                    var revisionsOfModules = GetChangeFrequencies(extractCommitsResponse);
                     var createCsvResponse = _gateway.CreateCsvFileWithChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
                     if (createCsvResponse)
                         return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = true, GeneratedCsvPath = csvFilePath };
@@ -42,7 +42,7 @@ namespace HistoryTracker.Contexts
             }
             return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = false, Error = createLogFileResponse.Error };
         }
-        private ICollection<ChangeFrequency> GetChangeFrequenciesAndAuthors(ExtractAllCommitsForSpecifiedPeriodResponse commits)
+        private ICollection<ChangeFrequency> GetChangeFrequencies(ExtractAllCommitsForSpecifiedPeriodResponse commits)
         {
             var modulesWithChangeFrequenciesAndAuthors = new List<ChangeFrequency>();
 
@@ -76,19 +76,12 @@ namespace HistoryTracker.Contexts
                             {
                                 EntityPath = relativePath,
                                 Revisions = 1,
-                                Authors = commit.Author
                             };
                             modulesWithChangeFrequenciesAndAuthors.Add(entity);
                         }
                         else
                         {
                             existingEntity.Revisions++;
-                            var stringBuilder = new StringBuilder(existingEntity.Authors);
-                            if (!existingEntity.Authors.Contains(commit.Author))
-                            {
-                                stringBuilder.Append(';').Append(commit.Author);
-                                existingEntity.Authors = stringBuilder.ToString();
-                            }
                         }
                     }
                 }
