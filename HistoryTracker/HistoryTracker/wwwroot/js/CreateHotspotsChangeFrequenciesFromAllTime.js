@@ -7,7 +7,7 @@ function createChart(data) {
     // Create the color scale.
     const color = d3.scaleLinear()
         .domain([0, 5])
-        .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+        .range(["hsl(210, 80%, 95%)", "hsl(210, 50%, 70%)"])
         .interpolate(d3.interpolateHcl);
 
     // Compute the layout.
@@ -35,15 +35,16 @@ function createChart(data) {
             if (d.data.weight > 0.0) {
                 return `rgba(255, 0, 0, ${d.data.weight})`;
             } else if (d.children) {
-                return color(d.depth); 
+                return color(d.depth);
             } else {
-                return "WhiteSmoke"; 
+                return "WhiteSmoke";
             }
         })
         .style("fill-opacity", function (d) {
-            return d.weight; 
+            return d.weight;
         })
         .attr("pointer-events", d => !d.children ? "none" : null)
+
         .on("mouseover", function () { d3.select(this).attr("stroke", "#000"); })
         .on("mouseout", function () { d3.select(this).attr("stroke", null); })
         .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
