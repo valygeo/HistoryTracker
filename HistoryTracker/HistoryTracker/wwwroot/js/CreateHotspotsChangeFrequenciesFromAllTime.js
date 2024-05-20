@@ -24,7 +24,7 @@ function createChart(data) {
         .attr("viewBox", `-${width / 2} -${height / 2} ${width} ${height}`)
         .attr("width", width)
         .attr("height", height)
-        .attr("style", `max-width: 95%; height: auto; display: block; margin: 0 -14px; background: rgb(207 233 237); cursor: pointer;  position: fixed; left:10%; top:-640%;`);
+        .attr("style", `max-width: 95%; height: auto; display: block; margin: 0 -14px; background:linear-gradient(113deg, #7d9adb, #c2cfd5); cursor: pointer;  position: fixed; left:10%; top:-640%;`);
 
     // Append the nodes.
     const node = svg.append("g")
