@@ -70,6 +70,20 @@ namespace HistoryTracker.Controllers
             return Json(new { Error = response.Error});
         }
 
+        [HttpGet("get-main-authors-per-modules-by-revisions")]
+        public IActionResult GetMainAuthorsPerModule([FromQuery] ComplexityMetricsRequest request)
+        {
+            var context = new GenerateCsvWithMainAuthorsPerModuleContext(
+                new GenerateCsvWithMainAuthorsPerModuleGateway(),
+                new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()),
+                new ExtractCommitsForSpecifiedPeriodFromLogFileContext(
+                    new ExtractCommitsForSpecifiedPeriodFromLogFileGateway()), new CloneRepositoryContext(new CloneRepositoryGateway()));
+            var response = context.Execute(request);
+            if (response.IsSuccess)
+                return Json(response.GeneratedCsvPath);
+            return Json(new { Error = response.Error });
+        }
+
         public IActionResult Privacy()
         {
             return View();

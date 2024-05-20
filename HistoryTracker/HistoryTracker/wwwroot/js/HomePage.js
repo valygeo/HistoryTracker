@@ -130,6 +130,41 @@ const hideLoader = function() {
         }
     });
 }
+
+const getMainAuthorsPerModule = function () {
+    var githubUrl = $('#githubUrl').val();
+    var encodedGithubUrl = encodeURIComponent(githubUrl);
+    var endDatePeriod = $('#endDate').val();
+
+    $.ajax({
+        type: "GET",
+        url: "/get-main-authors-per-modules-by-revisions",
+        data: {
+            RepositoryUrl: encodedGithubUrl,
+            endDatePeriod: endDatePeriod
+        },
+        dataType: "json",
+        beforeSend: function () {
+            showLoader();
+        },
+        success: function (response) {
+            if (response.error) {
+                displayError(response.error);
+                hideLoader();
+            }
+            else {
+                var hotspotsButton = document.getElementById("displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod");
+                localStorage.setItem('filePathForHotspotsFrequencyAndComplexityForSpecificPeriod', response);
+                hideLoader();
+                hotspotsButton.style.display = "block";
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+            hideLoader();
+        }
+    });
+}
 const displayError = function (errorMessage) {
     var errorParagraph = document.getElementById("error-message-for-end-date");
     errorParagraph.innerText = errorMessage;
