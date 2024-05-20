@@ -48,7 +48,7 @@
     width: 100%;
     z-index: 1000;
     left: -45%;
-    color: aliceblue;
+    color: black;
 }
 
 *,
@@ -79,7 +79,8 @@ body {
     /*background-color: #fff;*/
 
     background-color: #002285;
-    background-image: linear-gradient(330deg, #cdcdcd 5%, #5f66c7 100%);
+    /* background-image: linear-gradient(330deg, #cdcdcd 5%, #5f66c7 100%);*/
+    background-image: linear-gradient(330deg, #cdcdcd 5%, #9296c5 100%);
     background-size: cover;
 }
 

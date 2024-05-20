@@ -26,10 +26,15 @@
 		                <label id="endDateLabel">End Date:</label>
 	                </div>
                     <div class="button-container">
-                        <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
-                        <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
-                        <input type="date" class="form-styling" style="margin-left:79%"id="endDate" name="endDate" required />
-                </div>
+	                    <div class="input-container">
+		                    <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
+		                    <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
+	                    </div>
+                    <div class="input-container">
+	                    <input type="date" class="form-styling" style="margin-left:180%"id="endDate" name="endDate" required />
+	                    <span id="error-message-for-end-date" style="color: red;display:none;">End date should be greater than first commit date!</span>
+                    </div>
+                    </div>
 	                <div class="button-container">
 		                <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
 		                <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
@@ -52,7 +57,7 @@
 </body>
 </html>
 
-<script src="js/HomePage.js"></script>
+<script src="~/js/HomePage.js"></script>
 <script src="js/d3.v7.min.js"></script>
 <link rel="stylesheet" href="css/loader.css" />
 <link href="~/css/google.fonts.nunito.css" rel="stylesheet">

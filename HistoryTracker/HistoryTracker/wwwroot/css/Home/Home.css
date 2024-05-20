@@ -8,6 +8,18 @@
     overflow: hidden;
 }
 
+.input-container {
+    position: relative;
+    display: flex;
+    flex-direction: column-reverse;
+    align-content: flex-end;
+    justify-content: space-evenly;
+    align-items: baseline;
+    flex-wrap: nowrap;
+    
+    
+}
+
     body::before {
         content: "";
         position: absolute;
