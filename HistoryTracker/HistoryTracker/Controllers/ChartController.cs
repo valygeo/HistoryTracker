@@ -18,5 +18,10 @@ namespace HistoryTracker.Controllers
         {
             return View();
         }
+        [HttpGet("file-main-authors-per-files")]
+        public IActionResult FileMainAuthorsPerFiles()
+        {
+            return View();
+        }
     }
 }

@@ -1,28 +1,28 @@
 ﻿
 using Domain;
+using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
 using System.Web;
-using Domain.MetaData;
 
 namespace HistoryTracker.Contexts
 {
-    public class MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodContext
+    public class MergeMainAuthorsAndNumberOfCodeLinesFilesContext
     {
         private readonly CloneRepositoryContext _cloneRepositoryContext;
-        private readonly GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodContext _generateCsvWithChangeFrequenciesOfModules;
+        private readonly GenerateCsvWithMainAuthorsPerModuleContext _generateCsvWithMainAuthorsPerModule;
         private readonly GenerateCsvWithNumberOfCodeLinesContext _generateCsvWithNumberOfCodeLines;
-        private readonly IMergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodGateway _gateway;
+        private readonly IMergeMainAuthorsAndNumberOfCodeLinesFilesGateway _gateway;
 
-        public MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodContext(CloneRepositoryContext cloneRepositoryContext, GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodContext generateCsvWithChangeFrequenciesOfModules,
-            GenerateCsvWithNumberOfCodeLinesContext generateCsvWithNumberOfCodeLinesContext, IMergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodGateway gateway)
+        public MergeMainAuthorsAndNumberOfCodeLinesFilesContext(CloneRepositoryContext cloneRepositoryContext, GenerateCsvWithMainAuthorsPerModuleContext generateCsvWithMainAuthorsPerModule,
+            GenerateCsvWithNumberOfCodeLinesContext generateCsvWithNumberOfCodeLinesContext, IMergeMainAuthorsAndNumberOfCodeLinesFilesGateway gateway)
         {
             _cloneRepositoryContext = cloneRepositoryContext;
-            _generateCsvWithChangeFrequenciesOfModules = generateCsvWithChangeFrequenciesOfModules;
+            _generateCsvWithMainAuthorsPerModule = generateCsvWithMainAuthorsPerModule;
             _generateCsvWithNumberOfCodeLines = generateCsvWithNumberOfCodeLinesContext;
             _gateway = gateway;
         }
 
-        public MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodResponse Execute(ComplexityMetricsRequest request, string clocPath)
+        public MergeMainAuthorsAndNumberOfCodeLinesFilesResponse Execute(ComplexityMetricsRequest request, string clocPath)
         {
             if (!String.IsNullOrWhiteSpace(request.RepositoryUrl))
             {
@@ -33,53 +33,54 @@ namespace HistoryTracker.Contexts
                 {
                     var repositoryName = Path.GetFileNameWithoutExtension(cloneRepositoryResponse.ClonedRepositoryPath);
                     
-                    var generateCsvWithChangeFrequenciesResponse =
-                        _generateCsvWithChangeFrequenciesOfModules.Execute(new CreateCsvFromSpecifiedPeriodRequest
+                    var generateCsvWithChangeFrequenciesAndMainAuthorsAuthorsResponse =
+                        _generateCsvWithMainAuthorsPerModule.Execute(new CreateCsvFromSpecifiedPeriodRequest
                         {
-                            ClonedRepositoryPath = cloneRepositoryResponse.ClonedRepositoryPath,
+                            ClonedRepositoryPath = cloneRepositoryResponse.ClonedRepositoryPath, 
                             RepositoryName = repositoryName,
                             PeriodEndDate = request.EndDatePeriod,
                         });
 
                     var generateCsvWithNumberOfCodeLinesResponse = _generateCsvWithNumberOfCodeLines.Execute(cloneRepositoryResponse.ClonedRepositoryPath, clocPath);
-                    if (generateCsvWithChangeFrequenciesResponse.IsSuccess && generateCsvWithNumberOfCodeLinesResponse.IsSuccess)
+                    if (generateCsvWithChangeFrequenciesAndMainAuthorsAuthorsResponse.IsSuccess && generateCsvWithNumberOfCodeLinesResponse.IsSuccess)
                     {
                         var csvFileName = $"{repositoryName}_complexity_metrics_before_{request.EndDatePeriod:yyyy-MM-dd}.csv";
                         var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
-                        var generateCsvResponse = GenerateMergedCsv(generateCsvWithChangeFrequenciesResponse.GeneratedCsvPath, generateCsvWithNumberOfCodeLinesResponse.GeneratedCsvPath, csvFilePath);
+                        var generateCsvResponse = GenerateMergedCsv(generateCsvWithChangeFrequenciesAndMainAuthorsAuthorsResponse.GeneratedCsvPath, generateCsvWithNumberOfCodeLinesResponse.GeneratedCsvPath, csvFilePath);
                         if (generateCsvResponse)
-                            return new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodResponse
+                            return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse
                             { IsSuccess = true, MergedCsvFilePath = csvFilePath };
-                        return new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodResponse
+                        return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse
                         { IsSuccess = false, Error = "Error trying to generate the csv file!" };
                     }
 
-                    if (!generateCsvWithChangeFrequenciesResponse.IsSuccess)
-                        return new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodResponse { IsSuccess = false, Error = generateCsvWithChangeFrequenciesResponse.Error };
+                    if (!generateCsvWithChangeFrequenciesAndMainAuthorsAuthorsResponse.IsSuccess)
+                        return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse { IsSuccess = false, Error = generateCsvWithChangeFrequenciesAndMainAuthorsAuthorsResponse.Error };
                     if (!generateCsvWithNumberOfCodeLinesResponse.IsSuccess)
-                        return new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodResponse { IsSuccess = false, Error = generateCsvWithNumberOfCodeLinesResponse.Error };
+                        return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse { IsSuccess = false, Error = generateCsvWithNumberOfCodeLinesResponse.Error };
                 }
-                return new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodResponse
+                return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse
                 { IsSuccess = false, Error = cloneRepositoryResponse.Error };
             }
-            return new MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodResponse
+            return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse
             { IsSuccess = false, Error = "Repository url is empty!" };
         }
         private bool GenerateMergedCsv(string changeFrequenciesCsvPath, string numberOfCodeLinesCsvPath, string csvFilePath)
         {
             var changeFrequenciesFile = File.ReadAllLines(changeFrequenciesCsvPath);
             var numberOfCodeLinesFile = File.ReadAllLines(numberOfCodeLinesCsvPath);
-            var changeFrequenciesMetrics = new List<ChangeFrequency>();
+            var changeFrequenciesMetrics = new List<FileMainAuthor>();
             var numberOfCodeLinesMetrics = new List<CodeMetric>();
-            var mergedProperties = new List<ChangeFrequencyAndCodeMetric>();
+            var mergedProperties = new List<FileMainAuthorsAndNumberOfCodeLines>();
 
             for (int i = 1; i < changeFrequenciesFile.Length; i++)
             {
-                var parts = changeFrequenciesFile[i].Split(',', 2);
-                changeFrequenciesMetrics.Add(new ChangeFrequency
+                var parts = changeFrequenciesFile[i].Split(',', 3);
+                changeFrequenciesMetrics.Add(new FileMainAuthor
                 {
                     EntityPath = parts[0],
                     Revisions = int.Parse(parts[1]),
+                    MainAuthor = parts[2]
                 });
             }
 
@@ -101,16 +102,17 @@ namespace HistoryTracker.Contexts
                 var matchingChangeFrequency = changeFrequenciesMetrics.FirstOrDefault(entity => entity.EntityPath.Equals(codeMetric.EntityPath));
                 if (matchingChangeFrequency != null)
                 {
-                    mergedProperties.Add(new ChangeFrequencyAndCodeMetric
+                    mergedProperties.Add(new FileMainAuthorsAndNumberOfCodeLines
                     {
                         EntityPath = codeMetric.EntityPath,
                         CodeLines = codeMetric.CodeLines,
                         Revisions = matchingChangeFrequency.Revisions,
+                        MainAuthor = matchingChangeFrequency.MainAuthor
                     });
                 }
                 else
                 {
-                    mergedProperties.Add(new ChangeFrequencyAndCodeMetric
+                    mergedProperties.Add(new FileMainAuthorsAndNumberOfCodeLines
                     {
                         EntityPath = codeMetric.EntityPath,
                         CodeLines = codeMetric.CodeLines,
@@ -119,20 +121,19 @@ namespace HistoryTracker.Contexts
                 }
             }
             var sortedMetrics = SortAfterChangeFrequencyAndCodeSize(mergedProperties);
-            var response = _gateway.CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(sortedMetrics, csvFilePath);
+            var response = _gateway.CreateCsvFileWithMainAuthorsAndNumberOfCodeLines(sortedMetrics, csvFilePath);
             return response;
         }
 
-        public List<ChangeFrequencyAndCodeMetric> SortAfterChangeFrequencyAndCodeSize(List<ChangeFrequencyAndCodeMetric> metrics)
+        public List<FileMainAuthorsAndNumberOfCodeLines> SortAfterChangeFrequencyAndCodeSize(List<FileMainAuthorsAndNumberOfCodeLines> metrics)
         {
             var sortedMetrics = metrics.OrderByDescending(metric => metric.Revisions)
                 .ThenByDescending(metric => metric.CodeLines).ToList();
             return sortedMetrics;
         }
-
     }
 
-    public class MergeChangeFrequenciesAndNumberOfCodeLinesFromSpecificPeriodResponse : BaseResponse
+    public class MergeMainAuthorsAndNumberOfCodeLinesFilesResponse : BaseResponse
     {
         public string MergedCsvFilePath { get; set; }
     }

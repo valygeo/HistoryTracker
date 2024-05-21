@@ -1,72 +1,49 @@
 ﻿
-using System.Numerics;
 using Domain;
 using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
 using System.Text.RegularExpressions;
-using System.Web;
+
 
 namespace HistoryTracker.Contexts
 {
     public class GenerateCsvWithMainAuthorsPerModuleContext
     {
-        private readonly CloneRepositoryContext _cloneRepositoryContext;
         private readonly IGenerateCsvWithMainAuthorsPerModuleGateway _gateway;
         private readonly CreateAllTimeLogFileContext _createAllTimeLogFileContext;
         private readonly ExtractCommitsForSpecifiedPeriodFromLogFileContext _extractCommitsForSpecifiedPeriodContext;
 
-        public GenerateCsvWithMainAuthorsPerModuleContext(IGenerateCsvWithMainAuthorsPerModuleGateway gateway, CreateAllTimeLogFileContext createAllTimeLogFileContext, ExtractCommitsForSpecifiedPeriodFromLogFileContext extractCommitsForSpecifiedPeriodContext, CloneRepositoryContext cloneRepositoryContext)
+        public GenerateCsvWithMainAuthorsPerModuleContext(IGenerateCsvWithMainAuthorsPerModuleGateway gateway, CreateAllTimeLogFileContext createAllTimeLogFileContext, ExtractCommitsForSpecifiedPeriodFromLogFileContext extractCommitsForSpecifiedPeriodContext)
         {
             _gateway = gateway;
             _createAllTimeLogFileContext = createAllTimeLogFileContext;
             _extractCommitsForSpecifiedPeriodContext = extractCommitsForSpecifiedPeriodContext;
-            _cloneRepositoryContext = cloneRepositoryContext;
         }
 
-        public GenerateCsvWithMainAuthorPerModuleResponse Execute(ComplexityMetricsRequest request)
+        public GenerateCsvWithMainAuthorPerModuleResponse Execute(CreateCsvFromSpecifiedPeriodRequest request)
         {
-            if (!String.IsNullOrWhiteSpace(request.RepositoryUrl))
+            var createLogFileResponse = _createAllTimeLogFileContext.Execute(request.ClonedRepositoryPath);
+            if (createLogFileResponse.IsSuccess)
             {
-                request.RepositoryUrl = HttpUtility.UrlDecode(request.RepositoryUrl);
-                var cloneRepositoryResponse = _cloneRepositoryContext.Execute(request.RepositoryUrl);
-                if (cloneRepositoryResponse.IsSuccess)
+                var formattedPeriodEndDate = $"{request.PeriodEndDate:yyyy-MM-dd}";
+                var csvFileName = $"{request.RepositoryName}_main_authors_per_modules_before_{formattedPeriodEndDate}.csv";
+                var csvFilePath = Path.Combine(request.ClonedRepositoryPath, csvFileName);
+                var extractCommitsResponse = _extractCommitsForSpecifiedPeriodContext.Execute(createLogFileResponse.LogFilePath, formattedPeriodEndDate);
+                if (extractCommitsResponse.IsSuccess)
                 {
-                    var createLogFileResponse = _createAllTimeLogFileContext.Execute(cloneRepositoryResponse.ClonedRepositoryPath);
-                    if (createLogFileResponse.IsSuccess)
-                    {
-                        var formattedPeriodEndDate = $"{request.EndDatePeriod:yyyy-MM-dd}";
-                        var csvFileName = $"{Path.GetFileNameWithoutExtension(cloneRepositoryResponse.ClonedRepositoryPath)}_main_authors_of_modules_before_{formattedPeriodEndDate}.csv";
-                        var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
-                        var extractCommitsResponse = _extractCommitsForSpecifiedPeriodContext.Execute(createLogFileResponse.LogFilePath, formattedPeriodEndDate);
-                        if (extractCommitsResponse.IsSuccess)
-                        {
-                            var revisionsOfModules = GetChangeFrequencies(extractCommitsResponse);
-                            var createCsvResponse = _gateway.CreateCsvFileWithMainAuthorsAndChangeFrequenciesOfModules(revisionsOfModules,
-                                    csvFilePath);
-                            if (createCsvResponse)
-                                return new GenerateCsvWithMainAuthorPerModuleResponse
-                                    { IsSuccess = true, GeneratedCsvPath = csvFilePath };
-                            return new GenerateCsvWithMainAuthorPerModuleResponse
-                                { IsSuccess = false, Error = "Error trying to create csv file!" };
-                        }
-
-                        return new GenerateCsvWithMainAuthorPerModuleResponse
-                            { IsSuccess = false, Error = extractCommitsResponse.Error };
-                    }
-
-                    return new GenerateCsvWithMainAuthorPerModuleResponse
-                        { IsSuccess = false, Error = createLogFileResponse.Error };
+                    var revisionsOfModules = GetChangeFrequenciesAndMainAuthors(extractCommitsResponse);
+                    var createCsvResponse = _gateway.CreateCsvFileWithMainAuthorsAndChangeFrequenciesOfModules(revisionsOfModules, csvFilePath);
+                    if (createCsvResponse)
+                        return new GenerateCsvWithMainAuthorPerModuleResponse { IsSuccess = true, GeneratedCsvPath = csvFilePath };
+                    return new GenerateCsvWithMainAuthorPerModuleResponse { IsSuccess = false, Error = "Error trying to create csv file!" };
                 }
-
-                return new GenerateCsvWithMainAuthorPerModuleResponse
-                    { IsSuccess = false, Error = cloneRepositoryResponse.Error };
-
+                return new GenerateCsvWithMainAuthorPerModuleResponse { IsSuccess = false, Error = extractCommitsResponse.Error };
             }
-            return new GenerateCsvWithMainAuthorPerModuleResponse
-                { IsSuccess = false, Error = "Repository url is empty!" };
+            return new GenerateCsvWithMainAuthorPerModuleResponse { IsSuccess = false, Error = createLogFileResponse.Error };
+            
         }
-
-        private ICollection<FileMainAuthor> GetChangeFrequencies(ExtractAllCommitsForSpecifiedPeriodResponse commits)
+          
+        private ICollection<FileMainAuthor> GetChangeFrequenciesAndMainAuthors(ExtractAllCommitsForSpecifiedPeriodResponse commits)
         {
             var modulesWithChangeFrequenciesAndAuthors = new List<FileMainAuthor>();
             foreach (var commit in commits.CommitsBeforeEndDate)
@@ -185,6 +162,25 @@ namespace HistoryTracker.Contexts
             }
             return mainAuthorsByMaxRevisions.OrderByDescending(m => m.Revisions).ToList();
         }
+        //private static IDictionary<string, FileMainAuthor> FindMainAuthorsPerModuleByNumberOfRevisions(
+        //    IDictionary<string, FileMainAuthor> mainAuthorsAndChangeFrequenciesPerModule)
+        //{
+        //    var mainAuthorsByMaxRevisions = new Dictionary<string, FileMainAuthor>();
+        //    foreach (var entry in mainAuthorsAndChangeFrequenciesPerModule)
+        //    {
+        //        if(!mainAuthorsByMaxRevisions.ContainsKey(entry.Key))
+        //            mainAuthorsByMaxRevisions[entry.Key] = entry.Value;
+        //        else
+        //        {
+        //            if (entry.Value.Revisions > mainAuthorsByMaxRevisions[entry.Key].Revisions)
+        //            {
+        //                mainAuthorsByMaxRevisions[entry.Key].Revisions = entry.Value.Revisions;
+        //                mainAuthorsByMaxRevisions[entry.Key].MainAuthor = entry.Value.MainAuthor;
+        //            }
+        //        }
+        //    }
+        //    return mainAuthorsByMaxRevisions;
+        //}
     }
 
     public class GenerateCsvWithMainAuthorPerModuleResponse : BaseResponse

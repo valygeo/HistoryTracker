@@ -22,5 +22,12 @@ namespace HistoryTracker.Controllers
             var result = context.Execute(filePath);
             return Json(result.Hierarchy);
         }
+        [HttpGet("file-main-authors-per-files")]
+        public JsonResult GetFileMainAuthorsPerFiles(string filePath)
+        {
+            var context = new GetFileMainAuthorsPerFileContext();
+            var result = context.Execute(filePath);
+            return Json(result.Hierarchy);
+        }
     }
 }

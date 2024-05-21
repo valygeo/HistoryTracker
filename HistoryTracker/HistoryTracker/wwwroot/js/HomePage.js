@@ -63,6 +63,9 @@ const redirectToChartPage = function () {
 const redirectToChartForSpecificPeriodPage = function () {
     window.location.href = "/Chart/hotspots-frequency-and-complexity-for-specific-period";
 }
+const redirectToChartForFileMainAuthorsPerFile = function () {
+    window.location.href = "/Chart/file-main-authors-per-files";
+}
 const showLoader = function() {
     var loader = document.getElementById("loader");
     loader.style.display = "block";
@@ -153,8 +156,8 @@ const getMainAuthorsPerModule = function () {
                 hideLoader();
             }
             else {
-                var hotspotsButton = document.getElementById("displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod");
-                localStorage.setItem('filePathForHotspotsFrequencyAndComplexityForSpecificPeriod', response);
+                var hotspotsButton = document.getElementById("displayFileMainAuthors");
+                localStorage.setItem('filePathForFileMainAuthors', response);
                 hideLoader();
                 hotspotsButton.style.display = "block";
             }

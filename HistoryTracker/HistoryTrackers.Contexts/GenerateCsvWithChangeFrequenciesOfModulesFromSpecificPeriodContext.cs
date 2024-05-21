@@ -3,7 +3,7 @@ using Domain;
 using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
 using System.Text.RegularExpressions;
-using System.Text;
+
 
 namespace HistoryTracker.Contexts
 {
@@ -20,14 +20,14 @@ namespace HistoryTracker.Contexts
             _createLogFileContext = createLogFileContext;
             _extractCommitsForSpecifiedPeriodContext = extractCommitsForSpecifiedPeriodContext;
         }
-        public GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse Execute(CreateLogFileFromSpecifiedPeriodData request)
+        public GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse Execute(CreateCsvFromSpecifiedPeriodRequest request)
         {
-            var createLogFileResponse = _createLogFileContext.Execute(request.clonedRepositoryPath);
+            var createLogFileResponse = _createLogFileContext.Execute(request.ClonedRepositoryPath);
             if (createLogFileResponse.IsSuccess)
             {
-                var formattedPeriodEndDate = $"{request.periodEndDate:yyyy-MM-dd}";
-                var csvFileName = $"{request.repositoryName}_change_frequencies_of_modules_before_{formattedPeriodEndDate}.csv";
-                var csvFilePath = Path.Combine(request.clonedRepositoryPath, csvFileName);
+                var formattedPeriodEndDate = $"{request.PeriodEndDate:yyyy-MM-dd}";
+                var csvFileName = $"{request.RepositoryName}_change_frequencies_of_modules_before_{formattedPeriodEndDate}.csv";
+                var csvFilePath = Path.Combine(request.ClonedRepositoryPath, csvFileName);
                 var extractCommitsResponse = _extractCommitsForSpecifiedPeriodContext.Execute(createLogFileResponse.LogFilePath, formattedPeriodEndDate);
                 if (extractCommitsResponse.IsSuccess)
                 {
