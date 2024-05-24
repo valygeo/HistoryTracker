@@ -68,12 +68,11 @@ namespace HistoryTracker.Contexts
 
             for (int i = 1; i < changeFrequenciesFile.Length; i++)
             {
-                var parts = changeFrequenciesFile[i].Split(',', 3);
+                var parts = changeFrequenciesFile[i].Split(',', 2);
                 changeFrequenciesMetrics.Add(new ChangeFrequency
                 {
                     EntityPath = parts[0],
                     Revisions = int.Parse(parts[1]),
-                    Authors = parts[2]
                 });
             }
 
@@ -100,7 +99,6 @@ namespace HistoryTracker.Contexts
                         EntityPath = codeMetric.EntityPath,
                         CodeLines = codeMetric.CodeLines,
                         Revisions = matchingChangeFrequency.Revisions,
-                        Authors = matchingChangeFrequency.Authors
                     });
                 }
             }

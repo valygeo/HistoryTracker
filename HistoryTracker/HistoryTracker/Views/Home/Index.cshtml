@@ -39,6 +39,8 @@
 	                <div class="button-container">
 		                <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
 		                <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
+
+		                <input type="button" value="Get main authors" class="btn-testing" style="margin-left:135px" onclick="getMainAuthorsPerModule()" />
                       
 		                <input type="button" value="Get complexity metrics for specific period" class="btn-testing" style="margin-left:135px" onclick="getComplexityMetricsForSpecificPeriod()" />
 	                </div>
@@ -47,8 +49,13 @@
 						<input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-displayforperiod" style="display:none " type="button" value="Display hotspots frequency and complexity for specific period" onclick="redirectToChartForSpecificPeriodPage()">
 	                </div>
 	               
+                    <div class="button-container">
+
+                       
+                    </div>
                     <div id="loader" class="loader"></div>
                    
+                    <input id="displayFileMainAuthors" class="btn-testing" style="display:none " type="button" value="File Main Authors Per File" onclick="redirectToChartForFileMainAuthorsPerFile()">
                 </form>
             </div>
             <div id="summaryDataContainer">
