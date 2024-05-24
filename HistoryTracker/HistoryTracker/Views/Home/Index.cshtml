@@ -33,6 +33,7 @@
                     <div class="input-container">
 	                    <input type="date" class="form-styling" style="margin-left:180%"id="endDate" name="endDate" required />
 	                    <span id="error-message-for-end-date" style="color: red;display:none;">End date should be greater than first commit date!</span>
+
                     </div>
                     </div>
 	                <div class="button-container">
@@ -43,10 +44,11 @@
 	                </div>
 	                <div class="button-container">
 		                <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-display" type="button" value="Display hotspots frequency and complexity" onclick="redirectToChartPage()">
+						<input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-displayforperiod" style="display:none " type="button" value="Display hotspots frequency and complexity for specific period" onclick="redirectToChartForSpecificPeriodPage()">
 	                </div>
 	               
                     <div id="loader" class="loader"></div>
-                    <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-testing" style="display:none " type="button" value="Display hotspots frequency and complexity for specific period" onclick="redirectToChartForSpecificPeriodPage()">
+                   
                 </form>
             </div>
             <div id="summaryDataContainer">
