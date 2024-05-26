@@ -392,10 +392,16 @@ form-signin input, .form-signup input {
     text-transform: math-auto;
     text-shadow: 0 0 black;
     color: #0c4073;
-    display: inline-block;
+    display: block;
     box-sizing: border-box;
     text-align: center;
     margin-inline: 5px;
+}
+
+.button-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .btn-displayforperiod {
@@ -423,6 +429,22 @@ form-signin input, .form-signup input {
     width: 100%;
     box-sizing: border-box; 
 }
+
+.button-containerfordisplay {
+    display: flex;
+    justify-content: center;
+    width: 140%;
+    box-sizing: border-box;
+    background-image: url(/images/fundal-container.jpg);
+    margin-top: 50px;
+    height: 160px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid;
+    border-color: #0c4073;
+   /* margin-left: 210px;*/
+}
+
 
 .btn-animate {
     float: left;
