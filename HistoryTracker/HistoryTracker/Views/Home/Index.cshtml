@@ -26,23 +26,37 @@
 		                <label id="endDateLabel">End Date:</label>
 	                </div>
                     <div class="button-container">
-                        <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
-                        <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
-                        <input type="date" class="form-styling" style="margin-left:79%"id="endDate" name="endDate" required />
-                        <p id="error-message-for-end-date" style="color:red;display:none;">.</p>
-                    </div>
-                    <div class="button-container">
-                        <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
-                        <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
+	                    <div class="input-container">
+		                    <input class="form-styling" type="text" id="githubUrl" placeholder="Enter your URL..."/>
+		                    <p id="error-message" style="color:red;display:none;">Please enter a valid GitHub URL.</p>
+	                    </div>
+                    <div class="input-container">
+	                    <input type="date" class="form-styling" style="margin-left:180%"id="endDate" name="endDate" required />
+	                    <span id="error-message-for-end-date" style="color: red;display:none;">End date should be greater than first commit date!</span>
 
-                        <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-testing" type="button" value="Display hotspots frequency and complexity" onclick="redirectToChartPage()">
-                      
-                        <input type="button" value="Get complexity metrics for specific period" class="btn-testing" style="margin-left:135px" onclick="getComplexityMetricsForSpecificPeriod()" />
-                        <input type="button" value="Get main authors" class="btn-testing" style="margin-left:135px" onclick="getMainAuthorsPerModule()" />
                     </div>
+                    </div>
+	                <div class="button-container">
+		                <input class="btn-testing" type="button" value="Get summary data" onclick="getSummaryData()"/>
+		                <input type="button" class="btn-testing" value="Get complexity metrics" onclick="getComplexityMetrics()" />
+
+		                <input type="button" value="Get complexity metrics for specific period" class="btn-testing" style="margin-left:135px" onclick="getComplexityMetricsForSpecificPeriod()" />
+
+	                </div>
+	                <input type="button" value="Get main authors" class="btn-testing" style="margin-top:8px" onclick="getMainAuthorsPerModule()" />
+	                <h2>Your option:</h2>
+	                <div class="button-containerfordisplay">
+	                <div class="button-wrapper">
+		                <input id="displayHotspotsFrequencyAndComplexityButton" style="display:none" class="btn-display" type="button" value="Display hotspots frequency and complexity" onclick="redirectToChartPage()">
+		                <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-display" style="display:none " type="button" value="Display hotspots frequency and complexity for specific period" onclick="redirectToChartForSpecificPeriodPage()">
+		                <input id="displayFileMainAuthors" class="btn-display" style="display:none " type="button" value="File Main Authors Per File" onclick="redirectToChartForFileMainAuthorsPerFile()">
+	                </div>
+					</div>
+	               
+                   
                     <div id="loader" class="loader"></div>
-                    <input id="displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod" class="btn-testing" style="display:none " type="button" value="Display hotspots frequency and complexity for specific period" onclick="redirectToChartForSpecificPeriodPage()">
-                    <input id="displayFileMainAuthors" class="btn-testing" style="display:none " type="button" value="File Main Authors Per File" onclick="redirectToChartForFileMainAuthorsPerFile()">
+                   
+                    
                 </form>
             </div>
             <div id="summaryDataContainer">
@@ -53,7 +67,7 @@
 </body>
 </html>
 
-<script src="js/HomePage.js"></script>
+<script src="~/js/HomePage.js"></script>
 <script src="js/d3.v7.min.js"></script>
 <link rel="stylesheet" href="css/loader.css" />
 <link href="~/css/google.fonts.nunito.css" rel="stylesheet">

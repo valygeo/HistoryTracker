@@ -7,7 +7,7 @@ function createChart(data) {
     // Create the color scale.
     const color = d3.scaleLinear()
         .domain([0, 5])
-        .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+        .range(["hsl(210, 80%, 95%)", "hsl(210, 50%, 70%)"])
         .interpolate(d3.interpolateHcl);
 
     // Compute the layout.
@@ -24,7 +24,7 @@ function createChart(data) {
         .attr("viewBox", `-${width / 2} -${height / 2} ${width} ${height}`)
         .attr("width", width)
         .attr("height", height)
-        .attr("style", `max-width: 100%; height: auto; display: block; margin: 0 -14px; background: ${color(0)}; cursor: pointer;`);
+        .attr("style", `max-width: 95%; height: auto; display: block; margin: 0 -14px; background:linear-gradient(113deg,  #afbcd91c, #c2cfd5); cursor: pointer;  position: fixed; left:10%; top:-640%; border: solid; border-radius: 10px; border-color: #a3adc1;`);
 
     // Append the nodes.
     const node = svg.append("g")
