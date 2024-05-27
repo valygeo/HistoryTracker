@@ -87,6 +87,22 @@ namespace HistoryTracker.Controllers
             return Json(new { Error = response.Error });
         }
 
+        [HttpGet]
+        [Route("{repositoryUrl:required}/get-metrics-for-power-law")]
+        public IActionResult GetMetricsForPowerLaw([FromRoute] string repositoryUrl)
+        {
+            var cloneRepositoryContext = new CloneRepositoryContext(new CloneRepositoryGateway());
+            var cloneRepositoryResponse = cloneRepositoryContext.Execute(repositoryUrl);
+            var context = new GenerateCsvWithChangeFrequenciesOfAllModulesContext(
+                new GenerateCsvWithChangeFrequenciesOfAllModulesGateway(),
+                new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()),
+                new ExtractAllCommitsContext(new ExtractAllCommitsGateway()));
+            var response = context.Execute(cloneRepositoryResponse.ClonedRepositoryPath);
+            if (response.IsSuccess)
+                return Json(response.GeneratedCsvPath);
+            return Json(new { Error = response.Error });
+        }
+
         public IActionResult Privacy()
         {
             return View();

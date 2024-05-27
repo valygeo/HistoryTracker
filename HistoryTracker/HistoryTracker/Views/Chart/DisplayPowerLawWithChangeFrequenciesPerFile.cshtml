@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Page</title>
+    <link rel="stylesheet" type="text/css" href="~/css/Home/sb-admin-2.css" />
+</head>
+<style>
+        .tooltip {
+            position: absolute;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+    </style>
+<body>
+<div class="title">
+    <h1>Power Law - Focus On Code That Matters</h1>
+</div>
+<div id="chartContainer"></div>
+<div class="tooltip" id="tooltip"></div>
+</body>
+</html>
+<script src="~/js/d3.v7.min.js"></script>
+<script src="~/js/HomePage.js"></script>
+<script src="~/js/PowerLaw.js"></script>

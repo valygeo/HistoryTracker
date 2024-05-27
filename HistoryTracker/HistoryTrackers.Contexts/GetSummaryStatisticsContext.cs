@@ -24,7 +24,6 @@ namespace HistoryTracker.Contexts
             if (String.IsNullOrWhiteSpace(githubUrl))
                 return new GetSummaryDataStatistics { IsSuccess = false, Error = "Github url is empty!" };
 
-            githubUrl = HttpUtility.UrlDecode(githubUrl);
             var cloneRepositoryResponse = _cloneRepositoryContext.Execute(githubUrl);
 
             if (cloneRepositoryResponse.IsSuccess)

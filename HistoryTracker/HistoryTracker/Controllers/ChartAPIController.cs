@@ -29,5 +29,13 @@ namespace HistoryTracker.Controllers
             var result = context.Execute(filePath);
             return Json(result.Hierarchy);
         }
+
+        [HttpGet("power-law-change-frequencies-per-file")]
+        public JsonResult GetChangeFrequenciesPerFile(string filePath)
+        {
+            var context = new DisplayPowerLawForModificationFrequenciesPerFileContext();
+            var result = context.Execute(filePath);
+            return Json(result.ChangeFrequenciesPerFile);
+        }
     }
 }

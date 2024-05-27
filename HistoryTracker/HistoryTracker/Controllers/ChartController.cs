@@ -23,5 +23,11 @@ namespace HistoryTracker.Controllers
         {
             return View();
         }
+
+        [HttpGet("power-law-change-frequencies-per-file")]
+        public IActionResult DisplayPowerLawWithChangeFrequenciesPerFile()
+        {
+            return View();
+        }
     }
 }

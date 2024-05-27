@@ -40,25 +40,23 @@ const getSummaryData = function () {
   
 }
 const getChangeFrequencies = function () {
-   
-        var githubUrl = $('#githubUrl').val();
-        var encodedGithubUrl = encodeURIComponent(githubUrl);
+    var githubUrl = $('#githubUrl').val();
+    var encodedGithubUrl = encodeURIComponent(githubUrl);
+    $.ajax({
+        type: "GET",
+        url: "/" + encodedGithubUrl + "/get-change-frequencies",
+        dataType: "json",
+        success: function (response) {
+            $('#changeFrequenciesContainer').html(
 
-        $.ajax({
-            type: "GET",
-            url: "/" + encodedGithubUrl + "/get-change-frequencies",
-            dataType: "json",
-            success: function (response) {
-                $('#changeFrequenciesContainer').html(
-
-                );
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    
+            );
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
 }
+
 const redirectToChartPage = function () {
     window.location.href = "/Chart";
 }
@@ -67,6 +65,9 @@ const redirectToChartForSpecificPeriodPage = function () {
 }
 const redirectToChartForFileMainAuthorsPerFile = function () {
     window.location.href = "/Chart/file-main-authors-per-files";
+}
+const redirectToChartForPowerLawPage = function () {
+    window.location.href = "/Chart/power-law-change-frequencies-per-file";
 }
 const showLoader = function() {
     var loader = document.getElementById("loader");
@@ -166,6 +167,36 @@ const getMainAuthorsPerModule = function () {
                 localStorage.setItem('filePathForFileMainAuthors', response);
                 hideLoader();
                 hotspotsButton.style.display = "block";
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+            hideLoader();
+        }
+    });
+}
+
+const getMetricsForPowerLaw = function () {
+    var githubUrl = $('#githubUrl').val();
+    var encodedGithubUrl = encodeURIComponent(githubUrl);
+
+    $.ajax({
+        type: "GET",
+        url: "/" + encodedGithubUrl + "/get-metrics-for-power-law",
+        dataType: "json",
+        beforeSend: function () {
+            showLoader();
+        },
+        success: function (response) {
+            if (response.error) {
+                displayError(response.error);
+                hideLoader();
+            }
+            else {
+                var powerLawButton = document.getElementById("displayPowerLaw");
+                localStorage.setItem('filePathWithChangeFrequenciesPerFileForPowerLawChart', response);
+                hideLoader();
+                powerLawButton.style.display = "block";
             }
         },
         error: function (xhr, status, error) {

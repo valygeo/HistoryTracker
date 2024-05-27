@@ -24,7 +24,6 @@ namespace HistoryTracker.Contexts
         {
             if (!String.IsNullOrWhiteSpace(repositoryUrl))
             {
-                repositoryUrl = HttpUtility.UrlDecode(repositoryUrl);
                 var cloneRepositoryResponse = _cloneRepositoryContext.Execute(repositoryUrl);
 
                 if (cloneRepositoryResponse.IsSuccess)
