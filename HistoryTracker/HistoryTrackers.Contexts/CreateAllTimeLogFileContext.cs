@@ -16,7 +16,7 @@ namespace HistoryTracker.Contexts
         {
             if (String.IsNullOrWhiteSpace(clonedRepositoryPath))
                 return new CreateAllTimeLogFileResponse { IsSuccess = false, Error = "Cloned repository path is empty!" };
-
+           
             var repositoryName = Path.GetFileNameWithoutExtension(clonedRepositoryPath);
             var logFilePath = Path.Combine(clonedRepositoryPath, $"{repositoryName}.log");
             var isRepositoryUpToDate = _gateway.IsRepositoryUpToDate(clonedRepositoryPath);
@@ -36,6 +36,7 @@ namespace HistoryTracker.Contexts
                 return new CreateAllTimeLogFileResponse { IsSuccess = true, LogFilePath = logFilePath };
             }
 
+            else
             {
                 var fetchChangesResult = _gateway.FetchChanges(clonedRepositoryPath);
 
@@ -44,7 +45,7 @@ namespace HistoryTracker.Contexts
                 {
                     var createLogFileResult = _gateway.CreateLogFile(repositoryName, clonedRepositoryPath);
                     if (!String.IsNullOrWhiteSpace(createLogFileResult))
-                        return new CreateAllTimeLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult};
+                        return new CreateAllTimeLogFileResponse { IsSuccess = true, LogFilePath = createLogFileResult };
                     return new CreateAllTimeLogFileResponse
                         { IsSuccess = false, Error = "Error occured while trying to create log file!" };
                 }
