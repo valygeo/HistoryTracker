@@ -433,16 +433,35 @@ form-signin input, .form-signup input {
 .button-containerfordisplay {
     display: flex;
     justify-content: center;
-    width: 140%;
+    width: auto;
     box-sizing: border-box;
     background-image: url(/images/fundal-container.jpg);
-    margin-top: 50px;
-    height: 160px;
+    margin-top: 10px;
+    height: auto;
     padding: 20px;
     border-radius: 10px;
     border: 2px solid;
     border-color: #0c4073;
-   /* margin-left: 210px;*/
+  
+}
+
+.btn-style {
+    border-radius: 10px;
+    margin-top: 9px;
+    width: 98%;
+    border: solid;
+    border-color: #0c4073;
+    background-color: rgb(235 214 214 / 20%);
+    text-transform: math-auto;
+    text-shadow: 0 0 black;
+    /*color: #0c4073;*/
+    box-sizing: border-box;
+    text-align: center;
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: solid 2px #0c4073;
+    transition: all .25s ease;
+    cursor: pointer;
 }
 
 
