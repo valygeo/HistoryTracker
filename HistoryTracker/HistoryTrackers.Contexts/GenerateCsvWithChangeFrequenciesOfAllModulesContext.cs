@@ -10,11 +10,11 @@ namespace HistoryTracker.Contexts
     {
         private readonly IGenerateCsvWithChangeFrequenciesOfAllModulesGateway _gateway;
         private readonly CreateAllTimeLogFileContext _createLogFileContext;
-        private readonly ExtractAllCommitsContext _extractAllCommitsContext;
+        private readonly ExtractCommitsContext _extractAllCommitsContext;
 
         public GenerateCsvWithChangeFrequenciesOfAllModulesContext(IGenerateCsvWithChangeFrequenciesOfAllModulesGateway gateway,
             CreateAllTimeLogFileContext createLogFileContext,
-            ExtractAllCommitsContext extractAllCommitsContext)
+            ExtractCommitsContext extractAllCommitsContext)
         {
             _gateway = gateway;
             _createLogFileContext = createLogFileContext;
@@ -40,15 +40,16 @@ namespace HistoryTracker.Contexts
             return new GenerateCsvWithChangeFrequenciesOfAllModulesResponse { IsSuccess = false, Error = createLogFileResponse.Error };
         }
         
-        private ICollection<ChangeFrequency> GetChangeFrequencies(ExtractAllCommitsResponse commits)
+        private Dictionary<string,int> GetChangeFrequencies(ExtractCommitsResponse commits)
         {
-            var modulesWithChangeFrequenciesAndAuthors = new List<ChangeFrequency>();
+            var modulesWithChangeFrequencies = new Dictionary<string, int>();
             
-            foreach (var commit in commits.Commits)
+            foreach (var commitEntry in commits.Commits)
             {
-                foreach (var commitDetail in commit.CommitDetails)
+                var commit = commitEntry.Value;
+                foreach (var commitDetailEntry in commit.CommitDetails)
                 {
-                    var pathWithWindowsSlashes = commitDetail.EntityChangedName.Replace("/", "\\");
+                    var pathWithWindowsSlashes = commitDetailEntry.Key.Replace("/", "\\");
                     var pathWithoutComma = pathWithWindowsSlashes.Replace(",", "");
                     var relativePath = $".\\{pathWithoutComma}";
 
@@ -56,35 +57,30 @@ namespace HistoryTracker.Contexts
                     {
                        var initialAndNewIntegratedValue =  ProcessRenameOrMovePattern(relativePath);
                        relativePath = initialAndNewIntegratedValue[1];
-                       foreach (var module in modulesWithChangeFrequenciesAndAuthors)
+                       if (modulesWithChangeFrequencies.ContainsKey(initialAndNewIntegratedValue[0]))
                        {
-                           if (module.EntityPath == initialAndNewIntegratedValue[0])
-                           {
-                               module.EntityPath = relativePath;
-                           }
+                           var moduleChangeFrequency = modulesWithChangeFrequencies[initialAndNewIntegratedValue[0]];
+                           modulesWithChangeFrequencies.Remove(initialAndNewIntegratedValue[0]);
+                           modulesWithChangeFrequencies[relativePath] = moduleChangeFrequency;
                        }
                     }
 
                     if (!string.IsNullOrWhiteSpace(relativePath))
                     {
-                        var existingEntity = modulesWithChangeFrequenciesAndAuthors.FirstOrDefault(e => e.EntityPath.Equals(relativePath));
-                        if (existingEntity == null)
+                        var existingEntity = modulesWithChangeFrequencies.ContainsKey(relativePath);
+                        if (!existingEntity)
                         {
-                            var entity = new ChangeFrequency
-                            {
-                                EntityPath = relativePath,
-                                Revisions = 1,
-                            };
-                            modulesWithChangeFrequenciesAndAuthors.Add(entity);
+                            var entity = new KeyValuePair<string, int>(relativePath, 1);
+                            modulesWithChangeFrequencies.Add(entity.Key, entity.Value);
                         }
                         else
                         {
-                            existingEntity.Revisions++;
+                            modulesWithChangeFrequencies[relativePath]++;
                         }
                     }
                 }
             }
-            return SortInDescendingOrder(modulesWithChangeFrequenciesAndAuthors);
+            return SortInDescendingOrder(modulesWithChangeFrequencies);
         }
         private static string[] ProcessRenameOrMovePattern(string value)
         {
@@ -113,10 +109,10 @@ namespace HistoryTracker.Contexts
 
             return result.IndexOf("{", StringComparison.InvariantCulture) > -1;
         }
-        private static ICollection<ChangeFrequency> SortInDescendingOrder(
-            ICollection<ChangeFrequency> changeFrequenciesAndAuthorsOfModules)
+        private static Dictionary<string,int> SortInDescendingOrder(
+            Dictionary<string,int> changeFrequenciesAndAuthorsOfModules)
         {
-            return changeFrequenciesAndAuthorsOfModules.OrderByDescending(module => module.Revisions).ToList();
+            return changeFrequenciesAndAuthorsOfModules.OrderByDescending(kv => kv.Value).ToDictionary(kv => kv.Key, kv => kv.Value);
         }
 
         public class GenerateCsvWithChangeFrequenciesOfAllModulesResponse : BaseResponse
