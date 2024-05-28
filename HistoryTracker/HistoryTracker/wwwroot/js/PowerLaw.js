@@ -36,7 +36,7 @@
         .attr("viewBox", [0, 0, width, height])
         .attr("width", width)
         .attr("height", height)
-        .attr("style", "max-width: 100%; height: auto;");
+        .attr("style", "max-width: 100%; height: auto; border: solid; border-radius: 10px; border-color: #a05f9a; background-image: linear-gradient(330deg, #c7becb 5%, #e0d0f99e 100%);")
 
     // Append the horizontal axis.
     svg.append("g").call(xAxis);
