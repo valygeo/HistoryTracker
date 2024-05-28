@@ -123,7 +123,19 @@
         .style("text-anchor", "start")
         .text(d => d);
 
+    // Add label for colors with no author
+    mainAuthors.forEach(author => {
+        if (!author) {
+            legendContainer.append("text")
+                .attr("x", 24)
+                .attr("y", mainAuthors.indexOf(author) * 20 + 15)
+                .style("text-anchor", "start")
+                .text("No changes or module does not exist ");
+        }
+    });
+
     return svg.node();
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {
