@@ -81,8 +81,12 @@ body {
     background-size: cover;
 }
 
-.container-legend{
-   margin-left:-15%;
+.container-legend {
+    margin-left: -15%;
+    position: absolute;
+    top: 95px;
+    left: -200px;
+    width: 300px;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -314,7 +318,7 @@ fieldset {
   border: 0;
 }
 
-legend {
+/*legend {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -324,7 +328,7 @@ legend {
   line-height: inherit;
   color: inherit;
   white-space: normal;
-}
+}*/
 
 progress {
   vertical-align: baseline;

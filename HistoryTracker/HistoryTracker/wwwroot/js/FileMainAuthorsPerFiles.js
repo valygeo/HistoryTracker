@@ -26,7 +26,8 @@
         .attr("viewBox", `-${width / 2} -${height / 2} ${width} ${height}`)
         .attr("width", width)
         .attr("height", height)
-        .attr("style", `max-width: 100%; height: auto; display: block; margin: 0 -14px; background: ${color(0)}; cursor: pointer;`);
+        .attr("style", `max-width: 100%; height: auto; display: block; margin: 0 -14px; background: rgb(232, 242, 252); cursor: pointer;  border: solid;
+         border-radius: 10px; border-color: #a3adc1;  background: linear-gradient(113deg, #afbcd91c, #c2cfd5);`);
 
     // Append the nodes.
     const node = svg.append("g")
