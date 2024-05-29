@@ -43,14 +43,15 @@ namespace HistoryTracker.Contexts
             
         }
           
-        private ICollection<FileMainAuthor> GetChangeFrequenciesAndMainAuthors(ExtractAllCommitsForSpecifiedPeriodResponse commits)
+        private Dictionary<string, FileMainAuthor> GetChangeFrequenciesAndMainAuthors(ExtractAllCommitsForSpecifiedPeriodResponse commits)
         {
-            var modulesWithChangeFrequenciesAndAuthors = new List<FileMainAuthor>();
-            foreach (var commit in commits.CommitsBeforeEndDate)
+            var modulesWithChangeFrequenciesAndAuthors = new Dictionary<string, FileMainAuthor>();
+            foreach (var commitEntry in commits.CommitsBeforeEndDate)
             {
+                var commit = commitEntry.Value;
                 foreach (var commitDetail in commit.CommitDetails)
                 {
-                    var pathWithWindowsSlashes = commitDetail.EntityChangedName.Replace("/", "\\");
+                    var pathWithWindowsSlashes = commitDetail.Key.Replace("/", "\\");
                     var pathWithoutComma = pathWithWindowsSlashes.Replace(",", "");
                     var relativePath = $".\\{pathWithoutComma}";
 
@@ -58,52 +59,50 @@ namespace HistoryTracker.Contexts
                     {
                         var initialAndNewIntegratedValue = ProcessRenameOrMovePattern(relativePath);
                         relativePath = initialAndNewIntegratedValue[1];
-                        foreach (var module in modulesWithChangeFrequenciesAndAuthors)
+                        if (modulesWithChangeFrequenciesAndAuthors.ContainsKey(initialAndNewIntegratedValue[0]))
                         {
-                            if (module.EntityPath == initialAndNewIntegratedValue[0])
-                            {
-                                module.EntityPath = relativePath;
-                            }
+                            var fileMainAuthorAndChangeFrequency = modulesWithChangeFrequenciesAndAuthors[initialAndNewIntegratedValue[0]];
+                            modulesWithChangeFrequenciesAndAuthors.Remove(initialAndNewIntegratedValue[0]);
+                            modulesWithChangeFrequenciesAndAuthors[relativePath] = fileMainAuthorAndChangeFrequency;
                         }
                     }
 
                     if (!string.IsNullOrWhiteSpace(relativePath))
                     {
-                        var existingEntity = modulesWithChangeFrequenciesAndAuthors.FirstOrDefault(e => e.EntityPath.Equals(relativePath) && e.MainAuthor.Equals(commit.Author));
-                        if (existingEntity == null)
+                        var existingModule = modulesWithChangeFrequenciesAndAuthors.ContainsKey(relativePath);
+                        if (!existingModule)
                         {
-                            var entity = new FileMainAuthor
+                            modulesWithChangeFrequenciesAndAuthors.Add(relativePath, new FileMainAuthor
                             {
-                                EntityPath = relativePath,
                                 MainAuthor = commit.Author,
-                                Revisions = 1,
-                            };
-                            modulesWithChangeFrequenciesAndAuthors.Add(entity);
+                                Revisions = 1
+                            });
                         }
                         else
                         {
-                            existingEntity.Revisions++;
+                            modulesWithChangeFrequenciesAndAuthors[relativePath].Revisions++;
                         }
                     }
                 }
             }
-            foreach (var commit in commits.CommitsAfterEndDate.Reverse())
+            foreach (var commitEntry in commits.CommitsAfterEndDate.Reverse())
             {
+                var commit = commitEntry.Value;
                 foreach (var commitDetail in commit.CommitDetails)
                 {
-                    var pathWithWindowsSlashes = commitDetail.EntityChangedName.Replace("/", "\\");
+                    var pathWithWindowsSlashes = commitDetail.Key.Replace("/", "\\");
                     var pathWithoutComma = pathWithWindowsSlashes.Replace(",", "");
                     var relativePath = $".\\{pathWithoutComma}";
+
                     if (IsThereARenameOrMove(relativePath))
                     {
                         var initialAndNewIntegratedValue = ProcessRenameOrMovePattern(relativePath);
                         relativePath = initialAndNewIntegratedValue[1];
-                        foreach (var module in modulesWithChangeFrequenciesAndAuthors)
+                        if (modulesWithChangeFrequenciesAndAuthors.ContainsKey(initialAndNewIntegratedValue[0]))
                         {
-                            if (module.EntityPath == initialAndNewIntegratedValue[0])
-                            {
-                                module.EntityPath = relativePath;
-                            }
+                            var fileMainAuthorAndChangeFrequency = modulesWithChangeFrequenciesAndAuthors[initialAndNewIntegratedValue[0]];
+                            modulesWithChangeFrequenciesAndAuthors.Remove(initialAndNewIntegratedValue[0]);
+                            modulesWithChangeFrequenciesAndAuthors[relativePath] = fileMainAuthorAndChangeFrequency;
                         }
                     }
                 }
@@ -138,49 +137,27 @@ namespace HistoryTracker.Contexts
 
             return result.IndexOf("{", StringComparison.InvariantCulture) > -1;
         }
-        private static ICollection<FileMainAuthor> FindMainAuthorsPerModuleByNumberOfRevisions(
-            ICollection<FileMainAuthor> mainAuthorsAndChangeFrequenciesPerModule)
+        private static Dictionary<string,FileMainAuthor> FindMainAuthorsPerModuleByNumberOfRevisions(Dictionary<string, FileMainAuthor> mainAuthorsAndChangeFrequenciesPerModule)
         {
-            var mainAuthorsByMaxRevisions = new List<FileMainAuthor>();
-
+            var mainAuthorsByMaxRevisions = new Dictionary<string, FileMainAuthor>();
             foreach (var mainAuthor in mainAuthorsAndChangeFrequenciesPerModule)
             {
-                var existingEntity = mainAuthorsByMaxRevisions.FirstOrDefault(e => e.EntityPath == mainAuthor.EntityPath);
-
-                if (existingEntity == null)
+                var existingModule = mainAuthorsByMaxRevisions.ContainsKey(mainAuthor.Key);
+                if (!existingModule)
                 {
-                    mainAuthorsByMaxRevisions.Add(mainAuthor);
+                    mainAuthorsByMaxRevisions.Add(mainAuthor.Key, mainAuthor.Value);
                 }
                 else
                 {
-                    if (mainAuthor.Revisions > existingEntity.Revisions)
+                    if (mainAuthor.Value.Revisions > mainAuthorsByMaxRevisions[mainAuthor.Key].Revisions)
                     {
-                        existingEntity.Revisions = mainAuthor.Revisions;
-                        existingEntity.MainAuthor = mainAuthor.MainAuthor;
+                        mainAuthorsByMaxRevisions[mainAuthor.Key] = mainAuthor.Value;
                     }
                 }
             }
-            return mainAuthorsByMaxRevisions.OrderByDescending(m => m.Revisions).ToList();
+            return mainAuthorsByMaxRevisions.OrderByDescending(kv => kv.Value.Revisions)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
         }
-        //private static IDictionary<string, FileMainAuthor> FindMainAuthorsPerModuleByNumberOfRevisions(
-        //    IDictionary<string, FileMainAuthor> mainAuthorsAndChangeFrequenciesPerModule)
-        //{
-        //    var mainAuthorsByMaxRevisions = new Dictionary<string, FileMainAuthor>();
-        //    foreach (var entry in mainAuthorsAndChangeFrequenciesPerModule)
-        //    {
-        //        if(!mainAuthorsByMaxRevisions.ContainsKey(entry.Key))
-        //            mainAuthorsByMaxRevisions[entry.Key] = entry.Value;
-        //        else
-        //        {
-        //            if (entry.Value.Revisions > mainAuthorsByMaxRevisions[entry.Key].Revisions)
-        //            {
-        //                mainAuthorsByMaxRevisions[entry.Key].Revisions = entry.Value.Revisions;
-        //                mainAuthorsByMaxRevisions[entry.Key].MainAuthor = entry.Value.MainAuthor;
-        //            }
-        //        }
-        //    }
-        //    return mainAuthorsByMaxRevisions;
-        //}
     }
 
     public class GenerateCsvWithMainAuthorPerModuleResponse : BaseResponse

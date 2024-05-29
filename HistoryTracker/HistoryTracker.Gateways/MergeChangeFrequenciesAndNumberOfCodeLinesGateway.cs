@@ -6,7 +6,7 @@ namespace HistoryTracker.Gateways
 {
     public class MergeChangeFrequenciesAndNumberOfCodeLinesGateway : IMergeChangeFrequenciesAndNumberOfCodeLinesGateway
     {
-        public bool CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(ICollection<ChangeFrequencyAndCodeMetric> metrics, string csvFilePath)
+        public bool CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(Dictionary<string, ChangeFrequencyAndCodeMetric> metrics, string csvFilePath)
         {
             try
             {
@@ -15,7 +15,7 @@ namespace HistoryTracker.Gateways
                     writer.WriteLine("Module, Revisions, Code");
                     foreach (var metric in metrics)
                     {
-                        writer.WriteLine($"{metric.EntityPath},{metric.Revisions},{metric.CodeLines}");
+                        writer.WriteLine($"{metric.Key},{metric.Value.Revisions},{metric.Value.CodeLines}");
                     }
                 }
                 return true;

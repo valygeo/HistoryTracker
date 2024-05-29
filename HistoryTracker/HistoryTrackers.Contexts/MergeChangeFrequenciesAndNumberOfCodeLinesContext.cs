@@ -1,5 +1,4 @@
 ﻿
-using System.Web;
 using Domain;
 using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
@@ -38,10 +37,8 @@ namespace HistoryTracker.Contexts
                     {
                         var generateCsvResponse = GenerateMergedCsv(generateCsvWithChangeFrequenciesAndAuthorsResponse.GeneratedCsvPath, generateCsvWithNumberOfCodeLinesResponse.GeneratedCsvPath, csvFilePath);
                         if (generateCsvResponse)
-                            return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse
-                                { IsSuccess = true, MergedCsvFilePath = csvFilePath };
-                        return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse
-                            { IsSuccess = false, Error = "Error trying to generate the csv file!" };
+                            return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = true, MergedCsvFilePath = csvFilePath };
+                        return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = false, Error = "Error trying to generate the csv file!" };
                     }
 
                     if (!generateCsvWithChangeFrequenciesAndAuthorsResponse.IsSuccess) 
@@ -49,70 +46,55 @@ namespace HistoryTracker.Contexts
                     if (!generateCsvWithNumberOfCodeLinesResponse.IsSuccess) 
                         return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = false, Error = generateCsvWithNumberOfCodeLinesResponse.Error };
                 }
-                return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse
-                    { IsSuccess = false, Error = cloneRepositoryResponse.Error };
+                return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = false, Error = cloneRepositoryResponse.Error };
             }
-            return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse
-                { IsSuccess = false, Error = "Repository url is empty!" };
-
+            return new MergeChangeFrequenciesAndNumberOfCodeLinesResponse { IsSuccess = false, Error = "Repository url is empty!" };
         }
 
         private bool GenerateMergedCsv(string changeFrequenciesCsvPath, string numberOfCodeLinesCsvPath, string csvFilePath)
         {
             var changeFrequenciesFile = File.ReadAllLines(changeFrequenciesCsvPath);
             var numberOfCodeLinesFile = File.ReadAllLines(numberOfCodeLinesCsvPath);
-            var changeFrequenciesMetrics = new List<ChangeFrequency>();
-            var numberOfCodeLinesMetrics = new List<CodeMetric>();
-            var mergedProperties = new List<ChangeFrequencyAndCodeMetric>();
+            var changeFrequenciesMetrics = new Dictionary<string, int>();
+            var numberOfCodeLinesMetrics = new Dictionary<string, int>();
+            var mergedMetrics = new Dictionary<string, ChangeFrequencyAndCodeMetric>();
 
             for (int i = 1; i < changeFrequenciesFile.Length; i++)
             {
                 var parts = changeFrequenciesFile[i].Split(',', 2);
-                changeFrequenciesMetrics.Add(new ChangeFrequency
-                {
-                    EntityPath = parts[0],
-                    Revisions = int.Parse(parts[1]),
-                });
+                changeFrequenciesMetrics.Add(parts[0], int.Parse(parts[1]));
+                //parts[0] = module path ; parts[1] = changeFrequency
             }
 
             for (int i = 1; i < numberOfCodeLinesFile.Length; i++)
             {
                 var parts = numberOfCodeLinesFile[i].Split(",", 5);
-                numberOfCodeLinesMetrics.Add(new CodeMetric
-                {
-                    ProgrammingLanguage = parts[0],
-                    EntityPath = parts[1],
-                    BlankLines = int.Parse(parts[2]),
-                    CommentLines = int.Parse(parts[3]),
-                    CodeLines = int.Parse(parts[4]),
-                });
+                numberOfCodeLinesMetrics.Add(parts[1], int.Parse(parts[4]));
+                //parts[1] = module path ; parts[4] = numberOfCodeLines
             }
 
             foreach (var codeMetric in numberOfCodeLinesMetrics)
             {
-                var matchingChangeFrequency = changeFrequenciesMetrics.FirstOrDefault(entity => entity.EntityPath.Equals(codeMetric.EntityPath));
-                if (matchingChangeFrequency != null)
+                if (changeFrequenciesMetrics.ContainsKey(codeMetric.Key))
                 {
-                    mergedProperties.Add(new ChangeFrequencyAndCodeMetric
+                    mergedMetrics.Add(codeMetric.Key, new ChangeFrequencyAndCodeMetric
                     {
-                        EntityPath = codeMetric.EntityPath,
-                        CodeLines = codeMetric.CodeLines,
-                        Revisions = matchingChangeFrequency.Revisions,
+                        CodeLines = codeMetric.Value,
+                        Revisions = changeFrequenciesMetrics[codeMetric.Key]
                     });
                 }
             }
-            var sortedMetrics = SortAfterChangeFrequencyAndCodeSize(mergedProperties);
+            var sortedMetrics = SortDescendingAfterChangeFrequencyAndCodeSize(mergedMetrics);
             var response = _gateway.CreateCsvFileWithChangeFrequencyAndNumberOfCodeLines(sortedMetrics, csvFilePath);
             return response;
         }
 
-        public List<ChangeFrequencyAndCodeMetric> SortAfterChangeFrequencyAndCodeSize(List<ChangeFrequencyAndCodeMetric> metrics)
+        public Dictionary<string,ChangeFrequencyAndCodeMetric> SortDescendingAfterChangeFrequencyAndCodeSize(Dictionary<string,ChangeFrequencyAndCodeMetric> metrics)
         {
-            var sortedMetrics = metrics.OrderByDescending(metric => metric.Revisions)
-                .ThenByDescending(metric => metric.CodeLines).ToList();
-            return sortedMetrics;
+            return metrics.OrderByDescending(kv => kv.Value.Revisions)
+                .ThenByDescending(kv => kv.Value.CodeLines)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
         }
-        
     }
 
     public class MergeChangeFrequenciesAndNumberOfCodeLinesResponse : BaseResponse

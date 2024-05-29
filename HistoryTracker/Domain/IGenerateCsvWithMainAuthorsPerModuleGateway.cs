@@ -5,7 +5,6 @@ namespace Domain
 {
     public interface IGenerateCsvWithMainAuthorsPerModuleGateway
     {
-        bool CreateCsvFileWithMainAuthorsAndChangeFrequenciesOfModules(
-            ICollection<FileMainAuthor> modulesChangeFrequenciesAndMainAuthors, string csvFilePath);
+        bool CreateCsvFileWithMainAuthorsAndChangeFrequenciesOfModules(Dictionary<string, FileMainAuthor> modulesChangeFrequenciesAndMainAuthors, string csvFilePath);
     }
 }

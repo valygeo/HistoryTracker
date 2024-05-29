@@ -10,11 +10,11 @@ namespace HistoryTracker.Contexts
     {
         private readonly IGenerateCsvWithChangeFrequenciesOfAllModulesGateway _gateway;
         private readonly CreateAllTimeLogFileContext _createLogFileContext;
-        private readonly ExtractCommitsContext _extractAllCommitsContext;
+        private readonly ExtractAllCommitsContext _extractAllCommitsContext;
 
         public GenerateCsvWithChangeFrequenciesOfAllModulesContext(IGenerateCsvWithChangeFrequenciesOfAllModulesGateway gateway,
             CreateAllTimeLogFileContext createLogFileContext,
-            ExtractCommitsContext extractAllCommitsContext)
+            ExtractAllCommitsContext extractAllCommitsContext)
         {
             _gateway = gateway;
             _createLogFileContext = createLogFileContext;
@@ -67,11 +67,10 @@ namespace HistoryTracker.Contexts
 
                     if (!string.IsNullOrWhiteSpace(relativePath))
                     {
-                        var existingEntity = modulesWithChangeFrequencies.ContainsKey(relativePath);
-                        if (!existingEntity)
+                        var existingModule = modulesWithChangeFrequencies.ContainsKey(relativePath);
+                        if (!existingModule)
                         {
-                            var entity = new KeyValuePair<string, int>(relativePath, 1);
-                            modulesWithChangeFrequencies.Add(entity.Key, entity.Value);
+                            modulesWithChangeFrequencies.Add(relativePath,1);
                         }
                         else
                         {
@@ -110,9 +109,9 @@ namespace HistoryTracker.Contexts
             return result.IndexOf("{", StringComparison.InvariantCulture) > -1;
         }
         private static Dictionary<string,int> SortInDescendingOrder(
-            Dictionary<string,int> changeFrequenciesAndAuthorsOfModules)
+            Dictionary<string,int> changeFrequenciesOfModules)
         {
-            return changeFrequenciesAndAuthorsOfModules.OrderByDescending(kv => kv.Value).ToDictionary(kv => kv.Key, kv => kv.Value);
+            return changeFrequenciesOfModules.OrderByDescending(kv => kv.Value).ToDictionary(kv => kv.Key, kv => kv.Value);
         }
 
         public class GenerateCsvWithChangeFrequenciesOfAllModulesResponse : BaseResponse

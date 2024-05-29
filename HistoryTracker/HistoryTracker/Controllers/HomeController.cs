@@ -45,7 +45,7 @@ namespace HistoryTracker.Controllers
             var context = new MergeChangeFrequenciesAndNumberOfCodeLinesContext(
                 new CloneRepositoryContext(new CloneRepositoryGateway()),
                 new GenerateCsvWithChangeFrequenciesOfAllModulesContext(
-                    new GenerateCsvWithChangeFrequenciesOfAllModulesGateway(), new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()), new ExtractCommitsContext(new ExtractAllCommitsGateway())),
+                    new GenerateCsvWithChangeFrequenciesOfAllModulesGateway(), new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()), new ExtractAllCommitsContext(new ExtractAllCommitsGateway())),
                 new GenerateCsvWithNumberOfCodeLinesContext(new GenerateCsvWithNumberOfCodeLinesGateway()),
                 new MergeChangeFrequenciesAndNumberOfCodeLinesGateway());
             var response = context.Execute(repositoryUrl,_clocPath);
@@ -96,7 +96,7 @@ namespace HistoryTracker.Controllers
             var context = new GenerateCsvWithChangeFrequenciesOfAllModulesContext(
                 new GenerateCsvWithChangeFrequenciesOfAllModulesGateway(),
                 new CreateAllTimeLogFileContext(new CreateAllTimeLogFileGateway()),
-                new ExtractCommitsContext(new ExtractAllCommitsGateway()));
+                new ExtractAllCommitsContext(new ExtractAllCommitsGateway()));
             var response = context.Execute(cloneRepositoryResponse.ClonedRepositoryPath);
             if (response.IsSuccess)
                 return Json(response.GeneratedCsvPath);
