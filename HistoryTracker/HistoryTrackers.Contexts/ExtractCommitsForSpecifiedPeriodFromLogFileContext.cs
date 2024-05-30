@@ -20,13 +20,12 @@ namespace HistoryTracker.Contexts
         public ExtractAllCommitsForSpecifiedPeriodResponse Execute(string logFilePath, string endDatePeriod)
         {
             var logFileContent = _gateway.ReadLogFile(logFilePath);
-            List<Commit> commitsBeforeEndDate = new List<Commit>();
-            List<Commit> commitsAfterEndDate = new List<Commit>();
+            Dictionary<string, Commit> commitsBeforeEndDate = new Dictionary<string, Commit>();
+            Dictionary<string, Commit> commitsAfterEndDate = new Dictionary<string, Commit>();
             var commitToAdd = new Commit();
-
+            var commitId = "";
             if (!CheckIfEndDateIsGreaterOrEqualsThanFirstCommitDate(logFileContent, endDatePeriod))
-                return new ExtractAllCommitsForSpecifiedPeriodResponse
-                    { IsSuccess = false, Error = "End date should be greater than first commit date!" };
+                return new ExtractAllCommitsForSpecifiedPeriodResponse { IsSuccess = false, Error = "End date should be greater than first commit date!" };
             {
                 for (int i = 0; i < logFileContent.Count; i++)
                 {
@@ -39,7 +38,7 @@ namespace HistoryTracker.Contexts
                         {
                             if (IsDate(parts[2]))
                             {
-                                commitToAdd.Id = parts[0];
+                                commitId = parts[0];
                                 commitToAdd.Author = parts[1];
                                 commitToAdd.CommitDate = parts[2];
                                 commitToAdd.Message = parts[3];
@@ -47,7 +46,7 @@ namespace HistoryTracker.Contexts
                             else
                             {
                                 string[] partsForMultipleNameOfAuthor = line.Split(' ', 5);
-                                commitToAdd.Id = partsForMultipleNameOfAuthor[0];
+                                commitId = partsForMultipleNameOfAuthor[0];
                                 commitToAdd.Author = partsForMultipleNameOfAuthor[1] + partsForMultipleNameOfAuthor[2];
                                 commitToAdd.CommitDate = partsForMultipleNameOfAuthor[3];
                                 commitToAdd.Message = partsForMultipleNameOfAuthor[4];
@@ -61,59 +60,62 @@ namespace HistoryTracker.Contexts
                             {
                                 if (IsCommitInSpecificPeriod(commitToAdd.CommitDate, endDatePeriod))
                                 {
-                                    commitsBeforeEndDate.Add(commitToAdd);
+                                    commitsBeforeEndDate.Add(commitId,commitToAdd);
                                     commitToAdd = new Commit();
+                                    commitId = "";
                                 }
                                 else if (!IsCommitInSpecificPeriod(commitToAdd.CommitDate, endDatePeriod))
                                 {
-                                    commitsAfterEndDate.Add(commitToAdd);
+                                    commitsAfterEndDate.Add(commitId, commitToAdd);
                                     commitToAdd = new Commit();
+                                    commitId = "";
                                 }
-
                             }
                         }
                     }
 
                     else if (!String.IsNullOrWhiteSpace(line) && char.IsDigit(line[0]))
                     {
-                        var commitDetails = new CommitDetails();
-                        string[] parts = line.Split('\t', 3);
-
-                        if (parts.Length >= 3)
-                        {
-                            commitDetails.RowsAdded = int.Parse(parts[0]);
-                            commitDetails.RowsDeleted = int.Parse(parts[1]);
-                            commitDetails.EntityChangedName = parts[2];
-                            commitToAdd.CommitDetails.Add(commitDetails);
-                        }
+                       AddCommitDetails(line, commitToAdd);
                     }
 
                     else if (String.IsNullOrWhiteSpace(line))
                     {
                         if (IsCommitInSpecificPeriod(commitToAdd.CommitDate, endDatePeriod))
                         {
-                            commitsBeforeEndDate.Add(commitToAdd);
+                            commitsBeforeEndDate.Add(commitId, commitToAdd);
                         }
                         else if (!IsCommitInSpecificPeriod(commitToAdd.CommitDate, endDatePeriod))
                         {
-                            commitsAfterEndDate.Add(commitToAdd);
+                            commitsAfterEndDate.Add(commitId, commitToAdd);
                         }
                     }
                 }
 
-                if (!commitsBeforeEndDate.Contains(commitToAdd) &&
-                    IsCommitInSpecificPeriod(commitToAdd.CommitDate, endDatePeriod))
-                    commitsBeforeEndDate.Add(commitToAdd);
+                if (!commitsBeforeEndDate.ContainsKey(commitId) && IsCommitInSpecificPeriod(commitToAdd.CommitDate, endDatePeriod))
+                    commitsBeforeEndDate.Add(commitId, commitToAdd);
 
-                if (!commitsAfterEndDate.Contains(commitToAdd) &&
-                    !IsCommitInSpecificPeriod(commitToAdd.CommitDate, endDatePeriod))
-                    commitsAfterEndDate.Add(commitToAdd);
+                if (!commitsAfterEndDate.ContainsKey(commitId) && !IsCommitInSpecificPeriod(commitToAdd.CommitDate, endDatePeriod))
+                    commitsAfterEndDate.Add(commitId, commitToAdd);
 
                 return new ExtractAllCommitsForSpecifiedPeriodResponse
                 {
                     IsSuccess = true, CommitsBeforeEndDate = commitsBeforeEndDate,
                     CommitsAfterEndDate = commitsAfterEndDate
                 };
+            }
+        }
+        private static void AddCommitDetails(string line, Commit commitToAdd)
+        {
+            var commitDetails = new CommitDetails();
+            string[] parts = line.Split('\t', 3);
+
+            if (parts.Length >= 3)
+            {
+                commitDetails.RowsAdded = int.Parse(parts[0]);
+                commitDetails.RowsDeleted = int.Parse(parts[1]);
+                commitToAdd.CommitDetails.Add(parts[2],commitDetails);
+                //parts[2] = entityChangedName
             }
         }
 
@@ -167,8 +169,8 @@ namespace HistoryTracker.Contexts
 
     public class ExtractAllCommitsForSpecifiedPeriodResponse : BaseResponse
     {
-        public ICollection<Commit> CommitsBeforeEndDate { get; set; }
-        public ICollection<Commit> CommitsAfterEndDate { get; set; }
+        public Dictionary<string,Commit> CommitsBeforeEndDate { get; set; }
+        public Dictionary<string, Commit> CommitsAfterEndDate { get; set; }
     }
 }
 

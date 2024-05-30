@@ -3,10 +3,9 @@ namespace Domain.MetaData
 {
     public class Commit
     {
-        public string Id { get; set; }
         public string Author { get; set; }
         public string Message { get; set; }
-        public ICollection<CommitDetails> CommitDetails { get; set; } = new List<CommitDetails>();
+        public Dictionary<string, CommitDetails> CommitDetails { get; set; } = new Dictionary<string, CommitDetails>();
         public string CommitDate { get; set; }
 
     }
@@ -15,7 +14,6 @@ namespace Domain.MetaData
     {
         public int RowsAdded { get; set; }
         public int RowsDeleted { get; set; }
-        public string EntityChangedName { get; set; }
     }
 
 }

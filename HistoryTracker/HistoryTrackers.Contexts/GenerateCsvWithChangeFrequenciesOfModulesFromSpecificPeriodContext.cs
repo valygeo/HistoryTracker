@@ -28,6 +28,7 @@ namespace HistoryTracker.Contexts
                 var formattedPeriodEndDate = $"{request.PeriodEndDate:yyyy-MM-dd}";
                 var csvFileName = $"{request.RepositoryName}_change_frequencies_of_modules_before_{formattedPeriodEndDate}.csv";
                 var csvFilePath = Path.Combine(request.ClonedRepositoryPath, csvFileName);
+
                 var extractCommitsResponse = _extractCommitsForSpecifiedPeriodContext.Execute(createLogFileResponse.LogFilePath, formattedPeriodEndDate);
                 if (extractCommitsResponse.IsSuccess)
                 {
@@ -42,15 +43,16 @@ namespace HistoryTracker.Contexts
             }
             return new GenerateCsvWithChangeFrequenciesOfModulesFromSpecificPeriodResponse { IsSuccess = false, Error = createLogFileResponse.Error };
         }
-        private ICollection<ChangeFrequency> GetChangeFrequencies(ExtractAllCommitsForSpecifiedPeriodResponse commits)
+        private Dictionary<string,int> GetChangeFrequencies(ExtractAllCommitsForSpecifiedPeriodResponse commits)
         {
-            var modulesWithChangeFrequenciesAndAuthors = new List<ChangeFrequency>();
+            var modulesWithChangeFrequencies = new Dictionary<string, int>();
 
-            foreach (var commit in commits.CommitsBeforeEndDate)
+            foreach (var commitEntry in commits.CommitsBeforeEndDate)
             {
+                var commit = commitEntry.Value;
                 foreach (var commitDetail in commit.CommitDetails)
                 {
-                    var pathWithWindowsSlashes = commitDetail.EntityChangedName.Replace("/", "\\");
+                    var pathWithWindowsSlashes = commitDetail.Key.Replace("/", "\\");
                     var pathWithoutComma = pathWithWindowsSlashes.Replace(",", "");
                     var relativePath = $".\\{pathWithoutComma}";
 
@@ -58,56 +60,45 @@ namespace HistoryTracker.Contexts
                     {
                         var initialAndNewIntegratedValue = ProcessRenameOrMovePattern(relativePath);
                         relativePath = initialAndNewIntegratedValue[1];
-                        foreach (var module in modulesWithChangeFrequenciesAndAuthors)
+                        if (modulesWithChangeFrequencies.ContainsKey(initialAndNewIntegratedValue[0]))
                         {
-                            if (module.EntityPath == initialAndNewIntegratedValue[0])
-                            {
-                                module.EntityPath = relativePath;
-                            }
+                            var moduleChangeFrequency = modulesWithChangeFrequencies[initialAndNewIntegratedValue[0]];
+                            modulesWithChangeFrequencies.Remove(initialAndNewIntegratedValue[0]);
+                            modulesWithChangeFrequencies[relativePath] = moduleChangeFrequency;
                         }
                     }
 
                     if (!string.IsNullOrWhiteSpace(relativePath))
                     {
-                        var existingEntity = modulesWithChangeFrequenciesAndAuthors.FirstOrDefault(e => e.EntityPath.Equals(relativePath));
-                        if (existingEntity == null)
-                        {
-                            var entity = new ChangeFrequency
-                            {
-                                EntityPath = relativePath,
-                                Revisions = 1,
-                            };
-                            modulesWithChangeFrequenciesAndAuthors.Add(entity);
-                        }
-                        else
-                        {
-                            existingEntity.Revisions++;
-                        }
+                        var existingModule = modulesWithChangeFrequencies.ContainsKey(relativePath);
+                        if (!existingModule)
+                            modulesWithChangeFrequencies.Add(relativePath,1);
+                        modulesWithChangeFrequencies[relativePath]++;
                     }
                 }
             }
-            foreach (var commit in commits.CommitsAfterEndDate.Reverse())
+            foreach (var commitEntry in commits.CommitsAfterEndDate.Reverse())
             {
+                var commit = commitEntry.Value;
                 foreach (var commitDetail in commit.CommitDetails)
                 {
-                    var pathWithWindowsSlashes = commitDetail.EntityChangedName.Replace("/", "\\");
+                    var pathWithWindowsSlashes = commitDetail.Key.Replace("/", "\\");
                     var pathWithoutComma = pathWithWindowsSlashes.Replace(",", "");
                     var relativePath = $".\\{pathWithoutComma}";
                     if (IsThereARenameOrMove(relativePath))
                     {
                         var initialAndNewIntegratedValue = ProcessRenameOrMovePattern(relativePath);
                         relativePath = initialAndNewIntegratedValue[1];
-                        foreach (var module in modulesWithChangeFrequenciesAndAuthors)
+                        if (modulesWithChangeFrequencies.ContainsKey(initialAndNewIntegratedValue[0]))
                         {
-                            if (module.EntityPath == initialAndNewIntegratedValue[0])
-                            {
-                                module.EntityPath = relativePath;
-                            }
+                            var moduleChangeFrequency = modulesWithChangeFrequencies[initialAndNewIntegratedValue[0]];
+                            modulesWithChangeFrequencies.Remove(initialAndNewIntegratedValue[0]);
+                            modulesWithChangeFrequencies[relativePath] = moduleChangeFrequency;
                         }
                     }
                 }
             }
-            return SortInDescendingOrder(modulesWithChangeFrequenciesAndAuthors);
+            return SortInDescendingOrder(modulesWithChangeFrequencies);
         }
         private static string[] ProcessRenameOrMovePattern(string value)
         {
@@ -136,10 +127,10 @@ namespace HistoryTracker.Contexts
 
             return result.IndexOf("{", StringComparison.InvariantCulture) > -1;
         }
-        private static ICollection<ChangeFrequency> SortInDescendingOrder(
-            ICollection<ChangeFrequency> changeFrequenciesAndAuthorsOfModules)
+        private static Dictionary<string, int> SortInDescendingOrder(
+            Dictionary<string, int> changeFrequenciesOfModules)
         {
-            return changeFrequenciesAndAuthorsOfModules.OrderByDescending(module => module.Revisions).ToList();
+            return changeFrequenciesOfModules.OrderByDescending(kv => kv.Value).ToDictionary(kv => kv.Key, kv => kv.Value);
         }
     }
 

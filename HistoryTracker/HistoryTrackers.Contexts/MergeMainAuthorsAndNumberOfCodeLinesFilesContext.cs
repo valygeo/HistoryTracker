@@ -2,7 +2,6 @@
 using Domain;
 using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
-using System.Web;
 
 namespace HistoryTracker.Contexts
 {
@@ -45,11 +44,10 @@ namespace HistoryTracker.Contexts
                         var csvFileName = $"{repositoryName}_complexity_metrics_before_{request.EndDatePeriod:yyyy-MM-dd}.csv";
                         var csvFilePath = Path.Combine(cloneRepositoryResponse.ClonedRepositoryPath, csvFileName);
                         var generateCsvResponse = GenerateMergedCsv(generateCsvWithChangeFrequenciesAndMainAuthorsAuthorsResponse.GeneratedCsvPath, generateCsvWithNumberOfCodeLinesResponse.GeneratedCsvPath, csvFilePath);
+
                         if (generateCsvResponse)
-                            return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse
-                            { IsSuccess = true, MergedCsvFilePath = csvFilePath };
-                        return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse
-                        { IsSuccess = false, Error = "Error trying to generate the csv file!" };
+                            return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse { IsSuccess = true, MergedCsvFilePath = csvFilePath };
+                        return new MergeMainAuthorsAndNumberOfCodeLinesFilesResponse { IsSuccess = false, Error = "Error trying to generate the csv file!" };
                     }
 
                     if (!generateCsvWithChangeFrequenciesAndMainAuthorsAuthorsResponse.IsSuccess)
@@ -67,16 +65,15 @@ namespace HistoryTracker.Contexts
         {
             var changeFrequenciesFile = File.ReadAllLines(changeFrequenciesCsvPath);
             var numberOfCodeLinesFile = File.ReadAllLines(numberOfCodeLinesCsvPath);
-            var changeFrequenciesMetrics = new List<FileMainAuthor>();
-            var numberOfCodeLinesMetrics = new List<CodeMetric>();
-            var mergedProperties = new List<FileMainAuthorsAndNumberOfCodeLines>();
+            var changeFrequenciesAndMainAuthorsMetrics = new Dictionary<string, FileMainAuthor>();
+            var numberOfCodeLinesMetrics = new Dictionary<string, int>();
+            var mergedMetrics = new Dictionary<string, FileMainAuthorsAndNumberOfCodeLines>();
 
             for (int i = 1; i < changeFrequenciesFile.Length; i++)
             {
                 var parts = changeFrequenciesFile[i].Split(',', 3);
-                changeFrequenciesMetrics.Add(new FileMainAuthor
+                changeFrequenciesAndMainAuthorsMetrics.Add(parts[0], new FileMainAuthor
                 {
-                    EntityPath = parts[0],
                     Revisions = int.Parse(parts[1]),
                     MainAuthor = parts[2]
                 });
@@ -85,49 +82,41 @@ namespace HistoryTracker.Contexts
             for (int i = 1; i < numberOfCodeLinesFile.Length - 1; i++)
             {
                 var parts = numberOfCodeLinesFile[i].Split(",", 5);
-                numberOfCodeLinesMetrics.Add(new CodeMetric
-                {
-                    ProgrammingLanguage = parts[0],
-                    EntityPath = parts[1],
-                    BlankLines = int.Parse(parts[2]),
-                    CommentLines = int.Parse(parts[3]),
-                    CodeLines = int.Parse(parts[4]),
-                });
+                numberOfCodeLinesMetrics.Add(parts[1], int.Parse(parts[4]));
+                //parts[1] = module path; parts[4] = changeFrequency
             }
 
             foreach (var codeMetric in numberOfCodeLinesMetrics)
             {
-                var matchingChangeFrequency = changeFrequenciesMetrics.FirstOrDefault(entity => entity.EntityPath.Equals(codeMetric.EntityPath));
-                if (matchingChangeFrequency != null)
+                var existingModule = changeFrequenciesAndMainAuthorsMetrics.ContainsKey(codeMetric.Key);
+                if (existingModule)
                 {
-                    mergedProperties.Add(new FileMainAuthorsAndNumberOfCodeLines
+                    mergedMetrics.Add(codeMetric.Key, new FileMainAuthorsAndNumberOfCodeLines
                     {
-                        EntityPath = codeMetric.EntityPath,
-                        CodeLines = codeMetric.CodeLines,
-                        Revisions = matchingChangeFrequency.Revisions,
-                        MainAuthor = matchingChangeFrequency.MainAuthor
+                        CodeLines = codeMetric.Value,
+                        Revisions = changeFrequenciesAndMainAuthorsMetrics[codeMetric.Key].Revisions,
+                        MainAuthor = changeFrequenciesAndMainAuthorsMetrics[codeMetric.Key].MainAuthor
                     });
                 }
                 else
                 {
-                    mergedProperties.Add(new FileMainAuthorsAndNumberOfCodeLines
+                    mergedMetrics.Add(codeMetric.Key, new FileMainAuthorsAndNumberOfCodeLines
                     {
-                        EntityPath = codeMetric.EntityPath,
-                        CodeLines = codeMetric.CodeLines,
+                        CodeLines = codeMetric.Value,
                         Revisions = 0,
+                        MainAuthor = ""
                     });
                 }
             }
-            var sortedMetrics = SortAfterChangeFrequencyAndCodeSize(mergedProperties);
+            var sortedMetrics = SortAfterChangeFrequencyAndCodeSize(mergedMetrics);
             var response = _gateway.CreateCsvFileWithMainAuthorsAndNumberOfCodeLines(sortedMetrics, csvFilePath);
             return response;
         }
 
-        public List<FileMainAuthorsAndNumberOfCodeLines> SortAfterChangeFrequencyAndCodeSize(List<FileMainAuthorsAndNumberOfCodeLines> metrics)
+        private static Dictionary<string, FileMainAuthorsAndNumberOfCodeLines> SortAfterChangeFrequencyAndCodeSize(Dictionary<string,FileMainAuthorsAndNumberOfCodeLines> metrics)
         {
-            var sortedMetrics = metrics.OrderByDescending(metric => metric.Revisions)
-                .ThenByDescending(metric => metric.CodeLines).ToList();
-            return sortedMetrics;
+            return metrics.OrderByDescending(kv => kv.Value.Revisions).ThenByDescending(kv => kv.Value.CodeLines)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
         }
     }
 

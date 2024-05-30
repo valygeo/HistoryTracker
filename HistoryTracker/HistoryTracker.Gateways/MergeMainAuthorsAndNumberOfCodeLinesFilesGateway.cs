@@ -6,7 +6,7 @@ namespace HistoryTracker.Gateways
 {
     public class MergeMainAuthorsAndNumberOfCodeLinesFilesGateway : IMergeMainAuthorsAndNumberOfCodeLinesFilesGateway
     {
-        public bool CreateCsvFileWithMainAuthorsAndNumberOfCodeLines(ICollection<FileMainAuthorsAndNumberOfCodeLines> metrics, string csvFilePath)
+        public bool CreateCsvFileWithMainAuthorsAndNumberOfCodeLines(Dictionary<string, FileMainAuthorsAndNumberOfCodeLines> metrics, string csvFilePath)
         {
             try
             {
@@ -15,7 +15,7 @@ namespace HistoryTracker.Gateways
                     writer.WriteLine("Module, Revisions, Code, Main Author");
                     foreach (var metric in metrics)
                     {
-                        writer.WriteLine($"{metric.EntityPath},{metric.Revisions},{metric.CodeLines},{metric.MainAuthor}");
+                        writer.WriteLine($"{metric.Key},{metric.Value.Revisions},{metric.Value.CodeLines},{metric.Value.MainAuthor}");
                     }
                 }
                 return true;

@@ -5,7 +5,6 @@ namespace Domain
 {
     public interface IMergeMainAuthorsAndNumberOfCodeLinesFilesGateway
     {
-        bool CreateCsvFileWithMainAuthorsAndNumberOfCodeLines(ICollection<FileMainAuthorsAndNumberOfCodeLines> metrics,
-            string csvFilePath);
+        bool CreateCsvFileWithMainAuthorsAndNumberOfCodeLines(Dictionary<string, FileMainAuthorsAndNumberOfCodeLines> metrics, string csvFilePath);
     }
 }

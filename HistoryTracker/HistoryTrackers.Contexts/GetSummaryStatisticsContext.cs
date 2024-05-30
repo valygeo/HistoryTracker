@@ -1,5 +1,4 @@
 ﻿
-using System.Web;
 using Domain.MetaData;
 using HistoryTracker.Contexts.Base;
 
@@ -41,7 +40,7 @@ namespace HistoryTracker.Contexts
             return new GetSummaryDataStatistics { IsSuccess = false, Error = cloneRepositoryResponse.Error };
         }
 
-        private Statistics GetStatistics(ICollection<Commit> commits)
+        private Statistics GetStatistics(Dictionary<string, Commit> commits)
         {
             var response = new Statistics();
             var authors = new List<string>();
@@ -49,22 +48,22 @@ namespace HistoryTracker.Contexts
             var entitiesChangedCount = new Dictionary<string, int>();
             foreach (var commit in commits)
             {
-                if(!String.IsNullOrWhiteSpace(commit.Author) && !authors.Contains(commit.Author))
-                    authors.Add(commit.Author);
+                if(!String.IsNullOrWhiteSpace(commit.Value.Author) && !authors.Contains(commit.Value.Author))
+                    authors.Add(commit.Value.Author);
 
-                foreach (var commitDetail in commit.CommitDetails)
+                foreach (var commitDetail in commit.Value.CommitDetails)
                 {
-                    if (!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName) &&
-                        !uniqueEntities.Contains(commitDetail.EntityChangedName))
+                    if (!String.IsNullOrWhiteSpace(commitDetail.Key) &&
+                        !uniqueEntities.Contains(commitDetail.Key))
                     {
-                        uniqueEntities.Add(commitDetail.EntityChangedName);
-                        entitiesChangedCount[commitDetail.EntityChangedName] = 0; 
+                        uniqueEntities.Add(commitDetail.Key);
+                        entitiesChangedCount[commitDetail.Key] = 0; 
                     }
                     
-                    if (!String.IsNullOrWhiteSpace(commitDetail.EntityChangedName) && uniqueEntities.Contains(commitDetail.EntityChangedName))
+                    if (!String.IsNullOrWhiteSpace(commitDetail.Key) && uniqueEntities.Contains(commitDetail.Key))
 
                     {
-                        entitiesChangedCount[commitDetail.EntityChangedName]++;
+                        entitiesChangedCount[commitDetail.Key]++;
                     }
                         
                 }
