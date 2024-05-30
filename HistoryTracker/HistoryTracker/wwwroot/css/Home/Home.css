@@ -16,9 +16,17 @@
     justify-content: space-evenly;
     align-items: baseline;
     flex-wrap: nowrap;
-    
-    
 }
+
+#error-message-for-end-date {
+    color: red;
+    display: none;
+    position: absolute;
+    left: 285%; 
+    transform: translateY(-50%);
+    white-space: nowrap;
+}
+
 
     body::before {
         content: "";
