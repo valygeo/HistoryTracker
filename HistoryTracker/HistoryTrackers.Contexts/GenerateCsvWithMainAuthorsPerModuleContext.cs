@@ -45,7 +45,7 @@ namespace HistoryTracker.Contexts
           
         private Dictionary<string, FileMainAuthor> GetChangeFrequenciesAndMainAuthors(ExtractAllCommitsForSpecifiedPeriodResponse commits)
         {
-            var modulesWithChangeFrequenciesAndAuthors = new Dictionary<string, FileMainAuthor>();
+            var modulesWithChangeFrequenciesAndAuthors = new Dictionary<string, List<FileMainAuthor>>();
             foreach (var commitEntry in commits.CommitsBeforeEndDate)
             {
                 var commit = commitEntry.Value;
@@ -69,18 +69,31 @@ namespace HistoryTracker.Contexts
 
                     if (!string.IsNullOrWhiteSpace(relativePath))
                     {
+                        var fileMainAuthors = new List<FileMainAuthor>();
                         var existingModule = modulesWithChangeFrequenciesAndAuthors.ContainsKey(relativePath);
                         if (!existingModule)
-                        {
-                            modulesWithChangeFrequenciesAndAuthors.Add(relativePath, new FileMainAuthor
+                        {   
+                            fileMainAuthors.Add(new FileMainAuthor
                             {
                                 MainAuthor = commit.Author,
                                 Revisions = 1
                             });
+                            modulesWithChangeFrequenciesAndAuthors.Add(relativePath, fileMainAuthors);
                         }
                         else
                         {
-                            modulesWithChangeFrequenciesAndAuthors[relativePath].Revisions++;
+                            var fileAuthorIfAlreadyExist = modulesWithChangeFrequenciesAndAuthors[relativePath].FirstOrDefault(author => author.MainAuthor.Equals(commit.Author));
+
+                            if (fileAuthorIfAlreadyExist != null)
+                                fileAuthorIfAlreadyExist.Revisions++;
+                            else
+                            {
+                                modulesWithChangeFrequenciesAndAuthors[relativePath].Add(new FileMainAuthor
+                                {
+                                    MainAuthor = commit.Author,
+                                    Revisions = 1
+                                });
+                            }
                         }
                     }
                 }
@@ -110,6 +123,23 @@ namespace HistoryTracker.Contexts
             return FindMainAuthorsPerModuleByNumberOfRevisions(modulesWithChangeFrequenciesAndAuthors);
         }
 
+        private static Dictionary<string, FileMainAuthor> FindMainAuthorsPerModuleByNumberOfRevisions(Dictionary<string, List<FileMainAuthor>> mainAuthorsAndChangeFrequenciesPerModule)
+        {
+            var mainAuthorsByMaxRevisions = new Dictionary<string, FileMainAuthor>();
+            foreach (var authorEntry in mainAuthorsAndChangeFrequenciesPerModule)
+            {
+                var modulePath = authorEntry.Key;
+                var authorsList = authorEntry.Value;
+                var fileMainAuthorByRevisions = authorsList.OrderByDescending(a => a.Revisions).First();
+                mainAuthorsByMaxRevisions.Add(modulePath, new FileMainAuthor
+                {
+                    MainAuthor = fileMainAuthorByRevisions.MainAuthor,
+                    Revisions = fileMainAuthorByRevisions.Revisions
+                });
+            }
+            return mainAuthorsByMaxRevisions.OrderByDescending(kv => kv.Value.Revisions)
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+        }
         private static string[] ProcessRenameOrMovePattern(string value)
         {
             Regex renameOrMovePattern = new Regex(@"\\{+[^{}]*[\s]=>[\s][^{}]*[\s]*\}");
@@ -136,27 +166,6 @@ namespace HistoryTracker.Contexts
                 return false;
 
             return result.IndexOf("{", StringComparison.InvariantCulture) > -1;
-        }
-        private static Dictionary<string,FileMainAuthor> FindMainAuthorsPerModuleByNumberOfRevisions(Dictionary<string, FileMainAuthor> mainAuthorsAndChangeFrequenciesPerModule)
-        {
-            var mainAuthorsByMaxRevisions = new Dictionary<string, FileMainAuthor>();
-            foreach (var mainAuthor in mainAuthorsAndChangeFrequenciesPerModule)
-            {
-                var existingModule = mainAuthorsByMaxRevisions.ContainsKey(mainAuthor.Key);
-                if (!existingModule)
-                {
-                    mainAuthorsByMaxRevisions.Add(mainAuthor.Key, mainAuthor.Value);
-                }
-                else
-                {
-                    if (mainAuthor.Value.Revisions > mainAuthorsByMaxRevisions[mainAuthor.Key].Revisions)
-                    {
-                        mainAuthorsByMaxRevisions[mainAuthor.Key] = mainAuthor.Value;
-                    }
-                }
-            }
-            return mainAuthorsByMaxRevisions.OrderByDescending(kv => kv.Value.Revisions)
-                .ToDictionary(kv => kv.Key, kv => kv.Value);
         }
     }
 
