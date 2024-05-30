@@ -1,17 +1,30 @@
 ﻿function validateAndShowMessage() {
     let isValid = true;
     const githubUrlPattern = /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+(\/[A-Za-z0-9_-]+)?(\.git)?\/?$/;
-    const githubUrlInput = document.getElementById('githubUrl').value;
-    const errorMessage = document.getElementById('error-message');
+    const githubUrlInput = document.getElementById('githubUrl');
+    const errorMessage = document.getElementById('error-message-for-repository-url-input');
 
-    if (githubUrlInput.trim() === '' || !githubUrlPattern.test(githubUrlInput)) {
+    if (githubUrlInput.value.trim() === '' || !githubUrlPattern.test(githubUrlInput.value)) {
+        githubUrlInput.style.borderColor = 'red';
+        githubUrlInput.style.borderWidth = '2px';
+        githubUrlInput.style.borderStyle = 'solid';
         errorMessage.style.display = 'block'; 
         isValid = false;
     } else {
+        githubUrlInput.style.borderColor = '';
+        githubUrlInput.style.borderWidth = '';
+        githubUrlInput.style.borderStyle = '';
         errorMessage.style.display = 'none'; 
     }
+    githubUrlInput.addEventListener('click', function (event) {
+        errorMessage.style.display = 'none';
+        githubUrlInput.style.borderColor = '';
+        githubUrlInput.style.borderWidth = '';
+        githubUrlInput.style.borderStyle = '';
+    });
     return isValid;
 }
+
 
    
 const getSummaryData = function () {
@@ -145,35 +158,38 @@ const getMainAuthorsPerModule = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
     var endDatePeriod = $('#endDate').val();
+    var isValid = validateAndShowMessage();
+    if (isValid) {
+        $.ajax({
+            type: "GET",
+            url: "/get-main-authors-per-modules-by-revisions",
+            data: {
+                RepositoryUrl: encodedGithubUrl,
+                endDatePeriod: endDatePeriod
+            },
+            dataType: "json",
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function (response) {
+                if (response.error) {
+                    displayError(response.error);
+                    hideLoader();
+                }
+                else {
+                    var hotspotsButton = document.getElementById("displayFileMainAuthors");
+                    localStorage.setItem('filePathForFileMainAuthors', response);
+                    hideLoader();
+                    hotspotsButton.style.display = "block";
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                hideLoader();
+            }
+        });
+    }
 
-    $.ajax({
-        type: "GET",
-        url: "/get-main-authors-per-modules-by-revisions",
-        data: {
-            RepositoryUrl: encodedGithubUrl,
-            endDatePeriod: endDatePeriod
-        },
-        dataType: "json",
-        beforeSend: function () {
-            showLoader();
-        },
-        success: function (response) {
-            if (response.error) {
-                displayError(response.error);
-                hideLoader();
-            }
-            else {
-                var hotspotsButton = document.getElementById("displayFileMainAuthors");
-                localStorage.setItem('filePathForFileMainAuthors', response);
-                hideLoader();
-                hotspotsButton.style.display = "block";
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-            hideLoader();
-        }
-    });
 }
 
 const getMetricsForPowerLaw = function () {
@@ -206,7 +222,17 @@ const getMetricsForPowerLaw = function () {
     });
 }
 const displayError = function (errorMessage) {
+    var endDateInput = document.getElementById('endDate');
     var errorParagraph = document.getElementById("error-message-for-end-date");
     errorParagraph.innerText = errorMessage;
     errorParagraph.style.display = "inline";
+    endDateInput.style.borderColor = 'red';
+    endDateInput.style.borderWidth = '2px';
+    endDateInput.style.borderStyle = 'solid';
+    endDateInput.addEventListener('click', function (event) {
+        endDateInput.style.borderColor = '';
+        endDateInput.style.borderWidth = '';
+        endDateInput.style.borderStyle = '';
+        errorParagraph.innerText = "";
+    });
 }

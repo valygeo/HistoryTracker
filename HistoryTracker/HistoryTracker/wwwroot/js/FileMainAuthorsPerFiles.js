@@ -133,9 +133,7 @@
                 .text("No changes or module does not exist ");
         }
     });
-
     return svg.node();
-
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -151,7 +149,6 @@ const getHierarchyData = function () {
         data: { filePath: filePath },
         dataType: "json",
         success: function (response) {
-            console.log(response);
             processDataAndDisplayChart(response);
         },
         error: function (xhr, status, error) {

@@ -26,6 +26,14 @@
     transform: translateY(-50%);
     white-space: nowrap;
 }
+#error-message-for-repository-url-input {
+    color: red;
+    display: none;
+    position: absolute;
+    left: 107%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+}
 
 
     body::before {
