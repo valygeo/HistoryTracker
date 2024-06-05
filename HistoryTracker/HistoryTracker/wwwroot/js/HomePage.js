@@ -1,8 +1,10 @@
-﻿function validateAndShowMessage() {
+﻿
+function validateAndShowMessageForRepositoryUrl() {
     let isValid = true;
     const githubUrlPattern = /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+(\/[A-Za-z0-9_-]+)?(\.git)?\/?$/;
     const githubUrlInput = document.getElementById('githubUrl');
     const errorMessage = document.getElementById('error-message-for-repository-url-input');
+
 
     if (githubUrlInput.value.trim() === '' || !githubUrlPattern.test(githubUrlInput.value)) {
         githubUrlInput.style.borderColor = 'red';
@@ -25,10 +27,37 @@
     return isValid;
 }
 
+function validateAndShowMessageForEndDate() {
+    let isValid = true;
+    const errorMessage = document.getElementById('error-message-for-end-date');
+    const endDateInput = document.getElementById('endDate');
+    const currentDate = new Date();
+    const endDate = new Date(endDateInput.value.trim());
+    if (endDateInput.value.trim() === '' || endDate > currentDate) {
+        endDateInput.style.borderColor = 'red';
+        endDateInput.style.borderWidth = '2px';
+        endDateInput.style.borderStyle = 'solid';
+        errorMessage.style.display = 'block';
+        isValid = false;
+    } else {
+        endDateInput.style.borderColor = '';
+        endDateInput.style.borderWidth = '';
+        endDateInput.style.borderStyle = '';
+        errorMessage.style.display = 'none';
+    }
+    endDateInput.addEventListener('click', function (event) {
+        errorMessage.style.display = 'none';
+        endDateInput.style.borderColor = '';
+        endDateInput.style.borderWidth = '';
+        endDateInput.style.borderStyle = '';
+    });
+    return isValid;
+}
+
 
    
 const getSummaryData = function () {
-    var isValid = validateAndShowMessage();
+    var isValid = validateAndShowMessageForRepositoryUrl();
     if (isValid) {
         var githubUrl = $('#githubUrl').val();
         var encodedGithubUrl = encodeURIComponent(githubUrl);
@@ -92,7 +121,7 @@ const hideLoader = function() {
     loader.style.display = "none";
 }
 getComplexityMetrics = function () {
-    var isValid = validateAndShowMessage();
+    var isValid = validateAndShowMessageForRepositoryUrl();
     if (isValid) {
         var githubUrl = $('#githubUrl').val();
         var encodedGithubUrl = encodeURIComponent(githubUrl);
@@ -122,44 +151,47 @@ getComplexityMetrics = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
     var endDatePeriod = $('#endDate').val();
+     var isValid = validateAndShowMessageForEndDate();
+     if (isValid) {
+         $.ajax({
+             type: "GET",
+             url: "/get-complexity-metrics-for-specific-period",
+             data: {
+                 RepositoryUrl: encodedGithubUrl,
+                 endDatePeriod: endDatePeriod
+             },
+             dataType: "json",
+             beforeSend: function () {
+                 showLoader();
+             },
+             success: function (response) {
+                 if (response.error) {
+                     displayError(response.error);
+                     hideLoader();
+                 }
+                 else {
+                     var hotspotsButton = document.getElementById("displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod");
+                     localStorage.setItem('filePathForHotspotsFrequencyAndComplexityForSpecificPeriod', response);
+                     hideLoader();
+                     hotspotsButton.style.display = "block";
+                 }
+             },
+             error: function (xhr, status, error) {
+                 console.error(xhr.responseText);
+                 hideLoader();
+             }
+         });
+     }
 
-    $.ajax({
-        type: "GET",
-        url: "/get-complexity-metrics-for-specific-period",
-        data: {
-            RepositoryUrl: encodedGithubUrl,
-            endDatePeriod : endDatePeriod
-              },
-        dataType: "json",
-        beforeSend: function () {
-            showLoader();
-        },
-        success: function (response) {
-            if (response.error) {
-                displayError(response.error);
-                hideLoader();
-            }
-            else
-            {
-                var hotspotsButton = document.getElementById("displayHotspotsFrequencyAndComplexityButtonForSpecificPeriod");
-                localStorage.setItem('filePathForHotspotsFrequencyAndComplexityForSpecificPeriod', response);
-                hideLoader();
-                hotspotsButton.style.display = "block";
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-            hideLoader();
-        }
-    });
 }
 
 const getMainAuthorsPerModule = function () {
     var githubUrl = $('#githubUrl').val();
     var encodedGithubUrl = encodeURIComponent(githubUrl);
     var endDatePeriod = $('#endDate').val();
-    var isValid = validateAndShowMessage();
-    if (isValid) {
+    var isValidRepositoryUrl = validateAndShowMessageForRepositoryUrl();
+    var isValidEndDate = validateAndShowMessageForEndDate();
+    if (isValidRepositoryUrl && isValidEndDate) {
         $.ajax({
             type: "GET",
             url: "/get-main-authors-per-modules-by-revisions",
@@ -193,33 +225,36 @@ const getMainAuthorsPerModule = function () {
 }
 
 const getMetricsForPowerLaw = function () {
-    var githubUrl = $('#githubUrl').val();
-    var encodedGithubUrl = encodeURIComponent(githubUrl);
+    var isValid = validateAndShowMessageForRepositoryUrl();
+    if (isValid) {
+        var githubUrl = $('#githubUrl').val();
+        var encodedGithubUrl = encodeURIComponent(githubUrl);
 
-    $.ajax({
-        type: "GET",
-        url: "/" + encodedGithubUrl + "/get-metrics-for-power-law",
-        dataType: "json",
-        beforeSend: function () {
-            showLoader();
-        },
-        success: function (response) {
-            if (response.error) {
-                displayError(response.error);
+        $.ajax({
+            type: "GET",
+            url: "/" + encodedGithubUrl + "/get-metrics-for-power-law",
+            dataType: "json",
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function (response) {
+                if (response.error) {
+                    displayError(response.error);
+                    hideLoader();
+                }
+                else {
+                    var powerLawButton = document.getElementById("displayPowerLaw");
+                    localStorage.setItem('filePathWithChangeFrequenciesPerFileForPowerLawChart', response);
+                    hideLoader();
+                    powerLawButton.style.display = "block";
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
                 hideLoader();
             }
-            else {
-                var powerLawButton = document.getElementById("displayPowerLaw");
-                localStorage.setItem('filePathWithChangeFrequenciesPerFileForPowerLawChart', response);
-                hideLoader();
-                powerLawButton.style.display = "block";
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error(xhr.responseText);
-            hideLoader();
-        }
-    });
+        });
+    }
 }
 const displayError = function (errorMessage) {
     var endDateInput = document.getElementById('endDate');

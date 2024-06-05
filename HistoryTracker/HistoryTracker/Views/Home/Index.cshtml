@@ -32,8 +32,7 @@
 	                    </div>
                     <div class="input-container">
 	                    <input type="date" class="form-styling" style="margin-left:180%" id="endDate" name="endDate" required />
-	                    <span id="error-message-for-end-date" style="display:none;">End date should be greater than first commit date!</span>
-
+							<span id="error-message-for-end-date" style="display:none;">End date should not be empty or in the future!</span>
                     </div>
                     </div>
 	                <div class="button-container">
@@ -47,7 +46,7 @@
 		                <input type="button" class="btn-testing"   style="margin-top:8px" value="Get Metrics For Power Law" onclick="getMetricsForPowerLaw()" />
 	                </div>
 					<li class="testing-active">
-						<a class="btn" style="font-size: larger;margin-top: 50px;"> Your option:</a>
+						<a class="btn" style="font-size: larger;margin-top: 50px;"> Your options:</a>
 					</li>
 	                <div class="button-containerfordisplay">
 		                <div class="button-wrapper">
