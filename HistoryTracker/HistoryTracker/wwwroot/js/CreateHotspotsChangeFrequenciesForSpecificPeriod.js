@@ -95,6 +95,26 @@ function createChart(data) {
             .on("start", function (d) { if (d.parent === focus) this.style.display = "inline"; })
             .on("end", function (d) { if (d.parent !== focus) this.style.display = "none"; });
     }
+   
+        const legendContainer = d3.select("#legendContainer").append("svg")
+            .attr("width", 460)
+            .attr("height", 400);
+
+        legendContainer.append("circle")
+            .attr("cx", 10)
+            .attr("cy", 10)
+            .attr("r", 10)
+            .style("fill", "white")
+            .style("stroke", "black");
+
+    legendContainer.append("text")
+        .attr("x", 25)
+        .attr("y", 15)
+        .attr("dy", "0.15rem")
+        .text("The module did not exist or was not modified during that period")
+        .style("font-size", "15px")
+        .style("fill", "black");
+
     return svg.node();
 }
 
