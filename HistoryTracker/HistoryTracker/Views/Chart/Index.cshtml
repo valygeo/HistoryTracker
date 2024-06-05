@@ -5,11 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chart Page</title>
     <link rel="stylesheet" type="text/css" href="~/css/Home/sb-admin-2.css" />
+    <style>
+        .description {
+            margin-top: 80px; 
+            margin-left: 30px;
+            font-size: x-large;
+            position: relative;
+            width:500px;
+        }
+    </style>
 </head>
 <body>
 <div class="title">
-	<a class="btn" style="font-size: xx-large;position: fixed;margin-left: -10px;">Display hotspots frequency and complexity</a>
-
+    <a class="btn" style=" font-size :xx-large;position:fixed;margin-left: -10px;">Hotspots frequency and complexity from all time of the project</a>
+        <p class="description">The circles represent the modules in the project, the redder their color, the more often they have been modified (they are more problematic), and the bigger they are, the higher the number of lines of code.</p>
 </div>
 <div id="chartContainer"></div>
 </body>
