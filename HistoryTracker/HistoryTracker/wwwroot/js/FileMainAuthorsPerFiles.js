@@ -101,7 +101,7 @@
     // Generate legend
     const mainAuthors = Array.from(new Set(root.leaves().map(d => d.data.mainAuthor)));
     const legendContainer = d3.select("#legendContainer").append("svg")
-        .attr("width", 300)
+        .attr("width", 400)
         .attr("height", mainAuthors.length * 40 + 10);
 
     const legend = legendContainer.selectAll(".legend")
@@ -130,7 +130,7 @@
                 .attr("x", 24)
                 .attr("y", mainAuthors.indexOf(author) * 20 + 15)
                 .style("text-anchor", "start")
-                .text("No changes or module does not exist ");
+                .text("No changes or module does not exist in that period");
         }
     });
     return svg.node();
